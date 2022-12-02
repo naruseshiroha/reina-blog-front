@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
 import Pages from 'vite-plugin-pages';
 import AutoImport from 'unplugin-auto-import/vite';
@@ -26,4 +27,9 @@ export default defineConfig({
       resolvers: [NaiveUiResolver()],
     }),
   ],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'), // 把 @ 指向到 src 目录去
+    },
+  },
 });
