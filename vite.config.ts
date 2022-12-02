@@ -18,10 +18,31 @@ export default defineConfig({
     AutoImport({
       imports: [
         'vue',
+        'vue-router',
         {
-          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
-        },
+          'naive-ui': [
+            'useDialog',
+            'useMessage',
+            'useNotification',
+            'useLoadingBar'
+          ]
+        }
       ],
+      // targets to transform
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/,
+        /\.vue\?vue/, // .vue
+        /\.md$/, // .md
+      ],
+      // Generate corresponding .eslintrc-auto-import.json file.
+      // eslint globals Docs - https://eslint.org/docs/user-guide/configuring/language-options#specifying-globals
+      eslintrc: {
+        enabled: false, // Default `false`
+        filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
+        globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
+      },
+      dts: './src/auto-imports.d.ts',
     }),
     Components({
       resolvers: [NaiveUiResolver()],
