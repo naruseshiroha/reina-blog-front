@@ -1,6 +1,7 @@
 <template>
   <div>
     Article
+    <n-button>Navie Button</n-button>
   </div>
 </template>
 
