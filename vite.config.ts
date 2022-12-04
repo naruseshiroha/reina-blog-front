@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
 import Pages from 'vite-plugin-pages';
-import Layouts from 'vite-plugin-vue-layouts';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
@@ -15,10 +14,6 @@ export default defineConfig({
     Pages({
       dirs: 'src/views',
       exclude: ['**/components/*.vue'],
-    }),
-    Layouts({
-      layoutsDirs: 'src/layouts',
-      defaultLayout: 'default'
     }),
     AutoImport({
       imports: [
