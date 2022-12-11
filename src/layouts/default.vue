@@ -13,7 +13,7 @@
               </n-layout-content>
             </n-gi>
             <n-gi :span="2" class="px-3 border-2 border-black-50 flex">
-              <n-layout-sider style="max-width: none" class="flex-1">
+              <n-layout-sider class="flex-1">
                 <MySider />
               </n-layout-sider>
             </n-gi>

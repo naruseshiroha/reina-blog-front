@@ -18,7 +18,7 @@ export default defineConfig({
     }),
     Layouts({
       layoutsDirs: 'src/layouts',
-      defaultLayout: 'default'
+      defaultLayout: 'mydefault'
     }),
     AutoImport({
       imports: [
