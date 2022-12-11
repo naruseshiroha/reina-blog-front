@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+#dir
+src/assets/imgs
+*.code-workspace
