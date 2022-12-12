@@ -16,7 +16,6 @@
         :model="loginForm"
         :rules="rules"
         size="medium"
-        show-feedback
       >
         <h2 class="text-center text-lg mb-4">登录</h2>
         <n-form-item label="用户名" path="userName">
@@ -27,7 +26,6 @@
           />
         </n-form-item>
         <n-form-item label="密码" path="password">
-          <!-- <n-input  placeholder="输入姓名" /> -->
           <n-input
             v-model:value="loginForm.password"
             type="password"
@@ -45,14 +43,12 @@
       <!-- register -->
       <n-form
         v-show="formType === 'register'"
-        class="my-3"
         ref="registerFormRef"
         label-width="auto"
         label-placement="left"
         :model="registerForm"
         :rules="rules"
         size="medium"
-        show-feedback
       >
         <h2 class="text-center text-lg mb-4">注册</h2>
         <n-form-item label="昵称" path="nickName">
@@ -127,7 +123,11 @@
 </template>
 
 <script setup lang="ts">
+
 import { FormInst, FormItemInst, FormItemRule, FormRules } from "naive-ui";
+import { useFetch } from "@vueuse/core";
+
+console.log("data", await useFetch('/api/user').json());
 
 interface LoginInput {
   userName: string;
@@ -145,7 +145,7 @@ interface RegisterInput {
 // login
 const formType = ref<string>("register");
 const loginFormRef = ref<FormInst | null>(null);
-const loginForm = ref<LoginInput>({
+const loginForm = reactive<LoginInput>({
   userName: "",
   password: "",
 });
@@ -155,7 +155,7 @@ const handleLoginBtn = () => {};
 // register
 const rePasswordRef = ref<FormItemInst | null>(null);
 const registerFormRef = ref<FormInst | null>(null);
-const registerForm = ref<RegisterInput>({
+const registerForm = reactive<RegisterInput>({
   telephone: "",
   email: "",
   nickName: "",
@@ -171,13 +171,13 @@ const handleLogoutBtn = () => {};
 
 // password @input
 const handlePasswordInput = () => {
-  if (registerForm.value.rePassword) {
+  if (registerForm.rePassword) {
     rePasswordRef.value?.validate({ trigger: "password-input" });
   }
 };
 // validator
 const validateRePassword = (rule: FormItemRule, value: string): boolean => {
-  return value === registerForm.value.password;
+  return value === registerForm.password;
 };
 const validateEmail = (rule: FormItemRule, value: string): boolean => {
   const reg = /^\w{3,}(\.\w+)*@[A-Za-z0-9_]+(\.[A-Za-z]{2,5}){1,3}$/;
@@ -256,16 +256,20 @@ const getVerifyCode = async (email: string): Promise<string> => {
 
 // switch Login & Register
 const switchLoginRegister = () => {
-  switch (formType.value) {
-    case "login":
-      formType.value = "register";
-      loginFormRef.value?.restoreValidation();
-      break;
-    case "register":
-    default:
-      formType.value = "login";
-      registerFormRef.value?.restoreValidation();
-      break;
+  if (formType.value === "login") {
+    formType.value = "register";
+    loginFormRef.value?.restoreValidation();
+    Object.assign(loginForm, { userName: "", password: "" });
+  } else if (formType.value === "register") {
+    formType.value = "login";
+    registerFormRef.value?.restoreValidation();
+    Object.assign(registerForm, {
+      nickName: "",
+      email: "",
+      password: "",
+      rePassword: "",
+      verifyCode: "",
+    });
   }
 };
 </script>

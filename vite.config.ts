@@ -9,6 +9,15 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://1.117.89.74:8801',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
+  },
   plugins: [
     vue(),
     // vite-plugin-pages
@@ -18,20 +27,15 @@ export default defineConfig({
     }),
     Layouts({
       layoutsDirs: 'src/layouts',
-      defaultLayout: 'mydefault'
+      defaultLayout: 'mydefault',
     }),
     AutoImport({
       imports: [
         'vue',
         'vue-router',
         {
-          'naive-ui': [
-            'useDialog',
-            'useMessage',
-            'useNotification',
-            'useLoadingBar'
-          ]
-        }
+          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+        },
       ],
       // targets to transform
       include: [
