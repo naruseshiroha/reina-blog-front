@@ -1,6 +1,6 @@
 <template>
   <div>
-    Content
+    Welcome Content
   </div>
 </template>
 
