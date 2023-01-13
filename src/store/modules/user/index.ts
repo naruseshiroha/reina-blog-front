@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getVerifyCode } from '@/api/user';
+import { fetchVerifyCode } from '@/api/user';
 
 interface IUserState {
   nickName: string;
@@ -10,7 +10,7 @@ interface IUserState {
 
 // useStore 可以是 useUser、useCart 之类的任何东西
 // 第一个参数是应用程序中 store 的唯一 id
-export const useStore = defineStore('userStore', {
+export const useUserStore = defineStore('userStore', {
   // other options...
   state: (): IUserState => ({
     nickName: '',
@@ -53,8 +53,9 @@ export const useStore = defineStore('userStore', {
     },
     // api
     async getVerifyCode(email: string) {
-      const { data: code } = await getVerifyCode(email);
-      if (code) this.setVerifyCode(code);
+      const { data: code } = await fetchVerifyCode(email);
+      // if (code) this.setVerifyCode(code);
+      if (code) this.setVerifyCode("code");
     },
   },
 });
