@@ -48,6 +48,14 @@ interface BaseEntity {
     updatedBy: number
 }
 
+export interface Category extends BaseEntity {
+    id: string;
+    categoryName: string;
+    categoryDesc: string;
+    status: boolean;
+    count: number;
+}
+
 export interface Tag extends BaseEntity {
     id: string;
     tagName: string;
