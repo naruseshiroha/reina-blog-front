@@ -20,11 +20,15 @@ interface IArticle {
 
 interface IArticleState {
   articles: IArticle[];
+  total: number;
+  isFinished: boolean;
 }
 
 const useArticleStore = defineStore('articleStore', {
   state: (): IArticleState => ({
     articles: [],
+    total: 0,
+    isFinished: false,
   }),
   getters: {
     getArticles(): IArticle[] {
@@ -43,10 +47,15 @@ const useArticleStore = defineStore('articleStore', {
     },
     // api
     async fetchPageArticles(page?: any) {
+      if (this.isFinished) return
+
       const { data } = await fetchArticles(page);
-      console.log('data', data)
       const { code, data: { list: articles, total } } = data.value
-      console.log({code, articles, total});
+
+      if (!this.total) this.total = total
+      const { pageNum, pageSize } = page
+      if (pageNum * pageSize >= this.total) this.isFinished = true
+
       if (this.articles.length === 0) {
         this.setArticles(articles)
       } else {
