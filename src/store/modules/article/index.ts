@@ -11,7 +11,7 @@ interface IArticle {
   top: boolean;
   author: User;
   category: Category;
-  createdAt: Date;
+  createdAt: string;
   tags: Tag[];
   viewCount: number;
   likeCount: number;
