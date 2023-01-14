@@ -10,7 +10,11 @@ module.exports = {
       "1/2": "50%",
       "3/4": "75%",
     },
-    extend: {},
+    extend: {
+      colors: {
+        'sky-blue': '#1ec7e6'
+      },
+    },
   },
   variants: {
     extend: {},
