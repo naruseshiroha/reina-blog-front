@@ -7,15 +7,15 @@
     top: {{ top }} <br />
     <!-- <p v-for="v in indexs" :key="v">{{ v }}</p> -->
     <!-- <pre>{{ articles }}</pre> -->
-    <div class="article" v-for="v in articles" :key="v.id">
-      <n-icon class="top" v-if="v.top" :component="TopIcon" />
-      <h2 class="text-rose-600">
-        <router-link :to="`/article/${v.id}`">{{ v.title }}</router-link>
+    <n-card class="article my-2 relative" v-for="v in articles" :key="v.id">
+      <n-icon class="absolute -top-2 right-2 text-2xl text-rose-700" v-if="v.top" :component="TopIcon" />
+      <h2 class=" text-center ">
+        <router-link class="text-2xl text-white bg-sky-blue p-0.5 m-0.5 opacity-80" :to="`/article/${v.id}`">{{ v.title }}</router-link>
       </h2>
-      <n-space class="tags">
+      <n-space class="tags m-5 !justify-center">
         <n-tag>
           <n-icon :component="CalendarIcon" />
-          &nbsp;{{ v.createdAt }}&nbsp;
+          &nbsp;{{ v.createdAt.substring(0, 10) }}&nbsp;
         </n-tag>
         <n-tag>
           <n-icon :component="TagsIcon" />
@@ -49,7 +49,7 @@
           </div>
         </router-link>
       </div>
-    </div>
+    </n-card>
     bottom: {{ bottom }} <br />
 
     <span v-if="bottom"> 已经到底了哦！ </span> <br />
@@ -108,4 +108,8 @@ watch(
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+:deep(.n-tag__content) {
+  display: flex;
+}
+</style>
