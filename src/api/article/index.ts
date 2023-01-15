@@ -1,4 +1,4 @@
-import { useFetch } from "@vueuse/core";
+ import { useFetch } from "@vueuse/core";
 
 export async function fetchArticles(page?: any) {
     let params = ``
@@ -9,4 +9,8 @@ export async function fetchArticles(page?: any) {
         }
     }
     return await useFetch('/api/article/all' + (page ? `?${params.substring(1)}` : '')).get().json()
+}
+
+export async function fetchArchives(pageNum: number = 1, pageSize: number = 10) {
+    return await useFetch(`/api/archive/${pageNum}/${pageSize}`).get().json()
 }
