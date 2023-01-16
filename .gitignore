@@ -26,3 +26,5 @@ dist-ssr
 #dir
 src/assets/imgs
 *.code-workspace
+
+components.d.ts
