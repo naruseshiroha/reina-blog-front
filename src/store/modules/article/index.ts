@@ -1,5 +1,5 @@
-import { fetchArticles } from '@/api/article';
-import { Category, Tag, User } from '@/api/types';
+import { fetchArchives, fetchArticles } from '@/api/article';
+import { Category, IPageQuery, Tag, User } from '@/api/types';
 import { defineStore } from 'pinia';
 
 interface IArticle {
@@ -18,22 +18,39 @@ interface IArticle {
   commentCount: number;
 }
 
+interface IArchive {
+  id: string;
+  title: string;
+  createdAt: string;
+  category: Category;
+}
+
 interface IArticleState {
   articles: IArticle[];
-  total: number;
-  isFinished: boolean;
+  archives: IArchive[];
+  articleTotal: number;
+  articleIsFinished: boolean;
+  archiveTotal: number;
+  archiveIsFinished: boolean;
 }
 
 const useArticleStore = defineStore('articleStore', {
   state: (): IArticleState => ({
     articles: [],
-    total: 0,
-    isFinished: false,
+    archives: [],
+    articleTotal: 0,
+    articleIsFinished: false,
+    archiveTotal: 0,
+    archiveIsFinished: false,
   }),
   getters: {
     getArticles(): IArticle[] {
       return this.articles;
     },
+    getArchives(): IArchive[] {
+      return this.archives;
+    },
+
   },
   actions: {
     patch(partial: Partial<IArticleState>) {
@@ -45,23 +62,41 @@ const useArticleStore = defineStore('articleStore', {
     setArticles(articles: IArticle[]) {
       this.articles = articles;
     },
+    setArchives(archives: IArchive[]) {
+      this.archives = archives;
+    },
     // api
     async fetchPageArticles(page?: any) {
-      if (this.isFinished) return
+      if (this.articleIsFinished) return
 
-      const { data } = await fetchArticles(page);
+      const { pageNum, pageSize } = page
+      const { data } = await fetchArticles(pageNum, pageSize);
       const { code, data: { list: articles, total } } = data.value
 
-      if (!this.total) this.total = total
-      const { pageNum, pageSize } = page
-      if (pageNum * pageSize >= this.total) this.isFinished = true
+      if (!this.articleTotal) this.articleTotal = total
+      if (pageNum * pageSize >= this.articleTotal) this.articleIsFinished = true
 
       if (this.articles.length === 0) {
         this.setArticles(articles)
       } else {
         this.articles.push(...articles)
       }
-    }
+    },
+    async fetchPageArchives(page: IPageQuery) {
+      if (this.archiveIsFinished) return
+      const { pageNum, pageSize } = page
+      const { data } = await fetchArchives(pageNum, pageSize);
+      const { code, data: { list: archives, total } } = data.value
+
+      if (!this.archiveTotal) this.archiveTotal = total
+      if (pageNum * pageSize >= this.archiveTotal) this.archiveIsFinished = true
+
+      if (this.archives.length === 0) {
+        this.setArchives(archives)
+      } else {
+        this.archives.push(...archives)
+      }
+    },
   },
 });
 

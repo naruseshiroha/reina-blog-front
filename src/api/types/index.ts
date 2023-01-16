@@ -18,6 +18,11 @@ export interface Page<T> {
     total: number;
 }
 
+export interface IPageQuery {
+    pageNum: number;
+    pageSize: number;
+}
+
 export interface LoginModule {
     userName: string;
     password: string;
