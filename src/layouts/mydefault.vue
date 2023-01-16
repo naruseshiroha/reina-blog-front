@@ -58,7 +58,7 @@ const checkAside = (routeName: string) => {
   position: sticky;
   top: 0;
   width: 100%;
-  z-index: 99999;
+  z-index: 2;
   background-color: white;
 }
 </style>
