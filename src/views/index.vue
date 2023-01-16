@@ -74,10 +74,6 @@ const props = defineProps({
   bottom: Boolean,
 });
 
-const indexs = ref(50);
-
-
-
 const email = ref("lixunsam");
 const { data } = useFetch(`/api/user/code?email=${email.value}`).get().text();
 console.log("res", data);
@@ -94,12 +90,7 @@ const { getArticles: articles } = toRefs(articleStore);
 watch(
   () => props.bottom,
   async (newVal, oldVal) => {
-    console.log("new val: ", newVal);
-    console.log("old val: ", oldVal);
     if (newVal == true) {
-      const res: number = await new Promise((resolve, reject) => resolve(30));
-      console.log("res", res);
-      indexs.value += res;
       page.pageNum += 1
       articleStore.fetchPageArticles(page)
     }

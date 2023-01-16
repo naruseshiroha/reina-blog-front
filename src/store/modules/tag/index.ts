@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia';
 import { fetchTags } from '@/api/tag';
-import { Tag, R, TagVO } from '@/api/types';
+import { Tag, R, TagVO, IPageQuery } from '@/api/types';
 
 interface ITagState {
   tags: TagVO[];
   selected: String[];
+  tagIsFinished: boolean;
+  tagTotal: number;
 }
 
 const useTagStore = defineStore('TagStore', {
   state: (): ITagState => ({
     tags: [],
     selected: [],
+    tagIsFinished: false,
+    tagTotal: 0,
   }),
   getters: {
     getTags(): TagVO[] {
@@ -34,8 +38,10 @@ const useTagStore = defineStore('TagStore', {
       this.selected = selected;
     },
     // api
-    async fetchApiTags() {
-      const { data } = await fetchTags();
+    async fetchAllTags(pageNum: number = 1, pageSize: number = 9999) {
+      const { data } = await fetchTags(pageNum, pageSize);
+      console.log('data', data);
+      
       this.setTags(
         (data.value as R<Tag[]>).data.map(e => ({
           id: e.id,
@@ -46,6 +52,21 @@ const useTagStore = defineStore('TagStore', {
         }))
       );
     },
+    async fetchPageTag(page: IPageQuery) {
+      if (this.tagIsFinished) return
+      const { pageNum, pageSize } = page
+      const { data } = await fetchTags(pageNum, pageSize);
+      const { code, data: { list: tags, total } } = data.value
+
+      if (!this.tagTotal) this.tagTotal = total
+      if (pageNum * pageSize >= this.tagTotal) this.tagIsFinished = true
+
+      if (this.tags.length === 0) {
+        this.setTags(tags)
+      } else {
+        this.tags.push(...tags)
+      }
+    }
   },
 });
 

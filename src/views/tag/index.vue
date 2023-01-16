@@ -20,7 +20,7 @@ const message = useMessage();
 const showDropdownRef = ref(false);
 const tagStore = useTagStore();
 
-tagStore.fetchApiTags();
+tagStore.fetchAllTags();
 const { getTags: tags } = toRefs(tagStore);
 </script>
 

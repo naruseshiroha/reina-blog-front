@@ -99,7 +99,7 @@ linkStore.fetchApiLinks();
 const { getLinks: links } = storeToRefs(linkStore);
 
 const tagStore = useTagStore();
-tagStore.fetchApiTags();
+tagStore.fetchAllTags();
 const { getTags: tags } = storeToRefs(tagStore);
 
 // watch(
