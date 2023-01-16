@@ -1,14 +1,7 @@
- import { useFetch } from "@vueuse/core";
+import { useFetch } from "@vueuse/core";
 
-export async function fetchArticles(page?: any) {
-    let params = ``
-    for (const key in page) {
-        if (Object.prototype.hasOwnProperty.call(page, key)) {
-            const value = page[key];
-            params += `&${key}=${value}`;
-        }
-    }
-    return await useFetch('/api/article/all' + (page ? `?${params.substring(1)}` : '')).get().json()
+export async function fetchArticles(pageNum: number, pageSize: number) {    
+    return await useFetch(`/api/article/${pageNum}/${pageSize}`).get().json()
 }
 
 export async function fetchArchives(pageNum: number = 1, pageSize: number = 10) {

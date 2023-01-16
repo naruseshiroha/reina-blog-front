@@ -69,11 +69,11 @@ const useArticleStore = defineStore('articleStore', {
     async fetchPageArticles(page?: any) {
       if (this.articleIsFinished) return
 
-      const { data } = await fetchArticles(page);
+      const { pageNum, pageSize } = page
+      const { data } = await fetchArticles(pageNum, pageSize);
       const { code, data: { list: articles, total } } = data.value
 
       if (!this.articleTotal) this.articleTotal = total
-      const { pageNum, pageSize } = page
       if (pageNum * pageSize >= this.articleTotal) this.articleIsFinished = true
 
       if (this.articles.length === 0) {
