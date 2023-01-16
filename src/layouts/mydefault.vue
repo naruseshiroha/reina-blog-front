@@ -34,7 +34,7 @@ const scrollBox = ref(null);
 const { x, y, arrivedState } = useScroll(scrollBox);
 const { top, bottom } = toRefs(arrivedState);
 
-const hideAsideRoutes: string[] = ["archive"];
+const hideAsideRoutes: string[] = ["archive", "tag"];
 
 const route = useRoute();
 const routeName = computed(() => route.name);
