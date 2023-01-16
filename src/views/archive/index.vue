@@ -1,8 +1,8 @@
 <template>
-  <div class="archive p-5">
-    <h1 class="text-center text-2xl">归档页</h1>
+  <div class="archive p-5 w-2/3 mx-auto">
+    <h1 class="text-center text-3xl font-bold">归档页</h1>
     <n-timeline size="large">
-      <n-timeline-item :title="`最高! 全 ${1 ?? 0} ポスト もっと書こう！`" />
+      <h2 class="text-2xl font-medium py-4">{{ `最高! 全 ${archiveTotal} ポスト もっと書こう！` }}</h2>
       <n-timeline-item v-for="v in archives" :key="v.id" type="default" content="">
         <template #header>
           <router-link :to="`/article/${v.id}`">{{ v.title }}</router-link>
@@ -42,7 +42,7 @@ const page = reactive({
 
 const archiveStore = useArticleStore();
 archiveStore.fetchPageArchives(page);
-const { getArchives: archives } = toRefs(archiveStore);
+const { getArchives: archives, archiveTotal } = toRefs(archiveStore);
 
 watch(
   () => props.bottom,
