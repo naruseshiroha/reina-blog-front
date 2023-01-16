@@ -4,18 +4,12 @@
 
 <script setup lang="ts">
 // Header
-import { h, ref, Component } from "vue";
-import { NIcon } from "naive-ui";
-import type { MenuOption } from "naive-ui";
-import {
-  HomeOutline as HomeIcon,
-  ArchiveOutline as ArchiveIcon,
-  PricetagsOutline as TagIcon,
-  HeartOutline as HeartIcon,
-  InformationOutline as InfoIcon,
-} from "@vicons/ionicons5";
-import { CommentsRegular as CommentIcon } from "@vicons/fa";
-import { RouterLink } from "vue-router";
+import { h, ref, Component } from 'vue';
+import { NIcon } from 'naive-ui';
+import type { MenuOption } from 'naive-ui';
+import { HomeOutline as HomeIcon, ArchiveOutline as ArchiveIcon, PricetagsOutline as TagIcon, HeartOutline as HeartIcon, InformationOutline as InfoIcon } from '@vicons/ionicons5';
+import { CommentsRegular as CommentIcon } from '@vicons/fa';
+import { RouterLink } from 'vue-router';
 
 const renderIcon = (icon: Component) => {
   return () => h(NIcon, null, { default: () => h(icon) });
@@ -44,15 +38,15 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: "index",
+            name: 'index',
             // params: {
             //   lang: 'zh-CN'
             // }
           },
         },
-        { default: () => "首页" }
+        { default: () => '首页' }
       ),
-    key: "index",
+    key: 'index',
     icon: renderIcon(HomeIcon),
   },
   {
@@ -61,35 +55,47 @@ const menuOptions: MenuOption[] = [
         RouterLink,
         {
           to: {
-            name: "archive",
+            name: 'archive',
             // params: {
             //   lang: 'zh-CN'
             // }
           },
         },
-        { default: () => "归档" }
+        { default: () => '归档' }
       ),
-    key: "archive",
+    key: 'archive',
     icon: renderIcon(ArchiveIcon),
   },
   {
-    label: "标签",
-    key: "tags",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: 'tag',
+            // params: {
+            //   lang: 'zh-CN'
+            // }
+          },
+        },
+        { default: () => '标签' }
+      ),
+    key: 'tags',
     icon: renderIcon(TagIcon),
   },
   {
-    label: "留言",
-    key: "comments",
+    label: '留言',
+    key: 'comments',
     icon: renderIcon(CommentIcon),
   },
   {
-    label: "收藏",
-    key: "collections",
+    label: '收藏',
+    key: 'collections',
     icon: renderIcon(HeartIcon),
   },
   {
-    label: "关于我",
-    key: "info",
+    label: '关于我',
+    key: 'info',
     icon: renderIcon(InfoIcon),
   },
 ];
