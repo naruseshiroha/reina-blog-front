@@ -1,12 +1,15 @@
 <template>
   <div ref="scrollBox" class="mydefault min-h-screen flex flex-col nowrap">
-    <header class="header text-center">
+    <header ref="headerRef" class="header text-center">
+    <br>
+      hasScroll {{ hasScroll }} ,,
+      bottom {{ bottom }}
       <MyHeader />
     </header>
     <main class="border flex-1 flex">
       <n-grid cols="11" item-responsive>
         <n-grid-item :span="hasAside ? 7 : 11">
-          <main style="padding: 0.5rem" class="h-full p-4">
+          <main ref="mainBox" style="padding: 0.5rem" class="h-full p-4">
             <RouterView :top="top" :bottom="bottom" />
           </main>
         </n-grid-item>
@@ -20,7 +23,7 @@
       <!-- <div class="border flex-1">content</div>
       <aside class="border">aside</aside> -->
     </main>
-    <footer class="border">
+    <footer ref="footerRef" class="border">
       <n-back-top :right="50" />
       Footer
     </footer>
@@ -28,11 +31,39 @@
 </template>
 
 <script setup lang="ts">
-import { useScroll } from "@vueuse/core";
-import { RouteRecordName } from "vue-router";
+import { useElementSize, useScroll, useWindowScroll, useWindowSize } from "@vueuse/core";
 const scrollBox = ref(null);
+const headerRef = ref(null);
+const mainBox = ref(null);
+const footerRef = ref(null);
 const { x, y, arrivedState } = useScroll(scrollBox);
 const { top, bottom } = toRefs(arrivedState);
+
+const wScroll = useWindowScroll()
+const wSize = useWindowSize()
+const headerSize = useElementSize(headerRef)
+const mainSize = useElementSize(mainBox)
+const footerSize = useElementSize(footerRef)
+console.dir(wSize.height.value);
+console.dir(headerSize.height);
+console.dir(footerSize.height);
+console.dir(mainSize.height);
+
+const hasScroll = computed(() => {
+  const wh = wSize.height.value;
+  const hh = headerSize.height.value
+  const mh = mainSize.height.value
+  const fh = footerSize.height.value
+  // console.log('wh', wh);
+  // console.log('hh', hh);
+  // console.log('mh', mh);
+  // console.log('fh', fh);
+  const res = wSize.height.value < headerSize.height.value + mainSize.height.value + footerSize.height.value
+  console.log('res', res);
+  
+  return res
+})
+console.log(hasScroll);
 
 const hideAsideRoutes: string[] = ["archive", "tag"];
 
@@ -44,6 +75,15 @@ const checkAside = (routeName: string) => {
   const find = hideAsideRoutes.find((e) => e === routeName);
   return !Boolean(find);
 };
+
+watch(hasScroll, (newVal, oldVal) => {
+  console.log('hasScroll', 'new', newVal, 'old', oldVal)
+  bottom.value = !newVal
+  // bottom.value = newVal
+},
+  { immediate: true }
+)
+
 
 </script>
 
