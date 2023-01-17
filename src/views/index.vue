@@ -68,6 +68,8 @@ import {
 } from "@vicons/fa";
 import { useArticleStore } from "@/store";
 import { useFetch } from "@vueuse/core";
+import { IPageQuery } from "@/api/types";
+import { Ref } from "vue";
 
 const props = defineProps({
   top: Boolean,
@@ -78,23 +80,25 @@ const email = ref("lixunsam");
 const { data } = useFetch(`/api/user/code?email=${email.value}`).get().text();
 console.log("res", data);
 
-const page = reactive({
-  pageNum: 1,
-  pageSize: 10
-})
 
 const articleStore = useArticleStore();
+const { getArticles: articles, getArticlePageNum: pageNum } = toRefs(articleStore);
+
+const page:Ref<IPageQuery> = computed(() => reactive({
+  pageNum: pageNum.value,
+  pageSize: 10
+}))
 articleStore.fetchPageArticles(page);
-const { getArticles: articles } = toRefs(articleStore);
+
 
 watch(
   () => props.bottom,
-  async (newVal, oldVal) => {
+  (newVal, oldVal) => {
     if (newVal == true) {
-      page.pageNum += 1
+      page.value.pageNum += 1;
       articleStore.fetchPageArticles(page)
     }
-  }
+  },
 );
 
 </script>

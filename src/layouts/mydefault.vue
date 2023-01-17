@@ -77,11 +77,9 @@ const checkAside = (routeName: string) => {
 };
 
 watch(hasScroll, (newVal, oldVal) => {
-  console.log('hasScroll', 'new', newVal, 'old', oldVal)
   bottom.value = !newVal
-  // bottom.value = newVal
 },
-  { immediate: true }
+  // { immediate: true }
 )
 
 

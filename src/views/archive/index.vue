@@ -31,32 +31,36 @@ import { useMessage } from 'naive-ui'
 const props = defineProps({
   top: Boolean,
   bottom: Boolean,
+  hasScrollBar: {
+    default: false,
+    type: Boolean,
+  }
 });
 
 const message = useMessage()
 
-const page = reactive({
-  pageNum: 1,
-  pageSize: 10,
-});
 
 const archiveStore = useArticleStore();
+const { getArchives: archives, archiveTotal, getArchivePageNum: pageNum } = toRefs(archiveStore);
+const page = computed(() => reactive({
+  pageNum: pageNum.value,
+  pageSize: 10,
+}))
+
 archiveStore.fetchPageArchives(page);
-const { getArchives: archives, archiveTotal } = toRefs(archiveStore);
 
 watch(
   () => props.bottom,
-  async (newVal, oldVal) => {
+  (newVal, oldVal) => {
     console.log('bottom', 'new', newVal, 'old', oldVal)
     if (newVal === true) {
-      page.pageNum += 1;
+      // page.value.pageNum += 1;
+      page.value.pageNum += 1;
       // debugger
-      archiveStore.fetchPageArchives(page);
+       archiveStore.fetchPageArchives(page);
     }
   },
-  {
-    immediate: true,
-  }
+  // { immediate: true } 
 );
 </script>
 
