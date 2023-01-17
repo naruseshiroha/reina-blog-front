@@ -6,16 +6,24 @@ export interface R<T> {
 }
 
 export interface Page<T> {
-    countId: string;
-    current: number;
-    maxLimit: number;
-    optimizeCountSql: boolean;
-    orders: Array<string>;
-    pages: number;
-    records: Array<T>;
-    searchCount: number;
+    total: string;
+    list: T[];
+    pageNum: number;
+    pageSize: number;
     size: number;
-    total: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatePageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
 }
 
 export interface IPageQuery {
