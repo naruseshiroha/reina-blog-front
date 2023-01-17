@@ -28,3 +28,4 @@ src/assets/imgs
 *.code-workspace
 
 components.d.ts
+src/auto-imports.d.ts
