@@ -2,7 +2,7 @@
   <div class="archive p-5 w-2/3 mx-auto">
     <h1 class="text-center text-3xl font-bold">归档页</h1>
     <n-timeline size="large">
-      <h2 class="text-2xl font-bold py-4">{{ `最高! 全 ${archiveTotal} ポスト もっと書こう！` }}</h2>
+      <h2 class="text-2xl font-bold py-4">{{ `最高! 全 ${archiveTotal} ポスト もっと書こう！` }}  {{  props  }}</h2>
       <n-timeline-item v-for="v in archives" :key="v.id" type="default" content="">
         <template #header>
           <router-link class="text-xl font-semibold" :to="`/article/${v.id}`">{{ v.title }}</router-link>
@@ -51,9 +51,10 @@ archiveStore.fetchPageArchives(page);
 
 watch(
   () => props.bottom,
-  (newVal, oldVal) => {
+  async (newVal, oldVal) => {
     console.log('bottom', 'new', newVal, 'old', oldVal)
-    if (newVal === true) {
+    console.log('hasScrollBar', props.hasScrollBar)
+    if (newVal === true || !props.hasScrollBar) {
       // page.value.pageNum += 1;
       page.value.pageNum += 1;
       // debugger

@@ -2,15 +2,16 @@
   <div ref="scrollBox" class="mydefault min-h-screen flex flex-col nowrap">
     <header ref="headerRef" class="header text-center">
     <br>
-      hasScroll {{ hasScroll }} ,,
-      bottom {{ bottom }}
+      hasScrollBar {{ hasScrollBar }} ,,
+      bottom {{ bottom }},, x {{ x }}, y {{  y  }},
+      msize {{ mainSize.height }}
       <MyHeader />
     </header>
     <main class="border flex-1 flex">
       <n-grid cols="11" item-responsive>
         <n-grid-item :span="hasAside ? 7 : 11">
           <main ref="mainBox" style="padding: 0.5rem" class="h-full p-4">
-            <RouterView :top="top" :bottom="bottom" />
+            <RouterView :top="top" :bottom="bottom" :hasScrollBar="hasScrollBar" />
           </main>
         </n-grid-item>
         <n-grid-item v-if="hasAside" :span="4">
@@ -49,22 +50,20 @@ console.dir(headerSize.height);
 console.dir(footerSize.height);
 console.dir(mainSize.height);
 
-const hasScroll = computed(() => {
+const hasScrollBar = computed(() => {
   const wh = wSize.height.value;
   const hh = headerSize.height.value
   const mh = mainSize.height.value
   const fh = footerSize.height.value
-  // console.log('wh', wh);
-  // console.log('hh', hh);
-  // console.log('mh', mh);
-  // console.log('fh', fh);
+  console.log('wh', wh);
+  console.log('hh', hh);
+  console.log('mh', mh);
+  console.log('fh', fh);
   const res = wSize.height.value < headerSize.height.value + mainSize.height.value + footerSize.height.value
   console.log('res', res);
   
   return res
 })
-console.log(hasScroll);
-
 const hideAsideRoutes: string[] = ["archive", "tag"];
 
 const route = useRoute();
@@ -76,10 +75,11 @@ const checkAside = (routeName: string) => {
   return !Boolean(find);
 };
 
-watch(hasScroll, (newVal, oldVal) => {
+watch([hasScrollBar, mainSize.height], (newVal, oldVal) => {
+  console.log('default hasScrollBar', newVal, oldVal);
   bottom.value = !newVal
 },
-  // { immediate: true }
+  { immediate: true }
 )
 
 
