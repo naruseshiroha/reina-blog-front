@@ -40,8 +40,6 @@ const useTagStore = defineStore('TagStore', {
     // api
     async fetchAllTags(pageNum: number = 1, pageSize: number = 9999) {
       const { data } = await fetchTags(pageNum, pageSize);
-      console.log('data', data.value);
-      
       this.setTags(
         (data.value as R<Page<TagVO>>).data.list.map(e => ({
           id: e.id,

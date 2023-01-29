@@ -46,12 +46,17 @@ export interface RegisterModule {
 }
 
 
-export interface User {
+export interface UserVO {
     id: string;
-    firstName: string;
-    lastName: string;
     email: string;
     telephone: string;
+    nickName: string;
+    firstName?: string;
+    lastName?: string;
+    avatar?: string;
+    gender?: string;
+    signature?: string;
+    role?: string;
 }
 
 interface BaseEntity {
@@ -66,6 +71,13 @@ export interface Category extends BaseEntity {
     categoryName: string;
     categoryDesc: string;
     status: boolean;
+    count: number;
+}
+
+export interface CategoryVO {
+    id: string;
+    categoryName: string;
+    categoryDesc: string;
     count: number;
 }
 
@@ -99,4 +111,20 @@ export interface LinkVO {
     linkName: string;
     linkDesc: string;
     linkUrl: string;
+}
+
+export interface ArticleVO {
+    id: string;
+    title: string;
+    description: string;
+    content: string;
+    coverImage: string;
+    top?: boolean;
+    createdAt: Date;
+    viewCount: number;
+    likeCount: number;
+    commentCount: number;
+    user: UserVO;
+    tags: TagVO[];
+    category: CategoryVO;
 }

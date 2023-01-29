@@ -1,10 +1,10 @@
 <template>
   <div ref="scrollBox" class="mydefault min-h-screen flex flex-col nowrap">
     <header ref="headerRef" class="header text-center">
-    <br>
+      <!--<br>
       hasScrollBar {{ hasScrollBar }} ,,
       bottom {{ bottom }},, x {{ x }}, y {{  y  }},
-      msize {{ mainSize.height }}
+      msize {{ mainSize.height }} -->
       <MyHeader />
     </header>
     <main class="border flex-1 flex">
@@ -15,7 +15,7 @@
           </main>
         </n-grid-item>
         <n-grid-item v-if="hasAside" :span="4">
-          <aside>
+          <aside class="sticky" :style="{ top: '44px' }">
             <MyAside />
           </aside>
           <!-- <aside class="h-full p-4 m-2">Aside</aside> -->
@@ -24,7 +24,7 @@
       <!-- <div class="border flex-1">content</div>
       <aside class="border">aside</aside> -->
     </main>
-    <footer ref="footerRef" class="border">
+    <footer ref="footerRef" class="border sticky z-10" :style="{ bottom: 0, backgroundColor: '#FFF' }">
       <n-back-top :right="50" />
       Footer
     </footer>
@@ -45,23 +45,23 @@ const wSize = useWindowSize()
 const headerSize = useElementSize(headerRef)
 const mainSize = useElementSize(mainBox)
 const footerSize = useElementSize(footerRef)
-console.dir(wSize.height.value);
-console.dir(headerSize.height);
-console.dir(footerSize.height);
-console.dir(mainSize.height);
+// console.dir(wSize.height.value);
+// console.dir(headerSize.height);
+// console.dir(footerSize.height);
+// console.dir(mainSize.height);
 
 const hasScrollBar = computed(() => {
   const wh = wSize.height.value;
   const hh = headerSize.height.value
   const mh = mainSize.height.value
   const fh = footerSize.height.value
-  console.log('wh', wh);
-  console.log('hh', hh);
-  console.log('mh', mh);
-  console.log('fh', fh);
+  // console.log('wh', wh);
+  // console.log('hh', hh);
+  // console.log('mh', mh);
+  // console.log('fh', fh);
   const res = wSize.height.value < headerSize.height.value + mainSize.height.value + footerSize.height.value
-  console.log('res', res);
-  
+  // console.log('res', res);
+
   return res
 })
 const hideAsideRoutes: string[] = ["archive", "tag"];
@@ -76,7 +76,7 @@ const checkAside = (routeName: string) => {
 };
 
 watch([hasScrollBar, mainSize.height], (newVal, oldVal) => {
-  console.log('default hasScrollBar', newVal, oldVal);
+  // console.log('default hasScrollBar', newVal, oldVal);
   bottom.value = !newVal
 },
   { immediate: true }

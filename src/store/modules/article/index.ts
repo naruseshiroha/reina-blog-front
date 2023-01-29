@@ -1,5 +1,5 @@
-import { fetchArchives, fetchArticles } from '@/api/article';
-import { Category, IPageQuery, Tag, User } from '@/api/types';
+import { fetchArchives, fetchArticleById, fetchArticles } from '@/api/article';
+import { ArticleVO, Category, IPageQuery, Tag, UserVO } from '@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
 
@@ -10,7 +10,7 @@ interface IArticle {
   content?: string;
   coverImage: string;
   top: boolean;
-  author: User;
+  author: UserVO;
   category: Category;
   createdAt: string;
   tags: Tag[];
@@ -27,6 +27,7 @@ interface IArchive {
 }
 
 interface IArticleState {
+  articleInfo: ArticleVO | undefined;
   articles: IArticle[];
   archives: IArchive[];
   archivePages: number[];
@@ -39,6 +40,7 @@ interface IArticleState {
 
 const useArticleStore = defineStore('articleStore', {
   state: (): IArticleState => ({
+    articleInfo: undefined,
     articles: [],
     archives: [],
     archivePages: [],
@@ -75,6 +77,9 @@ const useArticleStore = defineStore('articleStore', {
     setArchives(archives: IArchive[]) {
       this.archives = archives;
     },
+    setArticleInfo(articleInfo: ArticleVO) {
+      this.articleInfo = articleInfo;
+    },
     fetchArticlePreCheck(pageNum: number): boolean {
       if (this.articleIsFinished || this.articlePages.find(e => e === pageNum)) return true
       return false
@@ -86,7 +91,7 @@ const useArticleStore = defineStore('articleStore', {
     // api
     async fetchPageArticles(page?: any) {
       const { pageNum, pageSize } = unref(page)
-      if (this.fetchArticlePreCheck(pageNum)) return      
+      if (this.fetchArticlePreCheck(pageNum)) return
       const { data } = await fetchArticles(pageNum, pageSize);
       const { code, data: { list: articles, total } } = data.value
 
@@ -103,7 +108,7 @@ const useArticleStore = defineStore('articleStore', {
     async fetchPageArchives(page: Ref<IPageQuery>) {
       const { pageNum, pageSize } = unref(page)
       console.log('archive', pageNum, pageSize);
-      
+
       // check fetch is necessary
       if (this.fetchArchivePreCheck(pageNum)) return
       const { data } = await fetchArchives(pageNum, pageSize);
@@ -118,8 +123,14 @@ const useArticleStore = defineStore('articleStore', {
       } else {
         this.archives.push(...archives)
       }
-
     },
+    async fetchOneArticle(id: string) {
+      const result = await fetchArticleById(id);
+      const { error, data } = toRefs(result)
+      if (error.value) return
+      console.dir(data.value);
+      const a:number = 1
+    }
   },
 });
 

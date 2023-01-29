@@ -1,12 +1,6 @@
 <template>
   <div>
-    Welcome Content <br />
-    <!-- bottom: {{ props.isBottom }} <br> -->
-    <!-- top: {{ props.top }} <br> -->
     <span v-if="top"> 已经到顶了哦！ </span> <br />
-    top: {{ top }} <br />
-    <!-- <p v-for="v in indexs" :key="v">{{ v }}</p> -->
-    <!-- <pre>{{ articles }}</pre> -->
     <n-card class="article my-2 relative" v-for="v in articles" :key="v.id">
       <n-icon class="absolute -top-2 right-2 text-2xl text-rose-700" v-if="v.top" :component="TopIcon" />
       <h2 class=" text-center ">

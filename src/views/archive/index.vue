@@ -2,7 +2,7 @@
   <div class="archive p-5 w-2/3 mx-auto">
     <h1 class="text-center text-3xl font-bold">归档页</h1>
     <n-timeline size="large">
-      <h2 class="text-2xl font-bold py-4">{{ `最高! 全 ${archiveTotal} ポスト もっと書こう！` }}  {{  props  }}</h2>
+      <h2 class="text-2xl font-bold py-4">{{ `最高! 全 ${archiveTotal} ポスト もっと書こう！` }}</h2>
       <n-timeline-item v-for="v in archives" :key="v.id" type="default" content="">
         <template #header>
           <router-link class="text-xl font-semibold" :to="`/article/${v.id}`">{{ v.title }}</router-link>
@@ -39,7 +39,6 @@ const props = defineProps({
 
 const message = useMessage()
 
-
 const archiveStore = useArticleStore();
 const { getArchives: archives, archiveTotal, getArchivePageNum: pageNum } = toRefs(archiveStore);
 const page = computed(() => reactive({
@@ -57,20 +56,21 @@ watch(
     if (newVal === true || !props.hasScrollBar) {
       // page.value.pageNum += 1;
       page.value.pageNum += 1;
-      // debugger
-       archiveStore.fetchPageArchives(page);
+      archiveStore.fetchPageArchives(page);
     }
   },
   // { immediate: true } 
 );
 </script>
 
-<style lang="sass" scoped>
-:deep(.n-timeline-item-content)
-  .n-timeline-item-content__title
+<style lang="scss" scoped>
+:deep(.n-timeline-item-content) {
+  .n-timeline-item-content__title {
     float: left
-  
-  .n-timeline-item-content__meta 
-    float: right
+  }
 
+  .n-timeline-item-content__meta {
+    float: right
+  }
+}
 </style>
