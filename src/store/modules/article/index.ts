@@ -1,5 +1,6 @@
 import { fetchArchives, fetchArticleById, fetchArticles } from '@/api/article';
-import { ArticleVO, Category, IPageQuery, Tag, UserVO } from '@/api/types';
+import { fetchArticleMD } from '@/api/md';
+import { ArticleVO, Category, IPageQuery, R, Tag, UserVO } from '@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
 
@@ -27,6 +28,7 @@ interface IArchive {
 }
 
 interface IArticleState {
+  md: string;
   articleInfo: ArticleVO | undefined;
   articles: IArticle[];
   archives: IArchive[];
@@ -40,6 +42,7 @@ interface IArticleState {
 
 const useArticleStore = defineStore('articleStore', {
   state: (): IArticleState => ({
+    md: '',
     articleInfo: undefined,
     articles: [],
     archives: [],
@@ -129,7 +132,14 @@ const useArticleStore = defineStore('articleStore', {
       const { error, data } = toRefs(result)
       if (error.value) return
       console.dir(data.value);
-      const a:number = 1
+      const { data: article } = unref(data)
+      console.log('article', article);
+      this.setArticleInfo(article)
+    },
+    async fetchArticleContent(mdName: string) {
+      const md = await fetchArticleMD(mdName);
+      console.log('md', md);
+      this.md = md;
     }
   },
 });
