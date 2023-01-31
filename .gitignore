@@ -30,3 +30,5 @@ src/assets/img
 
 components.d.ts
 src/auto-imports.d.ts
+
+img/*
