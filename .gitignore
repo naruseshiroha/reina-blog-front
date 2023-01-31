@@ -32,3 +32,4 @@ components.d.ts
 src/auto-imports.d.ts
 
 img/*
+md/*
