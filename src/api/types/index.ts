@@ -120,7 +120,7 @@ export interface ArticleVO {
     content: string;
     coverImage: string;
     top?: boolean;
-    createdAt: Date;
+    createdAt: string;
     viewCount: number;
     likeCount: number;
     commentCount: number;
