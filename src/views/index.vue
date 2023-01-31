@@ -35,7 +35,7 @@
         </n-tag>
       </n-space>
       <div class="content">
-        <router-link :to="`/post/${v.id}`">
+        <router-link :to="`/article/${v.id}`">
           <div class="relative overflow-hidden">
             <img class="mx-auto" :src="`/img/article/${v.coverImage}`" alt="" />
             <div class="absolute top-0 h-full w-full p-5 bg-gray-900 bg-opacity-50 text-2xl text-center text-gray-200 italic opacity-0 hover:opacity-100">

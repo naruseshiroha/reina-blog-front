@@ -55,7 +55,7 @@
           </n-space>
           <n-image :src="`/src/assets/img/article/${article?.coverImage}`"
             fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" /> -->
-          <KaFu />
+          <KaFu class="markdown-body" />
 
           <!-- like collect -->
           <div class="lc bg-gray-100">

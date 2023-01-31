@@ -24,19 +24,7 @@ export default defineConfig({
     Vue({
       include: [/\.vue$/, /\.md$/], // <--
     }),
-    Markdown({
-      markdownItOptions: {
-        html: true,
-        linkify: true,
-        typographer: true,
-      },
-      markdownItSetup(md) {
-        // add anchor links to your H[x] tags
-        md.use(require('markdown-it-anchor'))
-        // add code syntax highlighting with Prism
-        md.use(require('markdown-it-prism'))
-      },
-    }),
+    Markdown(),
     // vite-plugin-pages
     Pages({
       dirs: 'src/views',
@@ -79,4 +67,5 @@ export default defineConfig({
       '@': resolve(__dirname, './src'), // 把 @ 指向到 src 目录去
     },
   },
+  base: '/blog/'
 });
