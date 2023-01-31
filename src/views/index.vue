@@ -1,10 +1,12 @@
 <template>
   <div>
     <span v-if="top"> 已经到顶了哦！ </span> <br />
-    <n-card class="article my-2 relative" v-for="v in articles" :key="v.id">
+    <n-card data-aos="flip-up" class="article my-2 relative" v-for="v in articles" :key="v.id">
       <n-icon class="absolute -top-2 right-2 text-2xl text-rose-700" v-if="v.top" :component="TopIcon" />
       <h2 class=" text-center ">
-        <router-link class="text-2xl text-white bg-sky-blue p-0.5 m-0.5 opacity-80" :to="`/article/${v.id}`">{{ v.title }}</router-link>
+        <router-link class="text-2xl text-white bg-sky-blue p-0.5 m-0.5 opacity-80" :to="`/article/${v.id}`">{{
+          v.title
+        }}</router-link>
       </h2>
       <n-space class="tags m-5 !justify-center">
         <n-tag>
@@ -13,31 +15,30 @@
         </n-tag>
         <n-tag>
           <n-icon :component="TagsIcon" />
-          花譜、神椿
-          <!-- <i v-for="t in v.tags" :key="t.tag?.id">
-                                            &nbsp;<router-link :to="`/post/tag/${t.tag?.id}`">{{
-                                                    t.tag?.tagName
-                                            }}</router-link>&nbsp;
-                                        </i> -->
+          <i v-for="t in v.tags" :key="t.id">
+            &nbsp;
+            <router-link :to="`/tag/${t.id}`">{{ t.tagName }}</router-link>
+            &nbsp;
+          </i>
         </n-tag>
         <n-tag>
           <n-icon :component="EyeIcon" />
-          &nbsp;{{ v.viewCount }}&nbsp;
+          &nbsp;{{ v.viewCount ?? 0 }}&nbsp;
         </n-tag>
         <n-tag>
           <n-icon :component="LikeIcon" />
-          &nbsp;{{ v.likeCount }}&nbsp;
+          &nbsp;{{ v.likeCount ?? 0 }}&nbsp;
         </n-tag>
         <n-tag>
           <n-icon :component="CommentsIcon" />
-          &nbsp;{{ v.commentCount }}&nbsp;
+          &nbsp;{{ v.commentCount ?? 0 }}&nbsp;
         </n-tag>
       </n-space>
       <div class="content">
         <router-link :to="`/post/${v.id}`">
-          <div class="img">
-            <img :src="`/src/assets/img/article/${v.coverImage}`" alt="" />
-            <div class="description">
+          <div class="relative overflow-hidden">
+            <img class="mx-auto" :src="`/img/article/${v.coverImage}`" alt="" />
+            <div class="absolute top-0 h-full w-full p-5 bg-gray-900 bg-opacity-50 text-2xl text-center text-gray-200 italic opacity-0 hover:opacity-100">
               {{ v.description }}
             </div>
           </div>
@@ -78,7 +79,7 @@ console.log("res", data);
 const articleStore = useArticleStore();
 const { getArticles: articles, getArticlePageNum: pageNum } = toRefs(articleStore);
 
-const page:Ref<IPageQuery> = computed(() => reactive({
+const page: Ref<IPageQuery> = computed(() => reactive({
   pageNum: pageNum.value,
   pageSize: 10
 }))
