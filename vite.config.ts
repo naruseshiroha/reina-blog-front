@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import vue from '@vitejs/plugin-vue';
+import Vue from '@vitejs/plugin-vue';
+import Markdown from 'vite-plugin-md'
 import Pages from 'vite-plugin-pages';
 import Layouts from 'vite-plugin-vue-layouts';
 import AutoImport from 'unplugin-auto-import/vite';
@@ -12,15 +13,30 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://1.117.89.74:8801',
-        target: 'http://192.168.11.225:8801',
+        target: 'http://1.117.89.74:8801',
+        // target: 'http://localhost:8801',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, ''),
       },
     },
   },
   plugins: [
-    vue(),
+    Vue({
+      include: [/\.vue$/, /\.md$/], // <--
+    }),
+    Markdown({
+      markdownItOptions: {
+        html: true,
+        linkify: true,
+        typographer: true,
+      },
+      markdownItSetup(md) {
+        // add anchor links to your H[x] tags
+        md.use(require('markdown-it-anchor'))
+        // add code syntax highlighting with Prism
+        md.use(require('markdown-it-prism'))
+      },
+    }),
     // vite-plugin-pages
     Pages({
       dirs: 'src/views',

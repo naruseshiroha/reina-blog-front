@@ -1,6 +1,8 @@
 import { createApp } from 'vue';
 import './style.css';
-import '@/assets/sass/my.sass'
+import '@/assets/sass/my.scss'
+import 'github-markdown-css'
+// AOS
 import App from './App.vue';
 import router from './router';
 import store from './store';
