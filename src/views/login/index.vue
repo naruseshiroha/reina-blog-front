@@ -74,10 +74,10 @@
 import { useFetch } from '@vueuse/core';
 import { FormInst, FormItemInst, FormItemRule, FormRules, NAvatar, NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import { computed, ref, reactive } from 'vue';
-import { R, Page, User, LoginModule, RegisterModule } from '@/api/types/';
+import { R, Page, UserVO, LoginModule, RegisterModule } from '@/api/types/';
 
-const { data: users } = useFetch('/api/user').get().json();
-const userArr = computed(() => (users.value as R<Page<User>>)?.data.records.map((e: User) => e.firstName + e.lastName));
+// const { data: users } = useFetch('/api/user').get().json();
+// const userArr = computed(() => (users.value as R<Page<UserVO>>)?.data.list.map((e: UserVO) => e?.firstName + e?.lastName));
 
 // login
 const formType = ref<string>('register');
