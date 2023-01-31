@@ -1,0 +1,14 @@
+.n-form-item-blank {
+    justify-content: space-evenly;
+}
+
+.n-tag {
+    cursor: pointer;
+    .n-tag__content {
+        display: flex;
+    }
+}
+
+body {
+    overflow: hidden;
+}
