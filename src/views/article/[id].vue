@@ -55,7 +55,8 @@
           </n-space>
           <n-image :src="`/src/assets/img/article/${article?.coverImage}`"
             fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" /> -->
-          <KaFu class="markdown-body" />
+          <!-- <KaFu class="markdown-body" /> -->
+          <div class="markdown-body" v-html="article?.content"></div>
 
           <!-- like collect -->
           <div class="lc bg-gray-100">
@@ -69,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import KaFu from '/md/kafu.md';
+// import KaFu from '/md/kafu.md';
 import {
   Home as HomeIcon,
   FolderOpen as FolderIcon,
@@ -82,7 +83,7 @@ import {
 } from '@vicons/fa'
 import { useArticleStore } from '@/store';
 import { storeToRefs } from 'pinia';
-import { fetchArticleMD } from '@/api/md';
+// import { fetchArticleMD } from '@/api/md';
 
 const articleStore = useArticleStore();
 const route = useRoute();
@@ -96,7 +97,7 @@ console.log('unref', unref(article));
 
 const category = computed(() => unref(article)?.category)
 
-articleStore.fetchArticleContent('kafu.md');
+// articleStore.fetchArticleContent('kafu.md');
 
 // console.log('ref', article);
 // console.log('unref', unref(article));
