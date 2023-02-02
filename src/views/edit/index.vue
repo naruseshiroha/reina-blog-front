@@ -131,10 +131,9 @@ const customRequest = async ({ file, onFinish }: UploadCustomRequestOptions) => 
   console.log('file', file);
   const data = new FormData();
   data.append('file', file.file as File);
-  const res = await (await fetch('/api/upload/article', { method: 'post', body: data })).json()
-  console.log('res', res);
-  file.url = 'http://1.117.89.74:6208/blog/img/avatar/default.jpg'
-  // previewFileList.value.push(file)
+  const { data: filename } = await (await fetch('/api/upload/article', { method: 'post', body: data })).json()
+  console.log('filename', filename);
+  file.url = `/img/article/${filename}`
   onFinish()
 }
 
