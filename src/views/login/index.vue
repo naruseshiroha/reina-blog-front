@@ -62,7 +62,7 @@
     <div v-show="formType === 'logined'">
       <h2 class="text-xl">ようこそ！</h2>
       <div class="mt-2 flex justify-between items-center">
-        <n-avatar round :size="60" src="/src/assets/imgs/another.jpg" />
+        <n-avatar round :size="60" src="/img/avatar/another.jpg" />
         <span>{{ '見崎　鳴' }}</span>
         <n-button @click="handleLogoutBtn">退出</n-button>
       </div>

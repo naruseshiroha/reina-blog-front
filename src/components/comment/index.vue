@@ -58,56 +58,56 @@ const showIcon = computed(() => (isShrink.value ? UpIcon : DownIcon));
 
 const comments = computed(() => [
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
     createdAt: "2022-10-12",
   },
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
     createdAt: "2022-10-12",
   },
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
     createdAt: "2022-10-12",
   },
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
     createdAt: "2022-10-12",
   },
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
     createdAt: "2022-10-12",
   },
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
     createdAt: "2022-10-12",
   },
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
     createdAt: "2022-10-12",
   },
   {
-    avatar: "/src/assets/imgs/another.jpg",
+    avatar: "/img/avatar/another.jpg",
     articleId: "1",
     content:
       "真不容易，我深入推galgame后才真正知道较冷门作品的好，废萌作品入坑，被rukuru震撼还有这样的剧情作，发现还有紫社这样社保的CG，最近推夏空的英仙座发现还有这么用心的社团给gal做全程动画。想找老作品还是弟弟君靠谱，节省了很多的找资源的精力，第一次很遗憾没早出生几年错过了这样的一个时代，再次感谢弟弟君。",
