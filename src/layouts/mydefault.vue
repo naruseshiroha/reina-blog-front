@@ -25,7 +25,7 @@
       <aside class="border">aside</aside> -->
     </main>
     <footer ref="footerRef" class="border sticky z-10" :style="{ bottom: 0, backgroundColor: '#FFF' }">
-      <n-back-top :right="50" />
+      <n-back-top class="z-10" :right="50" />
       Footer
     </footer>
   </div>
@@ -64,7 +64,7 @@ const hasScrollBar = computed(() => {
 
   return res
 })
-const hideAsideRoutes: string[] = ["archive", "tag"];
+const hideAsideRoutes: string[] = ["archive", "tag", 'edit' ];
 
 const route = useRoute();
 const routeName = computed(() => route.name);
