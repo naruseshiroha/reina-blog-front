@@ -128,3 +128,18 @@ export interface ArticleVO {
     tags: TagVO[];
     category: CategoryVO;
 }
+
+export interface CommentVO {
+    id: string;
+    userId: string;
+    nickName: string;
+    articleId: string;
+    content: string;
+    replyUserId: string;
+    replyNickName: string;
+    status?: string;
+    parentId: string;
+    createdAt: string;
+    children?: CommentVO[];
+    collapsed?: boolean;
+}

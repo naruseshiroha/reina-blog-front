@@ -9,7 +9,8 @@
             <n-breadcrumb>
               <n-breadcrumb-item>
                 <router-link to="/">
-                  <n-icon :component="HomeIcon" /> Home
+                  <n-icon :component="HomeIcon" />
+                  Home
                 </router-link>
               </n-breadcrumb-item>
               <n-breadcrumb-item>
@@ -59,10 +60,117 @@
           <div class="markdown-body" v-html="article?.content"></div>
 
           <!-- like collect -->
-          <div class="lc bg-gray-100">
-            <n-button>Like</n-button>
-            <n-button>Collect</n-button>
-          </div>  
+          <div class="my-2 flex items-center">
+            <!-- <div> -->
+            <div class="mr-auto flex items-center">
+              <n-icon class="mx-1" :size="22"><TagsIcon /></n-icon>
+              <n-tag class="mx-1" v-for="v in article?.tags" :key="v.id">{{
+                v.tagName
+              }}</n-tag>
+            </div>
+            <!-- </div> -->
+            <!-- <n-grid :x-gap="12" :cols="4">
+              <n-grid-item class="text-center" :offset="1"> -->
+            <n-button class="mr-2">
+              <template #icon>
+                <n-icon><LikeIcon /></n-icon>
+              </template>
+              喜欢
+            </n-button>
+            <!-- </n-grid-item>
+              <n-grid-item class="text-center"> -->
+            <n-button>
+              <template #icon>
+                <n-icon><CollectIcon /></n-icon>
+              </template>
+              收藏
+            </n-button>
+            <!-- </n-grid-item>
+            </n-grid> -->
+          </div>
+
+          <!-- Comment -->
+          <div class="comment">
+            <div class="amount border p-2 flex items-center justify-center">
+              <n-icon class="mr-1" :size="22"><CommentsIcon /></n-icon>
+              <span class="text-xl">{{ 1234 }}条评论</span>
+            </div>
+            <div v-for="comment in comments" :key="comment.id" class="mt-5">
+              <n-card :title="`${comment.nickName} 说道：`" hoverable>
+                <template #header-extra>
+                  <span class="text-base flex items-center">
+                    {{ comment.createdAt.replace(/T/, " ") }}
+                    <n-button
+                      v-show="comment.children"
+                      class="ml-2"
+                      text
+                      @click="comment.collapsed = !comment.collapsed"
+                    >
+                      <n-icon
+                        :size="18"
+                        :component="
+                          comment.collapsed ? ChevronCircleUpIcon : ChevronCircleDownIcon
+                        "
+                      />
+                    </n-button>
+                  </span>
+                </template>
+                <div class="relative pb-4">
+                  <p :style="{ textIndent: '2rem' }">{{ comment.content }}</p>
+                  <n-avatar
+                    class="absolute -top-8 -left-12"
+                    round
+                    :size="48"
+                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                  />
+                </div>
+                <template #footer>
+                  <div>
+                    <n-button class="float-right" type="text">
+                      <template #icon>
+                        <ReplyIcon />
+                      </template>
+                      <span>回复</span>
+                    </n-button>
+                  </div>
+                </template>
+                <!-- children -->
+                <n-card
+                  v-show="!comment.collapsed"
+                  v-for="child in comment.children"
+                  :title="`${child.nickName} 回复 ${child.replyNickName} ：`"
+                  hoverable
+                >
+                  <template #header-extra>
+                    <span>
+                      {{ child.createdAt.replace(/T/, " ") }}
+                    </span>
+                  </template>
+                  <div class="relative pb-4">
+                    <p :style="{ textIndent: '2rem' }">{{ child.content }}</p>
+                    <n-avatar
+                      class="absolute -top-8 -left-12"
+                      round
+                      :size="48"
+                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                    />
+                  </div>
+                  <template #footer>
+                    <div>
+                      <n-button class="float-right" type="text">
+                        <template #icon>
+                          <ReplyIcon />
+                        </template>
+                        <span>回复</span>
+                      </n-button>
+                    </div>
+                  </template>
+                  <!-- <template #action> #action </template> -->
+                </n-card>
+                <!-- <template #action> #action </template> -->
+              </n-card>
+            </div>
+          </div>
         </template>
       </n-card>
     </n-space>
@@ -79,46 +187,56 @@ import {
   Tags as TagsIcon,
   EyeRegular as EyeIcon,
   ThumbsUpRegular as LikeIcon,
+  HeartRegular as CollectIcon,
   CommentsRegular as CommentsIcon,
-} from '@vicons/fa'
-import { useArticleStore } from '@/store';
-import { storeToRefs } from 'pinia';
+  ChevronCircleUp as ChevronCircleUpIcon,
+  ChevronCircleDown as ChevronCircleDownIcon,
+  Reply as ReplyIcon,
+} from "@vicons/fa";
+import { useArticleStore, useCommentStore } from "@/store";
+import { storeToRefs } from "pinia";
 // import { fetchArticleMD } from '@/api/md';
 
 const articleStore = useArticleStore();
+const commentStore = useCommentStore();
 const route = useRoute();
 
-const id = computed(() => route.params?.id)
-const { articleInfo: article, md } = storeToRefs(articleStore)
-const loading = computed(() => !Boolean(unref(article)))
-console.log('article', isReactive(article));
-console.log('article', isRef(article));
-console.log('unref', unref(article));
+const id = computed(() => route.params?.id);
+const { articleInfo: article, md } = storeToRefs(articleStore);
+const { comments } = storeToRefs(commentStore);
+const loading = computed(() => !Boolean(unref(article)));
 
-const category = computed(() => unref(article)?.category)
+const category = computed(() => unref(article)?.category);
 
 // articleStore.fetchArticleContent('kafu.md');
 
 // console.log('ref', article);
 // console.log('unref', unref(article));
 
-
 watch(
   id,
   async (newVal, oldVal) => {
-    console.log('newVal', newVal);
-    console.log('oldVal', oldVal);
+    console.log("newVal", newVal);
+    console.log("oldVal", oldVal);
     if (newVal) {
-      articleStore.fetchOneArticle(newVal as string)
+      articleStore.fetchOneArticle(newVal as string);
+      commentStore.fetchArticleComments(newVal as string);
     }
   },
   { immediate: true }
 );
-
-
-
 </script>
 
 <style lang="scss" scoped>
-
+:deep(.comment) {
+  .n-card-header__main {
+    font-size: 20px;
+  }
+  .n-card__content {
+    padding: 0 24px;
+  }
+  .n-card__footer {
+    padding: 0 0 5px 0;
+  }
+}
 </style>
