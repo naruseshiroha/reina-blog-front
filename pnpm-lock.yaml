@@ -15,6 +15,7 @@ specifiers:
   '@wangeditor/editor': ^5.1.23
   '@wangeditor/editor-for-vue': ^5.1.12
   aos: ^2.3.4
+  artalk: ^2.4.4
   autoprefixer: ^10.4.13
   github-markdown-css: ^5.1.0
   markdown-it: ^13.0.1
@@ -54,6 +55,7 @@ devDependencies:
   '@wangeditor/editor': 5.1.23
   '@wangeditor/editor-for-vue': 5.1.12_3apfu3xbp6awzuex7ed3sbrv6y
   aos: 2.3.4
+  artalk: 2.4.4
   autoprefixer: 10.4.13_postcss@8.4.19
   github-markdown-css: 5.1.0
   markdown-it: 13.0.1
@@ -762,6 +764,10 @@ packages:
       - terser
     dev: true
 
+  /abortcontroller-polyfill/1.7.5:
+    resolution: {integrity: sha512-JMJ5soJWP18htbbxJjG7bG6yuI6pRhgJ0scHHTfkUjf6wjP912xZWvM+A4sJK3gqd9E8fcPbDnOefbA9Th/FIQ==}
+    dev: true
+
   /acorn-node/1.8.2:
     resolution: {integrity: sha512-8mt+fslDufLYntIoPAaIMUe/lrbrehIiwmR3t2k9LljIzoigEPF27eLk2hy8zSGzmR/ogr7zbRKINMo1u0yh5A==}
     dependencies:
@@ -816,8 +822,21 @@ packages:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
     dev: true
 
+  /artalk/2.4.4:
+    resolution: {integrity: sha512-8O/FjQM+oFnfsfouuej2qjRNfV9/0JJR2jI9vS7neI8zTa4xqu0PChDIR0CtZG8ze0eOKI0taTlEFhmahJUJIQ==}
+    dependencies:
+      abortcontroller-polyfill: 1.7.5
+      hanabi: 0.4.0
+      insane: 2.6.2
+      marked: 4.2.12
+    dev: true
+
   /assertion-error/1.1.0:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
+    dev: true
+
+  /assignment/2.0.0:
+    resolution: {integrity: sha512-naMULXjtgCs9SVUEtyvJNt68aF18em7/W+dhbR59kbz9cXWPEvUkCun2tqlgqRPSqZaKPpqLc5ZnwL8jVmJRvw==}
     dev: true
 
   /async-validator/4.2.5:
@@ -1003,6 +1022,11 @@ packages:
 
   /color-name/1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+    dev: true
+
+  /comment-regex/1.0.1:
+    resolution: {integrity: sha512-IWlN//Yfby92tOIje7J18HkNmWRR7JESA/BK8W7wqY/akITpU5B0JQWnbTjCfdChSrDNb0DrdA9jfAxiiBXyiQ==}
+    engines: {node: '>=0.10.0'}
     dev: true
 
   /compute-scroll-into-view/1.0.20:
@@ -1555,6 +1579,12 @@ packages:
       get-intrinsic: 1.1.3
     dev: true
 
+  /hanabi/0.4.0:
+    resolution: {integrity: sha512-ixJH94fwmmVzUSdxl7TMkVZJmsq4d2JKrxedpM5V1V+91iVHL0q6NnJi4xiDahK6Vo00xT17H8H6b4F6RVbsOg==}
+    dependencies:
+      comment-regex: 1.0.1
+    dev: true
+
   /happy-dom/8.2.2:
     resolution: {integrity: sha512-Glf3mOxTmh0ZdrvoPpbr0kc2Mg6OWCyLf8j36Jyj1EAR3Vs0LLEaZ9HSOWFR9ZwCsBW6YgybT9slJlR9dTxEGA==}
     dependencies:
@@ -1595,6 +1625,11 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
+    dev: true
+
+  /he/0.5.0:
+    resolution: {integrity: sha512-DoufbNNOFzwRPy8uecq+j+VCPQ+JyDelHTmSgygrA5TsR8Cbw4Qcir5sGtWiusB4BdT89nmlaVDhSJOqC/33vw==}
+    hasBin: true
     dev: true
 
   /he/1.2.0:
@@ -1666,6 +1701,13 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: true
+
+  /insane/2.6.2:
+    resolution: {integrity: sha512-BqEL1CJsjJi+/C/zKZxv31zs3r6zkLH5Nz1WMFb7UBX2KHY2yXDpbFTSEmNHzomBbGDysIfkTX55A0mQZ2CQiw==}
+    dependencies:
+      assignment: 2.0.0
+      he: 0.5.0
     dev: true
 
   /is-arguments/1.1.1:
@@ -1935,6 +1977,12 @@ packages:
       linkify-it: 4.0.1
       mdurl: 1.0.1
       uc.micro: 1.0.6
+    dev: true
+
+  /marked/4.2.12:
+    resolution: {integrity: sha512-yr8hSKa3Fv4D3jdZmtMMPghgVt6TWbk86WQaWhDloQjRSQhMMYCAro7jP7VDJrjjdV8pxVxMssXS8B8Y5DZ5aw==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: true
 
   /mdurl/1.0.1:

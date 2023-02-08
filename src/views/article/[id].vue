@@ -63,7 +63,9 @@
           <div class="my-2 flex items-center">
             <!-- <div> -->
             <div class="mr-auto flex items-center">
-              <n-icon class="mx-1" :size="22"><TagsIcon /></n-icon>
+              <n-icon class="mx-1" :size="22">
+                <TagsIcon />
+              </n-icon>
               <n-tag class="mx-1" v-for="v in article?.tags" :key="v.id">{{
                 v.tagName
               }}</n-tag>
@@ -73,7 +75,9 @@
               <n-grid-item class="text-center" :offset="1"> -->
             <n-button class="mr-2">
               <template #icon>
-                <n-icon><LikeIcon /></n-icon>
+                <n-icon>
+                  <LikeIcon />
+                </n-icon>
               </template>
               喜欢
             </n-button>
@@ -81,7 +85,9 @@
               <n-grid-item class="text-center"> -->
             <n-button>
               <template #icon>
-                <n-icon><CollectIcon /></n-icon>
+                <n-icon>
+                  <CollectIcon />
+                </n-icon>
               </template>
               收藏
             </n-button>
@@ -92,37 +98,29 @@
           <!-- Comment -->
           <div class="comment">
             <div class="amount border p-2 flex items-center justify-center">
-              <n-icon class="mr-1" :size="22"><CommentsIcon /></n-icon>
+              <n-icon class="mr-1" :size="22">
+                <CommentsIcon />
+              </n-icon>
               <span class="text-xl">{{ 1234 }}条评论</span>
             </div>
-            <div v-for="comment in comments" :key="comment.id" class="mt-5">
+
+            <!-- <div v-for="comment in comments" :key="comment.id" class="mt-5">
               <n-card :title="`${comment.nickName} 说道：`" hoverable>
                 <template #header-extra>
                   <span class="text-base flex items-center">
                     {{ comment.createdAt.replace(/T/, " ") }}
-                    <n-button
-                      v-show="comment.children"
-                      class="ml-2"
-                      text
-                      @click="comment.collapsed = !comment.collapsed"
-                    >
-                      <n-icon
-                        :size="18"
-                        :component="
-                          comment.collapsed ? ChevronCircleUpIcon : ChevronCircleDownIcon
-                        "
-                      />
+                    <n-button v-show="comment.children" class="ml-2" text
+                      @click="comment.collapsed = !comment.collapsed">
+                      <n-icon :size="18" :component="
+                        comment.collapsed ? ChevronCircleUpIcon : ChevronCircleDownIcon
+                      " />
                     </n-button>
                   </span>
                 </template>
                 <div class="relative pb-4">
                   <p :style="{ textIndent: '2rem' }">{{ comment.content }}</p>
-                  <n-avatar
-                    class="absolute -top-8 -left-12"
-                    round
-                    :size="48"
-                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-                  />
+                  <n-avatar class="absolute -top-8 -left-12" round :size="48"
+                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
                 </div>
                 <template #footer>
                   <div>
@@ -134,13 +132,9 @@
                     </n-button>
                   </div>
                 </template>
-                <!-- children -->
-                <n-card
-                  v-show="!comment.collapsed"
-                  v-for="child in comment.children"
-                  :title="`${child.nickName} 回复 ${child.replyNickName} ：`"
-                  hoverable
-                >
+
+                <n-card v-show="!comment.collapsed" v-for="child in comment.children"
+                  :title="`${child.nickName} 回复 ${child.replyNickName} ：`" hoverable>
                   <template #header-extra>
                     <span>
                       {{ child.createdAt.replace(/T/, " ") }}
@@ -148,12 +142,8 @@
                   </template>
                   <div class="relative pb-4">
                     <p :style="{ textIndent: '2rem' }">{{ child.content }}</p>
-                    <n-avatar
-                      class="absolute -top-8 -left-12"
-                      round
-                      :size="48"
-                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-                    />
+                    <n-avatar class="absolute -top-8 -left-12" round :size="48"
+                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
                   </div>
                   <template #footer>
                     <div>
@@ -165,20 +155,29 @@
                       </n-button>
                     </div>
                   </template>
-                  <!-- <template #action> #action </template> -->
                 </n-card>
-                <!-- <template #action> #action </template> -->
               </n-card>
-            </div>
+            </div> -->
+
+
+
           </div>
         </template>
+        <div id="artalk">
+
+        </div>
       </n-card>
     </n-space>
+
+    <!-- 发表评论 -->
   </div>
 </template>
 
 <script setup lang="ts">
 // import KaFu from '/md/kafu.md';
+import 'artalk/dist/Artalk.css'
+import Artalk from 'artalk'
+
 import {
   Home as HomeIcon,
   FolderOpen as FolderIcon,
@@ -196,6 +195,20 @@ import {
 import { useArticleStore, useCommentStore } from "@/store";
 import { storeToRefs } from "pinia";
 // import { fetchArticleMD } from '@/api/md';
+
+const artalkRef = ref("#artalk")
+
+onMounted(() => {
+  const artalk = new Artalk({
+    el: artalkRef.value,
+    pageKey: ``,
+    pageTitle: ``,
+    server: 'http://47.94.11.160:6218/',
+    site: 'reina',
+    // ...
+  })
+})
+
 
 const articleStore = useArticleStore();
 const commentStore = useCommentStore();
@@ -225,6 +238,8 @@ watch(
   },
   { immediate: true }
 );
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -232,9 +247,11 @@ watch(
   .n-card-header__main {
     font-size: 20px;
   }
+
   .n-card__content {
     padding: 0 24px;
   }
+
   .n-card__footer {
     padding: 0 0 5px 0;
   }
