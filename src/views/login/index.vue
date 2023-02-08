@@ -71,10 +71,9 @@
 </template>
 
 <script setup lang="ts">
-import { useFetch } from '@vueuse/core';
 import { FormInst, FormItemInst, FormItemRule, FormRules, NAvatar, NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
-import { computed, ref, reactive } from 'vue';
-import { R, Page, UserVO, LoginModule, RegisterModule } from '@/api/types/';
+import { ref, reactive } from 'vue';
+import { LoginModule, RegisterModule } from '@/api/types/';
 
 // const { data: users } = useFetch('/api/user').get().json();
 // const userArr = computed(() => (users.value as R<Page<UserVO>>)?.data.list.map((e: UserVO) => e?.firstName + e?.lastName));
@@ -190,6 +189,8 @@ const getVerifyCode = (email: string): string => {
       timeLimitStr.value = '';
     }
   }, 1000);
+  console.log('email', email);
+  
   // return (code.value as R<string>)?.data;
   return '';
 };

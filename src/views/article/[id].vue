@@ -169,6 +169,8 @@
       </n-card>
     </n-space>
 
+    {{ comments }}
+
     <!-- 发表评论 -->
   </div>
 </template>
@@ -182,15 +184,15 @@ import {
   Home as HomeIcon,
   FolderOpen as FolderIcon,
   File as FileIcon,
-  CalendarAltRegular as CalendarIcon,
+  // CalendarAltRegular as CalendarIcon,
   Tags as TagsIcon,
-  EyeRegular as EyeIcon,
+  // EyeRegular as EyeIcon,
   ThumbsUpRegular as LikeIcon,
   HeartRegular as CollectIcon,
   CommentsRegular as CommentsIcon,
-  ChevronCircleUp as ChevronCircleUpIcon,
-  ChevronCircleDown as ChevronCircleDownIcon,
-  Reply as ReplyIcon,
+  // ChevronCircleUp as ChevronCircleUpIcon,
+  // ChevronCircleDown as ChevronCircleDownIcon,
+  // Reply as ReplyIcon,
 } from "@vicons/fa";
 import { useArticleStore, useCommentStore } from "/@/store";
 import { storeToRefs } from "pinia";
@@ -207,6 +209,7 @@ onMounted(() => {
     site: 'reina',
     // ...
   })
+  console.log('artalk', artalk);
 })
 
 
@@ -215,7 +218,7 @@ const commentStore = useCommentStore();
 const route = useRoute();
 
 const id = computed(() => route.params?.id);
-const { articleInfo: article, md } = storeToRefs(articleStore);
+const { articleInfo: article } = storeToRefs(articleStore);
 const { comments } = storeToRefs(commentStore);
 const loading = computed(() => !Boolean(unref(article)));
 

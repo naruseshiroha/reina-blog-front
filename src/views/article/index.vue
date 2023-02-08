@@ -1,6 +1,6 @@
 <template>
   <div class="border border-black">
-    <div class="relative flex flex-col flex-wrap items-center rounded shadow mb-4 px-2" v-for="(v, i) in 10 " :key="i">
+    <div class="relative flex flex-col flex-wrap items-center rounded shadow mb-4 px-2" v-for="v in 10 " :key="v">
       <n-icon v-if="'a.top'" color="#F00" class="absolute text-top text-2xl -top-2 right-2" :component="TopIcon"></n-icon>
       <h2 class="text-2xl font-bold my-2">
         <router-link :to="`/article/a.id`">{{ 'a.title' }}</router-link>

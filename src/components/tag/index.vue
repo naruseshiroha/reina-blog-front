@@ -27,7 +27,7 @@
         </template>
         <template #default>
           <n-list v-show="!isShrink" hoverable boarder>
-            <a v-for="(v, i) in links" :key="v.id" :href="v.linkUrl" target="_blank">
+            <a v-for="v in links" :key="v.id" :href="v.linkUrl" target="_blank">
               <n-list-item>
                 <!-- {{ v.linkName }} -->
 
@@ -52,7 +52,7 @@ import {
   LinkSquare24Regular as LinkIcon,
   ChevronCircleUp48Regular as UpIcon,
   ChevronCircleDown48Regular as DownIcon,
-  DismissCircle48Regular as CloseIcon,
+  // DismissCircle48Regular as CloseIcon,
 } from "@vicons/fluent";
 
 import { useTagStore, useLinkStore } from "/@/store";

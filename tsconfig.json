@@ -20,7 +20,7 @@
     "lib": ["dom", "esnext"],
     "noImplicitAny": false,
     "skipLibCheck": true,
-    "types": ["vite/client", "element-plus/global", "vite-plugin-vue-layouts/client" ],
+    "types": ["vite/client", "vite-plugin-vue-layouts/client" ],
     "removeComments": true,
     "paths": {
       "/@/*": ["src/*"],

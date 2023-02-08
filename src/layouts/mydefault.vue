@@ -32,15 +32,14 @@
 </template>
 
 <script setup lang="ts">
-import { useElementSize, useScroll, useWindowScroll, useWindowSize } from "@vueuse/core";
+import { useElementSize, useScroll, useWindowSize } from "@vueuse/core";
 const scrollBox = ref(null);
 const headerRef = ref(null);
 const mainBox = ref(null);
 const footerRef = ref(null);
-const { x, y, arrivedState } = useScroll(scrollBox);
+const { arrivedState } = useScroll(scrollBox);
 const { top, bottom } = toRefs(arrivedState);
 
-const wScroll = useWindowScroll()
 const wSize = useWindowSize()
 const headerSize = useElementSize(headerRef)
 const mainSize = useElementSize(mainBox)
@@ -51,10 +50,6 @@ const footerSize = useElementSize(footerRef)
 // console.dir(mainSize.height);
 
 const hasScrollBar = computed(() => {
-  const wh = wSize.height.value;
-  const hh = headerSize.height.value
-  const mh = mainSize.height.value
-  const fh = footerSize.height.value
   // console.log('wh', wh);
   // console.log('hh', hh);
   // console.log('mh', mh);
@@ -75,7 +70,7 @@ const checkAside = (routeName: string) => {
   return !Boolean(find);
 };
 
-watch([hasScrollBar, mainSize.height], (newVal, oldVal) => {
+watch([hasScrollBar, mainSize.height], (newVal) => {
   // console.log('default hasScrollBar', newVal, oldVal);
   bottom.value = !newVal
 },

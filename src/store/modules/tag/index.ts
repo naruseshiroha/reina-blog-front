@@ -54,7 +54,7 @@ const useTagStore = defineStore('TagStore', {
       if (this.tagIsFinished) return
       const { pageNum, pageSize } = page
       const { data } = await fetchTags(pageNum, pageSize);
-      const { code, data: { list: tags, total } } = data.value
+      const { data: { list: tags, total } } = data.value
 
       if (!this.tagTotal) this.tagTotal = total
       if (pageNum * pageSize >= this.tagTotal) this.tagIsFinished = true

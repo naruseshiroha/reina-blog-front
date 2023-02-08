@@ -1,5 +1,5 @@
 import { fetchArchives, fetchArticleById, fetchArticles } from '/@/api/article';
-import { ArticleVO, Category, IPageQuery, R, Tag, UserVO } from '/@/api/types';
+import { ArticleVO, Category, IPageQuery, Tag, UserVO } from '/@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
 
@@ -95,7 +95,7 @@ const useArticleStore = defineStore('articleStore', {
       const { pageNum, pageSize } = unref(page)
       if (this.fetchArticlePreCheck(pageNum)) return
       const { data } = await fetchArticles(pageNum, pageSize);
-      const { code, data: { list: articles, total } } = data.value
+      const { data: { list: articles, total } } = data.value
 
       if (articles.length) this.articlePages.unshift(pageNum)
       if (!this.articleTotal) this.articleTotal = total
@@ -114,7 +114,7 @@ const useArticleStore = defineStore('articleStore', {
       // check fetch is necessary
       if (this.fetchArchivePreCheck(pageNum)) return
       const { data } = await fetchArchives(pageNum, pageSize);
-      const { code, data: { list: archives, total } } = data.value
+      const { data: { list: archives, total } } = data.value
 
       if (archives.length) this.archivePages.unshift(pageNum)
       if (!this.archiveTotal) this.archiveTotal = total
