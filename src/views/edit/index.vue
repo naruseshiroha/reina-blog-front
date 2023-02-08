@@ -53,7 +53,7 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
 import { ref } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { isImage } from '@/util';
+import { isImage } from '/@/util';
 
 const message = useMessage();
 
@@ -68,9 +68,6 @@ const fileList = ref<UploadFileInfo[]>([
 const mode = 'default'
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
-
-// 内容 HTML
-const valueHtml = ref('')
 
 const toolbarConfig = {}
 const editorConfig = { placeholder: '请输入内容...' }

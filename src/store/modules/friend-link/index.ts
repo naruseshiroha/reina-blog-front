@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { fetchLinks } from '@/api/friend-link';
-import { Link, LinkVO, R } from '@/api/types';
+import { fetchLinks } from '/@/api/friend-link';
+import { Link, LinkVO, R } from '/@/api/types';
 
 interface ILinkState {
   //   nickName: string;

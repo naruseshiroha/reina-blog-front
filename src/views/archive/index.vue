@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { useArticleStore } from "@/store";
+import { useArticleStore } from "/@/store";
 import { useMessage } from 'naive-ui'
 
 const props = defineProps({

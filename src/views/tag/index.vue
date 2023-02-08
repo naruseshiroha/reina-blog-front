@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useMessage } from 'naive-ui';
-import { useTagStore } from '@/store';
+import { useTagStore } from '/@/store';
 
 const message = useMessage();
 const showDropdownRef = ref(false);

@@ -1,72 +1,57 @@
-import { defineConfig } from 'vite';
+import { UserConfig, ConfigEnv } from 'vite';
+import { createVitePlugins } from './build/vite/plugins';
 import { resolve } from 'path';
-import Vue from '@vitejs/plugin-vue';
-import Markdown from 'vite-plugin-md'
-import Pages from 'vite-plugin-pages';
-import Layouts from 'vite-plugin-vue-layouts';
-import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-vue-components/vite';
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
+import proxy from './build/vite/proxy';
+import { VITE_PORT } from './build/constant';
+
+function pathResolve(dir: string) {
+  return resolve(process.cwd(), '.', dir);
+}
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  server: {
-    proxy: {
-      '/api': {
-        // target: 'http://1.117.89.74:8801',
-        target: 'http://localhost:6219',
-        // target: 'http://localhost:8801',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ''),
-      },
-    },
-  },
-  plugins: [
-    Vue({
-      include: [/\.vue$/, /\.md$/], // <--
-    }),
-    Markdown(),
-    // vite-plugin-pages
-    Pages({
-      dirs: 'src/views',
-      exclude: ['**/components/*.vue'],
-    }),
-    Layouts({
-      layoutsDirs: 'src/layouts',
-      defaultLayout: 'mydefault',
-    }),
-    AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
+export default ({ command }: ConfigEnv): UserConfig => {
+  const isBuild = command === 'build';
+  let base: string;
+  if (command === 'build') {
+    base = '/blog/';
+  } else {
+    base = '/';
+  }
+  return {
+    base,
+    resolve: {
+      alias: [
         {
-          'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'],
+          find: 'vue-i18n',
+          replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
+        },
+        // /@/xxxx => src/xxxx
+        {
+          find: /\/@\//,
+          replacement: pathResolve('src') + '/',
+        },
+        // /#/xxxx => types/xxxx
+        {
+          find: /\/#\//,
+          replacement: pathResolve('types') + '/',
         },
       ],
-      // targets to transform
-      include: [
-        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-        /\.vue$/,
-        /\.vue\?vue/, // .vue
-        /\.md$/, // .md
-      ],
-      // Generate corresponding .eslintrc-auto-import.json file.
-      // eslint globals Docs - https://eslint.org/docs/user-guide/configuring/language-options#specifying-globals
-      eslintrc: {
-        enabled: false, // Default `false`
-        filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
-        globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
-      },
-      dts: './src/auto-imports.d.ts',
-    }),
-    Components({
-      resolvers: [NaiveUiResolver()],
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, './src'), // 把 @ 指向到 src 目录去
     },
-  },
-  base: '/blog/'
-});
+    // plugins
+    plugins: createVitePlugins(isBuild),
+
+    // css
+    css: {},
+
+    // server
+    server: {
+      hmr: { overlay: false }, // 禁用或配置 HMR 连接 设置 server.hmr.overlay 为 false 可以禁用服务器错误遮罩层
+      // 服务配置
+      port: VITE_PORT, // 类型： number 指定服务器端口;
+      open: false, // 类型： boolean | string在服务器启动时自动在浏览器中打开应用程序；
+      cors: false, // 类型： boolean | CorsOptions 为开发服务器配置 CORS。默认启用并允许任何源
+      host: '0.0.0.0', // IP配置，支持从IP启动
+      proxy,
+    },
+  };
+};

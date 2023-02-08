@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { fetchVerifyCode } from '@/api/user';
+import { fetchVerifyCode } from '/@/api/user';
 
 interface IUserState {
   nickName: string;

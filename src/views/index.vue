@@ -61,7 +61,7 @@ import {
   ThumbsUpRegular as LikeIcon,
   CommentsRegular as CommentsIcon,
 } from "@vicons/fa";
-import { useArticleStore } from "@/store";
+import { useArticleStore } from "/@/store";
 import { useFetch } from "@vueuse/core";
 import { IPageQuery } from "@/api/types";
 import { Ref } from "vue";

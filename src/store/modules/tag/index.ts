@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { fetchTags } from '@/api/tag';
-import { R, TagVO, IPageQuery, Page } from '@/api/types';
+import { fetchTags } from '/@/api/tag';
+import { R, TagVO, IPageQuery, Page } from '/@/api/types';
 
 interface ITagState {
   tags: TagVO[];

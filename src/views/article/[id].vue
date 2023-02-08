@@ -192,7 +192,7 @@ import {
   ChevronCircleDown as ChevronCircleDownIcon,
   Reply as ReplyIcon,
 } from "@vicons/fa";
-import { useArticleStore, useCommentStore } from "@/store";
+import { useArticleStore, useCommentStore } from "/@/store";
 import { storeToRefs } from "pinia";
 // import { fetchArticleMD } from '@/api/md';
 

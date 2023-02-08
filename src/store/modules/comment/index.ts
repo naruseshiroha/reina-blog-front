@@ -1,5 +1,5 @@
-import { fetchArticleComments } from '@/api/comment';
-import { CommentVO } from '@/api/types';
+import { fetchArticleComments } from '/@/api/comment';
+import { CommentVO } from '/@/api/types';
 import { defineStore } from 'pinia';
 
 

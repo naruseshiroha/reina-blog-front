@@ -1,6 +1,5 @@
-import { fetchArchives, fetchArticleById, fetchArticles } from '@/api/article';
-import { fetchArticleMD } from '@/api/md';
-import { ArticleVO, Category, IPageQuery, R, Tag, UserVO } from '@/api/types';
+import { fetchArchives, fetchArticleById, fetchArticles } from '/@/api/article';
+import { ArticleVO, Category, IPageQuery, R, Tag, UserVO } from '/@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
 
@@ -136,11 +135,6 @@ const useArticleStore = defineStore('articleStore', {
       console.log('article', article);
       this.setArticleInfo(article)
     },
-    async fetchArticleContent(mdName: string) {
-      const md = await fetchArticleMD(mdName);
-      console.log('md', md);
-      this.md = md;
-    }
   },
 });
 

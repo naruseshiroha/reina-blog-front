@@ -28,8 +28,5 @@ src/assets/imgs
 src/assets/img
 *.code-workspace
 
-components.d.ts
-src/auto-imports.d.ts
-
 img/*
 md/*

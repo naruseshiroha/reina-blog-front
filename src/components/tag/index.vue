@@ -55,7 +55,7 @@ import {
   DismissCircle48Regular as CloseIcon,
 } from "@vicons/fluent";
 
-import { useTagStore, useLinkStore } from "@/store";
+import { useTagStore, useLinkStore } from "/@/store";
 import { storeToRefs } from "pinia";
 
 const isShrink = ref(false);

@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import './style.css';
-import '@/assets/scss/my.scss'
+import '/@/assets/scss/my.scss'
 import 'github-markdown-css'
 // AOS
 import App from './App.vue';
