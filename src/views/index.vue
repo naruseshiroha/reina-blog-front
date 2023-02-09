@@ -43,6 +43,7 @@
             </div>
           </div>
         </router-link>
+
       </div>
     </n-card>
     bottom: {{ bottom }} <br />
@@ -53,7 +54,7 @@
 
 <script setup lang="ts">
 import {
-  Fire as FireIcon,
+  // Fire as FireIcon,
   Bookmark as TopIcon,
   CalendarAltRegular as CalendarIcon,
   Tags as TagsIcon,
@@ -63,8 +64,8 @@ import {
 } from "@vicons/fa";
 import { useArticleStore } from "/@/store";
 import { useFetch } from "@vueuse/core";
-import { IPageQuery } from "@/api/types";
 import { Ref } from "vue";
+import { IPageQuery } from "/@/api/types";
 
 const props = defineProps({
   top: Boolean,
@@ -88,7 +89,7 @@ articleStore.fetchPageArticles(page);
 
 watch(
   () => props.bottom,
-  (newVal, oldVal) => {
+  (newVal) => {
     if (newVal == true) {
       page.value.pageNum += 1;
       articleStore.fetchPageArticles(page)
