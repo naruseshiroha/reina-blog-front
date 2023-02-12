@@ -84,7 +84,7 @@
             </n-button>
             <!-- </n-grid-item>
               <n-grid-item class="text-center"> -->
-            <n-button>
+            <n-button @click="handleCollectButton">
               <template #icon>
                 <n-icon>
                   <CollectIcon />
@@ -211,6 +211,7 @@ import {
 } from "@vicons/fa";
 import { useArticleStore, useCommentStore } from "/@/store";
 import { storeToRefs } from "pinia";
+import { fetchCollectArticle } from "/@/api/collection";
 // import { fetchArticleMD } from '@/api/md';
 
 const artalkRef = ref("#artalk");
@@ -272,6 +273,15 @@ const handleLikeButton = async () => {
   //   }
   // }
 };
+
+const handleCollectButton = async () => {
+  console.log("collect");
+
+  const data = await fetchCollectArticle()
+  console.log('data', data);
+  
+  
+}
 
 watch(
   id,
