@@ -1,4 +1,4 @@
-import { fetchArchives, fetchArticleById, fetchArticles } from '/@/api/article';
+import { fetchArchives, fetchArticleById, fetchArticles, fetchLikeArticle, fetchLikeArticleUser } from '/@/api/article';
 import { ArticleVO, Category, IPageQuery, Tag, UserVO } from '/@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
@@ -37,6 +37,7 @@ interface IArticleState {
   articleIsFinished: boolean;
   archiveTotal: number;
   archiveIsFinished: boolean;
+  likeUsers: string[];
 }
 
 const useArticleStore = defineStore('articleStore', {
@@ -51,6 +52,7 @@ const useArticleStore = defineStore('articleStore', {
     articleIsFinished: false,
     archiveTotal: 0,
     archiveIsFinished: false,
+    likeUsers: [],
   }),
   getters: {
     getArticles(): IArticle[] {
@@ -81,6 +83,19 @@ const useArticleStore = defineStore('articleStore', {
     },
     setArticleInfo(articleInfo: ArticleVO) {
       this.articleInfo = articleInfo;
+    },
+    setLikeUsers(likeUsers: string[]) {
+      this.likeUsers = likeUsers;
+    },
+    removeLikedUser(userId: string) {
+
+      this.likeUsers.splice(this.likeUsers.indexOf(userId), 1);
+    },
+    checkIsLiked(userId: string): boolean {
+      console.log('users', this.likeUsers);
+      const result = this.likeUsers.includes(userId);
+      console.log('check result', result);
+      return this.likeUsers.includes(userId);
     },
     fetchArticlePreCheck(pageNum: number): boolean {
       if (this.articleIsFinished || this.articlePages.find(e => e === pageNum)) return true
@@ -134,6 +149,30 @@ const useArticleStore = defineStore('articleStore', {
       const { data: article } = unref(data)
       console.log('article', article);
       this.setArticleInfo(article)
+    },
+    async fetchLikeArticleUser(aid: string) {
+      const result = await fetchLikeArticleUser(aid);
+      const { error, data } = toRefs(result)
+      if (error.value) return
+      const { data: likeUsers } = unref(data)
+      this.setLikeUsers(likeUsers);
+    },
+    async fetchLikeArticle(aid: string, uid: string, liked: boolean = false): Promise<string> {
+      const result = await fetchLikeArticle(aid, uid, liked)
+      console.log('result', result);
+      const { error, data } = toRefs(result)
+      if (error.value) return "error"
+      console.log('data', data.value);
+      const { data: res, msg } = unref(data)
+      debugger
+      if (res) {
+        if (!liked) {
+          this.likeUsers.push(uid);
+        } else {
+          this.removeLikedUser(uid);
+        }
+      }
+      return msg;
     },
   },
 });

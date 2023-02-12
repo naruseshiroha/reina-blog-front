@@ -73,13 +73,14 @@
             <!-- </div> -->
             <!-- <n-grid :x-gap="12" :cols="4">
               <n-grid-item class="text-center" :offset="1"> -->
-            <n-button class="mr-2">
+            <n-button class="mr-2" @click="handleLikeButton">
               <template #icon>
                 <n-icon>
                   <LikeIcon />
                 </n-icon>
               </template>
-              喜欢
+              <span :style="{ width: '28px' }">{{ isLike ? "已赞" : "赞" }}</span>
+              <!-- {{ like ? "已喜欢" : "喜欢" }} -->
             </n-button>
             <!-- </n-grid-item>
               <n-grid-item class="text-center"> -->
@@ -104,23 +105,34 @@
               <span class="text-xl">{{ 1234 }}条评论</span>
             </div>
 
-            <!-- <div v-for="comment in comments" :key="comment.id" class="mt-5">
+            <div v-for="comment in comments" :key="comment.id" class="mt-5">
               <n-card :title="`${comment.nickName} 说道：`" hoverable>
                 <template #header-extra>
                   <span class="text-base flex items-center">
                     {{ comment.createdAt.replace(/T/, " ") }}
-                    <n-button v-show="comment.children" class="ml-2" text
-                      @click="comment.collapsed = !comment.collapsed">
-                      <n-icon :size="18" :component="
-                        comment.collapsed ? ChevronCircleUpIcon : ChevronCircleDownIcon
-                      " />
+                    <n-button
+                      v-show="comment.children"
+                      class="ml-2"
+                      text
+                      @click="comment.collapsed = !comment.collapsed"
+                    >
+                      <n-icon
+                        :size="18"
+                        :component="
+                          comment.collapsed ? ChevronCircleUpIcon : ChevronCircleDownIcon
+                        "
+                      />
                     </n-button>
                   </span>
                 </template>
                 <div class="relative pb-4">
                   <p :style="{ textIndent: '2rem' }">{{ comment.content }}</p>
-                  <n-avatar class="absolute -top-8 -left-12" round :size="48"
-                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
+                  <n-avatar
+                    class="absolute -top-8 -left-12"
+                    round
+                    :size="48"
+                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                  />
                 </div>
                 <template #footer>
                   <div>
@@ -133,8 +145,12 @@
                   </div>
                 </template>
 
-                <n-card v-show="!comment.collapsed" v-for="child in comment.children"
-                  :title="`${child.nickName} 回复 ${child.replyNickName} ：`" hoverable>
+                <n-card
+                  v-show="!comment.collapsed"
+                  v-for="child in comment.children"
+                  :title="`${child.nickName} 回复 ${child.replyNickName} ：`"
+                  hoverable
+                >
                   <template #header-extra>
                     <span>
                       {{ child.createdAt.replace(/T/, " ") }}
@@ -142,8 +158,12 @@
                   </template>
                   <div class="relative pb-4">
                     <p :style="{ textIndent: '2rem' }">{{ child.content }}</p>
-                    <n-avatar class="absolute -top-8 -left-12" round :size="48"
-                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
+                    <n-avatar
+                      class="absolute -top-8 -left-12"
+                      round
+                      :size="48"
+                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+                    />
                   </div>
                   <template #footer>
                     <div>
@@ -157,15 +177,10 @@
                   </template>
                 </n-card>
               </n-card>
-            </div> -->
-
-
-
+            </div>
           </div>
         </template>
-        <div id="artalk">
-
-        </div>
+        <div id="artalk"></div>
       </n-card>
     </n-space>
 
@@ -177,8 +192,8 @@
 
 <script setup lang="ts">
 // import KaFu from '/md/kafu.md';
-import 'artalk/dist/Artalk.css'
-import Artalk from 'artalk'
+import "artalk/dist/Artalk.css";
+import Artalk from "artalk";
 
 import {
   Home as HomeIcon,
@@ -190,37 +205,45 @@ import {
   ThumbsUpRegular as LikeIcon,
   HeartRegular as CollectIcon,
   CommentsRegular as CommentsIcon,
-  // ChevronCircleUp as ChevronCircleUpIcon,
-  // ChevronCircleDown as ChevronCircleDownIcon,
-  // Reply as ReplyIcon,
+  ChevronCircleUp as ChevronCircleUpIcon,
+  ChevronCircleDown as ChevronCircleDownIcon,
+  Reply as ReplyIcon,
 } from "@vicons/fa";
 import { useArticleStore, useCommentStore } from "/@/store";
 import { storeToRefs } from "pinia";
 // import { fetchArticleMD } from '@/api/md';
 
-const artalkRef = ref("#artalk")
+const artalkRef = ref("#artalk");
 
-onMounted(() => {
+const message = useMessage();
+
+onMounted(async () => {
   const artalk = new Artalk({
     el: artalkRef.value,
     pageKey: ``,
     pageTitle: ``,
-    server: 'http://47.94.11.160:6218/',
-    site: 'reina',
+    server: "http://47.94.11.160:6218/",
+    site: "reina",
     // ...
-  })
-  console.log('artalk', artalk);
-})
+  });
+  console.log("artalk", artalk);
 
+  // const { data } = await fetchLikeArticleUser("12321")
+  // console.log('data', data);
+});
 
 const articleStore = useArticleStore();
 const commentStore = useCommentStore();
 const route = useRoute();
 
-const id = computed(() => route.params?.id);
+const id = computed(() => route.params?.id as string);
 const { articleInfo: article } = storeToRefs(articleStore);
 const { comments } = storeToRefs(commentStore);
 const loading = computed(() => !Boolean(unref(article)));
+
+const uid = ref("123");
+
+const isLike = computed(() => articleStore.checkIsLiked(unref(uid)));
 
 const category = computed(() => unref(article)?.category);
 
@@ -228,6 +251,27 @@ const category = computed(() => unref(article)?.category);
 
 // console.log('ref', article);
 // console.log('unref', unref(article));
+
+const handleLikeButton = async () => {
+  console.log("like...");
+  // const { data } = await fetchLikeArticle("12321", "123", unref(like));
+
+  const res = await articleStore.fetchLikeArticle(unref(id), unref(uid), unref(isLike));
+  console.log("res", res);
+  message.success(res);
+
+  // console.log("data", data);
+  // const { code, msg } = unref(data);
+  // if (code === 200) {
+  //   if (msg === "喜欢") {
+  //     like.value = true;
+  //     message.success("已喜欢！");
+  //   } else {
+  //     like.value = false;
+  //     message.info("已取消！");
+  //   }
+  // }
+};
 
 watch(
   id,
@@ -237,12 +281,11 @@ watch(
     if (newVal) {
       articleStore.fetchOneArticle(newVal as string);
       commentStore.fetchArticleComments(newVal as string);
+      articleStore.fetchLikeArticleUser(newVal as string);
     }
   },
   { immediate: true }
 );
-
-
 </script>
 
 <style lang="scss" scoped>

@@ -13,7 +13,7 @@ export const VITE_PORT = 3000;
 export const API_PREFIX = '/api';
 
 // serve
-export const API_BASE_URL = '/dev-api';
+export const API_BASE_URL = '/api';
 export const API_TARGET_URL = 'http://localhost:6219';
 
 // mock
