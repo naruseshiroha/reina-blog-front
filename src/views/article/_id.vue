@@ -66,9 +66,9 @@
               <n-icon class="mx-1" :size="22">
                 <TagsIcon />
               </n-icon>
-              <n-tag class="mx-1" v-for="v in article?.tags" :key="v.id">{{
-                v.tagName
-              }}</n-tag>
+              <n-tag class="mx-1" v-for="v in article?.tags" :key="v.id">
+                {{ v.tagName }}
+              </n-tag>
             </div>
             <!-- </div> -->
             <!-- <n-grid :x-gap="12" :cols="4">
@@ -98,11 +98,49 @@
 
           <!-- Comment -->
           <div class="comment">
-            <div class="amount border p-2 flex items-center justify-center">
+            <div class="amount border p-2 mb-2 flex items-center justify-center">
               <n-icon class="mr-1" :size="22">
                 <CommentsIcon />
               </n-icon>
               <span class="text-xl">{{ 1234 }}条评论</span>
+            </div>
+
+            {{ replyUserId }}
+
+            <div id="reply-wrapper">
+              <div class="reply relative" id="reply">
+                <div :style="{ border: '1px solid #ccc', zIndex: 9999 }">
+                  <Toolbar
+                    style="border-bottom: 1px solid #ccc"
+                    :editor="editorRef"
+                    :defaultConfig="toolbarConfig"
+                    :mode="mode"
+                  />
+                  <Editor
+                    style="height: 250px; overflow-y: hidden"
+                    v-model="content"
+                    :defaultConfig="editorConfig"
+                    :mode="mode"
+                    @onCreated="handleCreated"
+                  />
+                  <n-button
+                    @click="handleCancelReplyBtn"
+                    v-show="showCloseIcon"
+                    type="text"
+                    class="absolute bottom-0 right-0 m-2"
+                  >
+                    取消回复
+                    <n-icon :size="18">
+                      <CloseIcon />
+                    </n-icon>
+                  </n-button>
+                  <div class="text-center border p-2 bg-white">
+                    <n-button type="text" class="text-base" @click="handlePublished">
+                      发表评论
+                    </n-button>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div v-for="comment in comments" :key="comment.id" class="mt-5">
@@ -126,7 +164,7 @@
                   </span>
                 </template>
                 <div class="relative pb-4">
-                  <p :style="{ textIndent: '2rem' }">{{ comment.content }}</p>
+                  <p :style="{ textIndent: '2rem' }" v-html="comment.content"></p>
                   <n-avatar
                     class="absolute -top-8 -left-12"
                     round
@@ -136,12 +174,17 @@
                 </div>
                 <template #footer>
                   <div>
-                    <n-button class="float-right" type="text">
+                    <n-button
+                      class="float-right"
+                      type="text"
+                      @click="handleReplyBtn(comment.id, $event)"
+                    >
                       <template #icon>
                         <ReplyIcon />
                       </template>
                       <span>回复</span>
                     </n-button>
+                    <div class="clear-right"></div>
                   </div>
                 </template>
 
@@ -167,12 +210,17 @@
                   </div>
                   <template #footer>
                     <div>
-                      <n-button class="float-right" type="text">
+                      <n-button
+                        class="float-right"
+                        type="text"
+                        @click="handleReplyBtn(comment.id, $event)"
+                      >
                         <template #icon>
                           <ReplyIcon />
                         </template>
                         <span>回复</span>
                       </n-button>
+                      <div class="clear-right"></div>
                     </div>
                   </template>
                 </n-card>
@@ -180,11 +228,12 @@
             </div>
           </div>
         </template>
+        <!-- artalk -->
         <div id="artalk"></div>
       </n-card>
     </n-space>
 
-    {{ comments }}
+    <!-- {{ comments }} -->
 
     <!-- 发表评论 -->
   </div>
@@ -192,9 +241,12 @@
 
 <script setup lang="ts">
 // import KaFu from '/md/kafu.md';
+
+import "@wangeditor/editor/dist/css/style.css";
 import "artalk/dist/Artalk.css";
 import Artalk from "artalk";
-
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+import { Close as CloseIcon } from "@vicons/ionicons5";
 import {
   Home as HomeIcon,
   FolderOpen as FolderIcon,
@@ -212,6 +264,7 @@ import {
 import { useArticleStore, useCommentStore } from "/@/store";
 import { storeToRefs } from "pinia";
 import { fetchCollectArticle } from "/@/api/collection";
+import { useFetch } from "@vueuse/core";
 // import { fetchArticleMD } from '@/api/md';
 
 const artalkRef = ref("#artalk");
@@ -277,11 +330,118 @@ const handleLikeButton = async () => {
 const handleCollectButton = async () => {
   console.log("collect");
 
-  const data = await fetchCollectArticle()
-  console.log('data', data);
-  
-  
-}
+  const data = await fetchCollectArticle();
+  console.log("data", data);
+};
+
+const showCloseIcon = ref(false);
+const mode = "default";
+
+// 编辑器实例，必须用 shallowRef
+const editorRef = shallowRef();
+
+// 内容 HTML
+const content = ref("");
+
+const toolbarConfig = {};
+const editorConfig = { placeholder: "请输入内容..." };
+
+// 组件销毁时，也及时销毁编辑器
+onBeforeUnmount(() => {
+  removeEditor();
+});
+
+const removeEditor = () => {
+  const editor = editorRef.value;
+  if (editor == null) return;
+  editor.destroy();
+};
+
+const handleCreated = (editor) => {
+  editorRef.value = editor; // 记录 editor 实例，重要！
+};
+
+// 发表评论
+const replyUserId = ref("");
+const replyObj = reactive({
+  content: undefined,
+  parentId: undefined,
+  replyUserId: undefined,
+  replyNickName: undefined,
+});
+// 移除 replyNode
+const removeReplyNode = (): HTMLElement => {
+  const rNode = document.getElementById("reply");
+  console.log("rnode", rNode);
+  rNode?.remove();
+  return rNode as HTMLElement;
+};
+// 点击取消回复
+const handleCancelReplyBtn = () => {
+  showCloseIcon.value = false;
+  // 还原
+  const rNode = removeReplyNode();
+  const wrapper = document.getElementById("reply-wrapper");
+  wrapper?.appendChild(rNode)
+};
+// 点击回复按钮
+const handleReplyBtn = async (id: string, event: Event) => {
+  showCloseIcon.value = true;
+  const buttonNode = event.currentTarget;
+
+  // remove node
+  const rNode = removeReplyNode();
+
+  const replyNode = (buttonNode as HTMLElement).parentNode?.parentNode;
+  console.log("replyNode", replyNode);
+
+  (replyNode as Node)?.appendChild(rNode as HTMLElement);
+
+  console.log("id", id);
+  replyUserId.value = id;
+};
+const handlePublished = async () => {
+  // const bo = {
+  //   userId: "1",
+  //   nickName: "test",
+  //   articleId: "1614829115282874369",
+  //   content: "test comment",
+  //   parentId: null,
+  //   replyUserId: null,
+  //   replyNickName: null,
+  // };
+  console.log("content", content.value);
+  // @TODO: userId, nickName, parentId, replyUserId, replyNickName
+  Object.assign(replyObj, {
+    userId: "1",
+    nickName: "test",
+    content: content,
+    articleId: id,
+  });
+  console.log(unref(replyObj));
+  // check content not empty
+  const regexp = /^(<p>(<br>)*(\s(&nbsp;)*)*<\/p>)+$/;
+  if (regexp.test(unref(content))) {
+    message.warning("评论不能为空！");
+    return;
+  }
+  const { data } = await useFetch("/api/comment", {
+    body: JSON.stringify(replyObj),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .post()
+    .json();
+  console.log("data", unref(data));
+  const { code, msg } = unref(data);
+  if (code === 200) {
+    message.success("发表成功，请等待管理员审核！");
+    content.value = "";
+  } else {
+    message.error(msg);
+  }
+};
 
 watch(
   id,
