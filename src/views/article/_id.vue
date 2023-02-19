@@ -229,7 +229,7 @@
           </div>
         </template>
         <!-- artalk -->
-        <div id="artalk"></div>
+        <!-- <div id="artalk"></div> -->
       </n-card>
     </n-space>
 
