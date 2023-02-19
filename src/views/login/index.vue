@@ -73,15 +73,13 @@
 <script setup lang="ts">
 import { FormInst, FormItemInst, FormItemRule, FormRules, NAvatar, NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import { ref, reactive } from 'vue';
-import { LoginModule, RegisterModule } from '@/api/types/';
-
-// const { data: users } = useFetch('/api/user').get().json();
-// const userArr = computed(() => (users.value as R<Page<UserVO>>)?.data.list.map((e: UserVO) => e?.firstName + e?.lastName));
+import { useFetch } from '@vueuse/core';
+import { UserLoginBO, UserRegisterBO } from '/@/api/types';
 
 // login
 const formType = ref<string>('register');
 const loginFormRef = ref<FormInst | null>(null);
-const loginForm = reactive<LoginModule>({
+const loginForm = reactive<UserLoginBO>({
   userName: '',
   password: '',
 });
@@ -91,7 +89,7 @@ const handleLoginBtn = () => {};
 // register
 const rePasswordRef = ref<FormItemInst | null>(null);
 const registerFormRef = ref<FormInst | null>(null);
-const registerForm = reactive<RegisterModule>({
+const registerForm = reactive<UserRegisterBO>({
   telephone: '',
   email: '',
   nickName: '',
@@ -213,6 +211,15 @@ const switchLoginRegister = () => {
     });
   }
 };
+
+const { data: pj } = useFetch('/api/user/login', {
+  body: JSON.stringify({userName: 'root', password: '123456',}),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}).post().json()
+console.log('pj', pj);
+
 </script>
 
 <style lang="scss" scoped></style>

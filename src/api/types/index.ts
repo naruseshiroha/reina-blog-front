@@ -31,12 +31,12 @@ export interface IPageQuery {
     pageSize: number;
 }
 
-export interface LoginModule {
+export interface UserLoginBO {
     userName: string;
     password: string;
 }
 
-export interface RegisterModule {
+export interface UserRegisterBO {
     telephone: string;
     email: string;
     nickName: string;
