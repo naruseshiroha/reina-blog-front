@@ -164,7 +164,6 @@ const useArticleStore = defineStore('articleStore', {
       if (error.value) return "error"
       console.log('data', data.value);
       const { data: res, msg } = unref(data)
-      debugger
       if (res) {
         if (!liked) {
           this.likeUsers.push(uid);
