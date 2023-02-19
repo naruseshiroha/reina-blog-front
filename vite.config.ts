@@ -35,6 +35,11 @@ export default ({ command }: ConfigEnv): UserConfig => {
           find: /\/#\//,
           replacement: pathResolve('types') + '/',
         },
+        // /@@/xxxx => build/xxxx
+        {
+          find: /\/@@\//,
+          replacement: pathResolve('build') + '/',
+        },
       ],
     },
     // plugins
