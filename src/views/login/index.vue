@@ -73,7 +73,6 @@
 <script setup lang="ts">
 import { FormInst, FormItemInst, FormItemRule, FormRules, NAvatar, NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import { ref, reactive } from 'vue';
-import { useFetch } from '@vueuse/core';
 import { UserLoginBO, UserRegisterBO } from '/@/api/types';
 
 // login
@@ -212,13 +211,14 @@ const switchLoginRegister = () => {
   }
 };
 
-const { data: pj } = useFetch('/api/user/login', {
-  body: JSON.stringify({userName: 'root', password: '123456',}),
-  headers: {
-    'Content-Type': 'application/json'
-  }
-}).post().json()
-console.log('pj', pj);
+// login
+// const { data: pj } = useFetch('/api/user/login', {
+//   body: JSON.stringify({userName: 'root', password: '123456',}),
+//   headers: {
+//     'Content-Type': 'application/json'
+//   }
+// }).post().json()
+// console.log('pj', pj);
 
 </script>
 
