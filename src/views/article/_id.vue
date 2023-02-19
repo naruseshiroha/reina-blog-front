@@ -177,7 +177,7 @@
                     <n-button
                       class="float-right"
                       type="text"
-                      @click="handleReplyBtn(comment.id, $event)"
+                      @click="handleReplyBtn(comment, $event)"
                     >
                       <template #icon>
                         <ReplyIcon />
@@ -200,7 +200,7 @@
                     </span>
                   </template>
                   <div class="relative pb-4">
-                    <p :style="{ textIndent: '2rem' }">{{ child.content }}</p>
+                    <p :style="{ textIndent: '2rem' }" v-html="child.content"></p>
                     <n-avatar
                       class="absolute -top-8 -left-12"
                       round
@@ -213,7 +213,7 @@
                       <n-button
                         class="float-right"
                         type="text"
-                        @click="handleReplyBtn(comment.id, $event)"
+                        @click="handleReplyBtn(child, $event)"
                       >
                         <template #icon>
                           <ReplyIcon />
@@ -243,8 +243,8 @@
 // import KaFu from '/md/kafu.md';
 
 import "@wangeditor/editor/dist/css/style.css";
-import "artalk/dist/Artalk.css";
-import Artalk from "artalk";
+// import "artalk/dist/Artalk.css";
+// import Artalk from "artalk";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { Close as CloseIcon } from "@vicons/ionicons5";
 import {
@@ -265,26 +265,23 @@ import { useArticleStore, useCommentStore } from "/@/store";
 import { storeToRefs } from "pinia";
 import { fetchCollectArticle } from "/@/api/collection";
 import { useFetch } from "@vueuse/core";
+import { CommentVO } from "/@/api/types";
 // import { fetchArticleMD } from '@/api/md';
-
-const artalkRef = ref("#artalk");
 
 const message = useMessage();
 
-onMounted(async () => {
-  const artalk = new Artalk({
-    el: artalkRef.value,
-    pageKey: ``,
-    pageTitle: ``,
-    server: "http://47.94.11.160:6218/",
-    site: "reina",
-    // ...
-  });
-  console.log("artalk", artalk);
-
-  // const { data } = await fetchLikeArticleUser("12321")
-  // console.log('data', data);
-});
+// const artalkRef = ref("#artalk");
+// onMounted(async () => {
+//   const artalk = new Artalk({
+//     el: artalkRef.value,
+//     pageKey: ``,
+//     pageTitle: ``,
+//     server: "http://47.94.11.160:6218/",
+//     site: "reina",
+//     // ...
+//   });
+//   console.log("artalk", artalk);
+// });
 
 const articleStore = useArticleStore();
 const commentStore = useCommentStore();
@@ -363,7 +360,12 @@ const handleCreated = (editor) => {
 
 // 发表评论
 const replyUserId = ref("");
-const replyObj = reactive({
+const replyObj = reactive<{
+  content: string | undefined;
+  parentId: string | undefined;
+  replyUserId: string | undefined;
+  replyNickName: string | undefined;
+}>({
   content: undefined,
   parentId: undefined,
   replyUserId: undefined,
@@ -382,10 +384,15 @@ const handleCancelReplyBtn = () => {
   // 还原
   const rNode = removeReplyNode();
   const wrapper = document.getElementById("reply-wrapper");
-  wrapper?.appendChild(rNode)
+  wrapper?.appendChild(rNode);
 };
 // 点击回复按钮
-const handleReplyBtn = async (id: string, event: Event) => {
+const handleReplyBtn = async (comment: CommentVO, event: Event) => {
+  const { id: parentId, userId: replyUserId, nickName: replyNickName, articleId } = comment;
+  Object.assign(replyObj, {
+    parentId, replyUserId, replyNickName, articleId
+  });
+
   showCloseIcon.value = true;
   const buttonNode = event.currentTarget;
 
@@ -398,7 +405,6 @@ const handleReplyBtn = async (id: string, event: Event) => {
   (replyNode as Node)?.appendChild(rNode as HTMLElement);
 
   console.log("id", id);
-  replyUserId.value = id;
 };
 const handlePublished = async () => {
   // const bo = {
