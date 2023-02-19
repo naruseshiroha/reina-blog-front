@@ -1,4 +1,4 @@
-import useMyFetch from '/@/util';
+import useMyFetch from '/@/util/fetch';
 
 export function fetchCollectArticle() {
     return useMyFetch(`/collect`).post().json();

@@ -143,3 +143,13 @@ export interface CommentVO {
     children?: CommentVO[];
     collapsed?: boolean;
 }
+
+export interface CommentBO {
+    userId: string;
+    nickName: string;
+    articleId: string;
+    content: string;
+    parentId?: string;
+    replyUserId?: string;
+    replyNickName?: string;
+}

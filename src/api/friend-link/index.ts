@@ -1,6 +1,5 @@
-
-import { useFetch } from "@vueuse/core";
+import useMyFetch from "/@/util/fetch";
 
 export async function fetchLinks() {
-    return await useFetch('/api/friendLink').json()
+    return await useMyFetch('/friendLink').json()
 }

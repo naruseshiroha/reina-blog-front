@@ -1,6 +1,5 @@
-
-import { useFetch } from "@vueuse/core";
+import useMyFetch from "/@/util/fetch";
 
 export async function fetchTags(pageNum: number, pageSize: number) {
-    return await useFetch(`/api/tag/${pageNum}/${pageSize}`).json()
+    return await useMyFetch(`/tag/${pageNum}/${pageSize}`).json()
 }

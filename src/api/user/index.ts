@@ -1,7 +1,5 @@
-import { useFetch } from "@vueuse/core";
+import useMyFetch from "/@/util/fetch";
 
 export async function fetchVerifyCode(email: string) {
-    const res = await useFetch(`/api/user/code?email=${email}`);
-    console.log('res', res);
-    return res
+    return await useMyFetch(`/user/code?email=${email}`);
 }

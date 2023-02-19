@@ -1,17 +1,16 @@
-import { ArticleVO } from './../types/index';
-import { useFetch } from "@vueuse/core";
-import useMyFetch from '/@/util';
+import { ArticleVO } from '/@/api/types/index';
+import useMyFetch from '/@/util/fetch';
 
 export async function fetchArticles(pageNum: number, pageSize: number) {
-    return await useFetch(`/api/article/${pageNum}/${pageSize}`).get().json()
+    return await useMyFetch(`/article/${pageNum}/${pageSize}`).get().json()
 }
 
 export async function fetchArchives(pageNum: number = 1, pageSize: number = 10) {
-    return await useFetch(`/api/archive/${pageNum}/${pageSize}`).get().json()
+    return await useMyFetch(`/archive/${pageNum}/${pageSize}`).get().json()
 }
 
 export async function fetchArticleById(id: string) {
-    return await useFetch<ArticleVO>(`/api/article/${id}`).get().json();
+    return await useMyFetch<ArticleVO>(`/article/${id}`).get().json();
 }
 
 export async function fetchLikeArticle(
