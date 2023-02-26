@@ -1,32 +1,35 @@
+import { UserRegisterBO, UserCollectBO } from './../../../api/types/index';
 import { defineStore } from 'pinia';
-import { fetchVerifyCode } from '/@/api/user';
+import { UserLoginBO } from '/@/api/types';
+import { fetchVerifyCode, fetchLogin, fetchRegister } from '/@/api/user';
+import { fetchUserCollect } from '/@/api/collection';
 
 interface IUserState {
+  userId: string;
   nickName: string;
   avatar: string;
-  verifyCode: string;
   token: string;
 }
 
 // useStore 可以是 useUser、useCart 之类的任何东西
 // 第一个参数是应用程序中 store 的唯一 id
-export const useUserStore = defineStore('userStore', {
+const useUserStore = defineStore('userStore', {
   // other options...
   state: (): IUserState => ({
+    userId: '',
     nickName: '',
     avatar: '',
-    verifyCode: '',
     token: '',
   }),
   getters: {
+    getUserId(): string {
+      return this.userId;
+    },
     getNickName(): string {
       return this.nickName;
     },
     getAvatar(): string {
       return this.avatar;
-    },
-    getVerifyCode(): string {
-      return this.verifyCode;
     },
     getToken(): string {
       return this.token;
@@ -45,17 +48,46 @@ export const useUserStore = defineStore('userStore', {
     setAvatar(avatar: string) {
       this.avatar = avatar;
     },
-    setVerifyCode(verifyCode: string) {
-      this.verifyCode = verifyCode;
-    },
     setToken(token: string) {
       this.token = token;
     },
     // api
-    async getVerifyCode(email: string) {
+    async fetchVerifyCode(email: string): Promise<string> {
       const { data: code } = await fetchVerifyCode(email);
-      // if (code) this.setVerifyCode(code);
-      if (code) this.setVerifyCode("code");
+      return (unref(code) as string)
     },
+    async fetchLogin(bo: UserLoginBO) {
+      const { data } = await fetchLogin(bo)
+      const { data: result, error, message } = unref(data)
+      if (error) {
+        return Error(message);
+      } else {
+        // @Todo: set userId
+        this.userId = "123456";
+        return result;
+      }
+    },
+    async fetchRegister(bo: UserRegisterBO) {
+      const { data } = await fetchRegister(bo);
+      const { data: result, error, message } = unref(data)
+      if (error) {
+        return Error(message);
+      } else {
+        return result;
+      }
+    },
+    async fetchUserCollect(bo: UserCollectBO) {
+      const { data } = await fetchUserCollect(bo)
+      console.log('data', data);
+      const { data: result, error, message } = unref(data)
+      if (error) {
+        return Error(message);
+      } else {
+        return result;
+      }
+    }
+
   },
 });
+
+export default useUserStore;

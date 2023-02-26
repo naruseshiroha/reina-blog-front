@@ -1,7 +1,6 @@
 <template>
   <div>
     <n-space vertical>
-      <n-switch v-model:value="loading" />
       <n-card>
         <template #header>
           <n-skeleton v-if="loading" text />
@@ -144,7 +143,11 @@
             </div>
 
             <div v-for="comment in comments" :key="comment.id" class="mt-5">
-              <n-card :title="`${comment.nickName} 说道：`" hoverable>
+              <n-card
+                :id="`${comment.id}`"
+                :title="`${comment.nickName} 说道：`"
+                hoverable
+              >
                 <template #header-extra>
                   <span class="text-base flex items-center">
                     {{ comment.createdAt.replace(/T/, " ") }}
@@ -189,6 +192,7 @@
                 </template>
 
                 <n-card
+                  :id="`${child.id}`"
                   v-show="!comment.collapsed"
                   v-for="child in comment.children"
                   :title="`${child.nickName} 回复 ${child.replyNickName} ：`"
@@ -261,31 +265,18 @@ import {
   ChevronCircleDown as ChevronCircleDownIcon,
   Reply as ReplyIcon,
 } from "@vicons/fa";
-import { useArticleStore, useCommentStore } from "/@/store";
+import { useArticleStore, useCommentStore, useUserStore } from "/@/store";
 import { storeToRefs } from "pinia";
-import { fetchCollectArticle } from "/@/api/collection";
 import { useFetch } from "@vueuse/core";
-import { CommentVO } from "/@/api/types";
+import { CommentVO, UserCollectBO } from "/@/api/types";
 // import { fetchArticleMD } from '@/api/md';
 
 const message = useMessage();
-
-// const artalkRef = ref("#artalk");
-// onMounted(async () => {
-//   const artalk = new Artalk({
-//     el: artalkRef.value,
-//     pageKey: ``,
-//     pageTitle: ``,
-//     server: "http://47.94.11.160:6218/",
-//     site: "reina",
-//     // ...
-//   });
-//   console.log("artalk", artalk);
-// });
-
 const articleStore = useArticleStore();
 const commentStore = useCommentStore();
+const userStore = useUserStore();
 const route = useRoute();
+
 
 const id = computed(() => route.params?.id as string);
 const { articleInfo: article } = storeToRefs(articleStore);
@@ -293,42 +284,37 @@ const { comments } = storeToRefs(commentStore);
 const loading = computed(() => !Boolean(unref(article)));
 
 const uid = ref("123");
-
 const isLike = computed(() => articleStore.checkIsLiked(unref(uid)));
-
 const category = computed(() => unref(article)?.category);
 
-// articleStore.fetchArticleContent('kafu.md');
-
-// console.log('ref', article);
-// console.log('unref', unref(article));
-
 const handleLikeButton = async () => {
-  console.log("like...");
-  // const { data } = await fetchLikeArticle("12321", "123", unref(like));
-
   const res = await articleStore.fetchLikeArticle(unref(id), unref(uid), unref(isLike));
-  console.log("res", res);
   message.success(res);
-
-  // console.log("data", data);
-  // const { code, msg } = unref(data);
-  // if (code === 200) {
-  //   if (msg === "喜欢") {
-  //     like.value = true;
-  //     message.success("已喜欢！");
-  //   } else {
-  //     like.value = false;
-  //     message.info("已取消！");
-  //   }
-  // }
 };
 
-const handleCollectButton = async () => {
-  console.log("collect");
+const { userId } = storeToRefs(userStore)
+// const { userId } = storeToRefs(userStore)
 
-  const data = await fetchCollectArticle();
-  console.log("data", data);
+
+const userCollectBO = reactive<UserCollectBO>({
+  userId: unref(userId),
+  articleId: article.value?.id || "",
+  title: article.value?.title || ""
+})
+const handleCollectButton = async () => {
+  console.log('bo', userCollectBO);
+  if (!userCollectBO.userId) {
+    message.warning("请登录后在进行此操作！")
+    return
+  }
+  const data = await userStore.fetchUserCollect(userCollectBO)
+  console.log('data..', data);
+  if (data instanceof Error) {
+    message.error(data.message)
+  } else {
+    message.success("收藏成功！")
+  }
+  
 };
 
 const showCloseIcon = ref(false);
@@ -374,7 +360,6 @@ const replyObj = reactive<{
 // 移除 replyNode
 const removeReplyNode = (): HTMLElement => {
   const rNode = document.getElementById("reply");
-  console.log("rnode", rNode);
   rNode?.remove();
   return rNode as HTMLElement;
 };
@@ -388,9 +373,17 @@ const handleCancelReplyBtn = () => {
 };
 // 点击回复按钮
 const handleReplyBtn = async (comment: CommentVO, event: Event) => {
-  const { id: parentId, userId: replyUserId, nickName: replyNickName, articleId } = comment;
+  const {
+    id: parentId,
+    userId: replyUserId,
+    nickName: replyNickName,
+    articleId,
+  } = comment;
   Object.assign(replyObj, {
-    parentId, replyUserId, replyNickName, articleId
+    parentId,
+    replyUserId,
+    replyNickName,
+    articleId,
   });
 
   showCloseIcon.value = true;
@@ -398,13 +391,8 @@ const handleReplyBtn = async (comment: CommentVO, event: Event) => {
 
   // remove node
   const rNode = removeReplyNode();
-
   const replyNode = (buttonNode as HTMLElement).parentNode?.parentNode;
-  console.log("replyNode", replyNode);
-
   (replyNode as Node)?.appendChild(rNode as HTMLElement);
-
-  console.log("id", id);
 };
 const handlePublished = async () => {
   // const bo = {
@@ -416,7 +404,6 @@ const handlePublished = async () => {
   //   replyUserId: null,
   //   replyNickName: null,
   // };
-  console.log("content", content.value);
   // @TODO: userId, nickName, parentId, replyUserId, replyNickName
   Object.assign(replyObj, {
     userId: "1",
@@ -424,7 +411,6 @@ const handlePublished = async () => {
     content: content,
     articleId: id,
   });
-  console.log(unref(replyObj));
   // check content not empty
   const regexp = /^(<p>(<br>)*(\s(&nbsp;)*)*<\/p>)+$/;
   if (regexp.test(unref(content))) {
@@ -439,7 +425,6 @@ const handlePublished = async () => {
   })
     .post()
     .json();
-  console.log("data", unref(data));
   const { code, msg } = unref(data);
   if (code === 200) {
     message.success("发表成功，请等待管理员审核！");
@@ -451,9 +436,7 @@ const handlePublished = async () => {
 
 watch(
   id,
-  async (newVal, oldVal) => {
-    console.log("newVal", newVal);
-    console.log("oldVal", oldVal);
+  async (newVal, _oldVal) => {
     if (newVal) {
       articleStore.fetchOneArticle(newVal as string);
       commentStore.fetchArticleComments(newVal as string);
@@ -462,6 +445,20 @@ watch(
   },
   { immediate: true }
 );
+
+// 锚点定位
+const anchor = computed(() => route.hash);
+onMounted(() => {
+  watch(
+    anchor,
+    (newVal, _oldVal) => {
+      setTimeout(() => {
+        document.getElementById(newVal.substring(1))?.scrollIntoView(false);
+      }, 500);
+    },
+    { immediate: true }
+  );
+});
 </script>
 
 <style lang="scss" scoped>

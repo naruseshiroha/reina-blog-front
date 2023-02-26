@@ -32,7 +32,7 @@ export interface IPageQuery {
 }
 
 export interface UserLoginBO {
-    userName: string;
+    username: string;
     password: string;
 }
 
@@ -57,6 +57,14 @@ export interface UserVO {
     gender?: string;
     signature?: string;
     role?: string;
+}
+
+export interface UserCollectBO {
+    id?: string;
+    userId: string;
+    articleId: string;
+    title: string;
+    enabled?: boolean;
 }
 
 interface BaseEntity {
@@ -141,6 +149,7 @@ export interface CommentVO {
     parentId: string;
     createdAt: string;
     children?: CommentVO[];
+    avatar: string;
     collapsed?: boolean;
 }
 

@@ -1,3 +1,4 @@
+import { IPageQuery } from './../types/index';
 import useMyFetch from '/@/util/fetch';
 import { CommentBO } from "../types";
 
@@ -12,4 +13,9 @@ export async function fetchPublishComment(commentBo: CommentBO) {
             'Content-Type': 'application/json',
         }
     }).post().json();
+}
+
+export async function fetchRecentComments(page:IPageQuery) {
+    const { pageNum, pageSize } = page;
+    return await useMyFetch(`/comment/${pageNum}/${pageSize}`).get().json()
 }

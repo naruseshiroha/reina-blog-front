@@ -15,6 +15,7 @@ export const API_PREFIX = '/api';
 // serve
 export const API_BASE_URL = '/api';
 export const API_TARGET_URL = 'http://localhost:6219';
+// export const API_TARGET_URL = 'http://47.94.11.160:6219';
 
 // mock
 export const MOCK_API_BASE_URL = '/mock/api';
