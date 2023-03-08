@@ -1,3 +1,4 @@
+import { IPageQuery } from './../types/index';
 import { ArticleVO } from '/@/api/types/index';
 import useMyFetch from '/@/util/fetch';
 
@@ -16,9 +17,14 @@ export async function fetchArticleById(id: string) {
 export async function fetchLikeArticle(
     aid: string, uid: string, liked: boolean = false
 ) {
-   return await useMyFetch<Boolean>(`/article/like/${aid}/${uid}?liked=${liked}`).get().json();
+    return await useMyFetch<Boolean>(`/article/like/${aid}/${uid}?liked=${liked}`).get().json();
 }
 
 export async function fetchLikeArticleUser(id: string) {
-   return await useMyFetch<Boolean>(`/article/like/${id}`).get().json();
+    return await useMyFetch<Boolean>(`/article/like/${id}`).get().json();
+}
+
+export async function fetchArticleInfo(ids: string[], page: IPageQuery = { pageNum: 1, pageSize: 10 }) {
+    const { pageNum, pageSize } = page;
+    return await useMyFetch(`/article/collect/${ids.join(',')}?pageNum=${pageNum}&pageSize=${pageSize}`).get().json()
 }

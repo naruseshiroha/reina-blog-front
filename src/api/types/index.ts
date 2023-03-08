@@ -59,12 +59,14 @@ export interface UserVO {
     role?: string;
 }
 
-export interface UserCollectBO {
+export interface UserCollect {
     id?: string;
     userId: string;
     articleId: string;
     title: string;
     enabled?: boolean;
+    checked?: boolean;
+    createdAt?: string;
 }
 
 interface BaseEntity {

@@ -265,18 +265,23 @@ import {
   ChevronCircleDown as ChevronCircleDownIcon,
   Reply as ReplyIcon,
 } from "@vicons/fa";
-import { useArticleStore, useCommentStore, useUserStore } from "/@/store";
+import {
+  useArticleStore,
+  useCollectionStore,
+  useCommentStore,
+  useUserStore,
+} from "/@/store";
 import { storeToRefs } from "pinia";
 import { useFetch } from "@vueuse/core";
-import { CommentVO, UserCollectBO } from "/@/api/types";
+import { CommentVO, UserCollect } from "/@/api/types";
 // import { fetchArticleMD } from '@/api/md';
 
 const message = useMessage();
 const articleStore = useArticleStore();
 const commentStore = useCommentStore();
 const userStore = useUserStore();
+const collectionStore = useCollectionStore();
 const route = useRoute();
-
 
 const id = computed(() => route.params?.id as string);
 const { articleInfo: article } = storeToRefs(articleStore);
@@ -292,29 +297,31 @@ const handleLikeButton = async () => {
   message.success(res);
 };
 
-const { userId } = storeToRefs(userStore)
-// const { userId } = storeToRefs(userStore)
+// const userId = computed(() => userStore.userId)
+const { userId } = storeToRefs(userStore);
 
-
-const userCollectBO = reactive<UserCollectBO>({
-  userId: unref(userId),
-  articleId: article.value?.id || "",
-  title: article.value?.title || ""
-})
+const userCollect = computed(() =>
+  reactive<UserCollect>({
+    userId: userId.value,
+    articleId: article.value?.id || "",
+    title: article.value?.title || "",
+  })
+);
 const handleCollectButton = async () => {
-  console.log('bo', userCollectBO);
-  if (!userCollectBO.userId) {
-    message.warning("请登录后在进行此操作！")
-    return
+  console.log("userId", userId);
+
+  console.log("bo", unref(userCollect));
+  if (!unref(userCollect).userId) {
+    message.warning("请登录后在进行此操作！");
+    return;
   }
-  const data = await userStore.fetchUserCollect(userCollectBO)
-  console.log('data..', data);
+  const data = await collectionStore.fetchUserCollect(unref(userCollect));
+  console.log("data..", data);
   if (data instanceof Error) {
-    message.error(data.message)
+    message.error(data.message);
   } else {
-    message.success("收藏成功！")
+    message.success("收藏成功！");
   }
-  
 };
 
 const showCloseIcon = ref(false);

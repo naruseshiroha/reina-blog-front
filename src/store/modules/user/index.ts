@@ -1,8 +1,7 @@
-import { UserRegisterBO, UserCollectBO } from './../../../api/types/index';
+import { UserRegisterBO } from '/@/api/types/index';
 import { defineStore } from 'pinia';
 import { UserLoginBO } from '/@/api/types';
 import { fetchVerifyCode, fetchLogin, fetchRegister } from '/@/api/user';
-import { fetchUserCollect } from '/@/api/collection';
 
 interface IUserState {
   userId: string;
@@ -51,6 +50,9 @@ const useUserStore = defineStore('userStore', {
     setToken(token: string) {
       this.token = token;
     },
+    logout() {
+      this.userId = ''
+    },
     // api
     async fetchVerifyCode(email: string): Promise<string> {
       const { data: code } = await fetchVerifyCode(email);
@@ -58,13 +60,13 @@ const useUserStore = defineStore('userStore', {
     },
     async fetchLogin(bo: UserLoginBO) {
       const { data } = await fetchLogin(bo)
-      const { data: result, error, message } = unref(data)
+      const { data: userId, error, message } = unref(data)
       if (error) {
         return Error(message);
       } else {
         // @Todo: set userId
-        this.userId = "123456";
-        return result;
+        this.userId = userId;
+        return userId;
       }
     },
     async fetchRegister(bo: UserRegisterBO) {
@@ -76,17 +78,6 @@ const useUserStore = defineStore('userStore', {
         return result;
       }
     },
-    async fetchUserCollect(bo: UserCollectBO) {
-      const { data } = await fetchUserCollect(bo)
-      console.log('data', data);
-      const { data: result, error, message } = unref(data)
-      if (error) {
-        return Error(message);
-      } else {
-        return result;
-      }
-    }
-
   },
 });
 

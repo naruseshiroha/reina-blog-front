@@ -1,5 +1,5 @@
-import { fetchArchives, fetchArticleById, fetchArticles, fetchLikeArticle, fetchLikeArticleUser } from '/@/api/article';
-import { ArticleVO, Category, IPageQuery, Tag, UserVO } from '/@/api/types';
+import { fetchArchives, fetchArticleById, fetchArticleInfo, fetchArticles, fetchLikeArticle, fetchLikeArticleUser } from '/@/api/article';
+import { ArticleVO, Category, IPageQuery, Page, R, Tag, UserVO } from '/@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
 
@@ -173,6 +173,11 @@ const useArticleStore = defineStore('articleStore', {
       }
       return msg;
     },
+    async fetchArticleInfo(ids: string[], page?:IPageQuery) {
+      const { data } = await fetchArticleInfo(ids, page)
+      console.log('data', data);
+      return (unref(data) as R<Page<ArticleVO>>).data.list;
+    }
   },
 });
 

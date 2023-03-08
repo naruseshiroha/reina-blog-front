@@ -135,7 +135,7 @@ import { ref, reactive } from "vue";
 import { UserLoginBO, UserRegisterBO } from "/@/api/types";
 import { useUserStore } from "/@/store";
 
-const userStrore = useUserStore();
+const userStore = useUserStore();
 const message = useMessage();
 
 // login begin
@@ -151,7 +151,7 @@ const handleLoginBtn = async () => {
   if (!pass) {
     return
   }
-  const data = await userStrore.fetchLogin(loginForm);
+  const data = await userStore.fetchLogin(loginForm);
   if (data instanceof Error) {
     message.error(data.message)
   } else {
@@ -179,7 +179,7 @@ const handleRegisterBtn = async () => {
     .then(() => 1)
     .catch(() => 0);
   if (!pass) return;
-  const data = await userStrore.fetchRegister(registerForm);
+  const data = await userStore.fetchRegister(registerForm);
   if (data instanceof Error) {
     message.error(data.message)
   } else {
@@ -192,6 +192,7 @@ const handleRegisterBtn = async () => {
 // logout
 const handleLogoutBtn = () => {
   message.success("已退出！")
+  userStore.logout();
   formType.value = "login"
 };
 
@@ -279,19 +280,23 @@ const getVerifyCode = async (email: string): Promise<string | void> => {
     return
   }
   
-  // time limit 
-  let limit = 60;
-  loadingCode.value = true;
-  const interval = setInterval(() => {
-    timeLimitStr.value = `(${limit})`;
-    limit -= 1;
-    if (limit < 0) {
-      clearInterval(interval);
-      loadingCode.value = false;
-      timeLimitStr.value = "";
-    }
-  }, 1000);
-  userStrore.fetchVerifyCode(email);
+
+  const code = await userStore.fetchVerifyCode(email);
+  if (code) {
+    message.info("请前往邮箱查看验证码！")
+    // time limit 
+    let limit = 60;
+    loadingCode.value = true;
+    const interval = setInterval(() => {
+      timeLimitStr.value = `(${limit})`;
+      limit -= 1;
+      if (limit < 0) {
+        clearInterval(interval);
+        loadingCode.value = false;
+        timeLimitStr.value = "";
+      }
+    }, 1000);
+  }
 };
 
 // switch Login & Register
