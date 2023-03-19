@@ -22,3 +22,7 @@ export async function fetchRegister(bo: UserRegisterBO) {
         }
     }).post().json()
 }
+
+export async function fetchUserInfo(id: string) {
+    return await useMyFetch(`/user/${id}`).get().json()
+}

@@ -61,7 +61,7 @@ const hasScrollBar = computed(() => {
 
   return res
 })
-const hideAsideRoutes: string[] = ["archive", "tag", 'edit', 'collection' ];
+const hideAsideRoutes: string[] = ["archive", "tag", 'edit', 'collection', 'about' ];
 
 const route = useRoute();
 const routeName = computed(() => route.name);

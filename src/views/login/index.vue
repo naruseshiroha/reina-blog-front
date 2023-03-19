@@ -1,32 +1,15 @@
 <template>
   <n-card hoverable>
     <!-- login -->
-    <n-form
-      v-show="formType === 'login'"
-      ref="loginFormRef"
-      label-width="auto"
-      label-placement="left"
-      :model="loginForm"
-      :rules="rules"
-      size="medium"
-    >
+    <n-form v-show="formType === 'login'" ref="loginFormRef" label-width="auto" label-placement="left" :model="loginForm"
+      :rules="rules" size="medium">
       <h2 class="text-center text-lg mb-4">登录</h2>
       <n-form-item label="用户名" path="username">
-        <n-input
-          v-model:value="loginForm.username"
-          placeholder="手机号码/邮箱"
-          clearable
-        />
+        <n-input v-model:value="loginForm.username" placeholder="手机号码/邮箱" clearable />
       </n-form-item>
       <n-form-item label="密码" path="password">
-        <n-input
-          v-model:value="loginForm.password"
-          type="password"
-          show-password-on="mousedown"
-          placeholder="密码"
-          :maxlength="16"
-          clearable
-        />
+        <n-input v-model:value="loginForm.password" type="password" show-password-on="mousedown" placeholder="密码"
+          :maxlength="16" clearable />
       </n-form-item>
       <n-form-item class="login-btns">
         <n-button @click="handleLoginBtn">登录</n-button>
@@ -34,72 +17,28 @@
       </n-form-item>
     </n-form>
     <!-- register -->
-    <n-form
-      v-show="formType === 'register'"
-      ref="registerFormRef"
-      label-width="auto"
-      label-placement="left"
-      :model="registerForm"
-      :rules="rules"
-      size="medium"
-    >
+    <n-form v-show="formType === 'register'" ref="registerFormRef" label-width="auto" label-placement="left"
+      :model="registerForm" :rules="rules" size="medium">
       <h2 class="text-center text-lg mb-4">注册</h2>
       <n-form-item label="昵称" path="nickName">
-        <n-input
-          @keydown.enter.prevent
-          v-model:value="registerForm.nickName"
-          placeholder="请输入昵称"
-          clearable
-        />
+        <n-input @keydown.enter.prevent v-model:value="registerForm.nickName" placeholder="请输入昵称" clearable />
       </n-form-item>
       <n-form-item ref="emailRef" label="邮箱" first path="email">
-        <n-input
-          @keydown.enter.prevent
-          v-model:value="registerForm.email"
-          placeholder="请输入邮箱"
-          clearable
-        />
+        <n-input @keydown.enter.prevent v-model:value="registerForm.email" placeholder="请输入邮箱" clearable />
       </n-form-item>
       <n-form-item label="密码" path="password">
-        <n-input
-          @input="handlePasswordInput"
-          @keydown.enter.prevent
-          v-model:value="registerForm.password"
-          type="password"
-          show-password-on="mousedown"
-          placeholder="请输入密码"
-          :minlength="6"
-          :maxlength="16"
-          clearable
-        />
+        <n-input @input="handlePasswordInput" @keydown.enter.prevent v-model:value="registerForm.password" type="password"
+          show-password-on="mousedown" placeholder="请输入密码" :minlength="6" :maxlength="16" clearable />
       </n-form-item>
       <n-form-item ref="rePasswordRef" first label="确认密码" path="rePassword">
-        <n-input
-          :disabled="!registerForm.password"
-          @keydown.enter.prevent
-          v-model:value="registerForm.rePassword"
-          type="password"
-          show-password-on="mousedown"
-          placeholder="请再次输入密码"
-          :minlength="6"
-          :maxlength="16"
-          clearable
-        />
+        <n-input :disabled="!registerForm.password" @keydown.enter.prevent v-model:value="registerForm.rePassword"
+          type="password" show-password-on="mousedown" placeholder="请再次输入密码" :minlength="6" :maxlength="16" clearable />
       </n-form-item>
       <n-form-item label="验证码" path="verifyCode">
-        <n-input
-          v-model:value="registerForm.verifyCode"
-          :disabled="!loadingCode"
-          placeholder="请输入验证码"
-          :maxlength="6"
-          clearable
-        />
-        <n-button
-          :disabled="loadingCode"
-          type="tertiary"
-          @click="getVerifyCode(registerForm.email)"
-          >获取验证码{{ timeLimitStr }}</n-button
-        >
+        <n-input v-model:value="registerForm.verifyCode" :disabled="!loadingCode" placeholder="请输入验证码" :maxlength="6"
+          clearable />
+        <n-button :disabled="loadingCode" type="tertiary" @click="getVerifyCode(registerForm.email)">获取验证码{{ timeLimitStr
+        }}</n-button>
       </n-form-item>
       <n-form-item class="login-btns">
         <n-button @click="switchLoginRegister">登录</n-button>
@@ -110,8 +49,8 @@
     <div v-show="formType === 'logined'">
       <h2 class="text-xl">ようこそ！</h2>
       <div class="mt-2 flex justify-between items-center">
-        <n-avatar round :size="60" src="/img/avatar/another.jpg" />
-        <span>{{ "見崎　鳴" }}</span>
+        <n-avatar round :size="60" :src="'/img/avatar/' + (userInfo?.avatar ?? 'default.jpg')" />
+        <span>{{ userInfo?.nickName }}</span>
         <n-button @click="handleLogoutBtn">退出</n-button>
       </div>
     </div>
@@ -137,6 +76,7 @@ import { useUserStore } from "/@/store";
 
 const userStore = useUserStore();
 const message = useMessage();
+const { userId, userInfo } = storeToRefs(userStore)
 
 // login begin
 const formType = ref<string>("register");
@@ -273,13 +213,13 @@ const getVerifyCode = async (email: string): Promise<string | void> => {
     message.warning("请输入邮箱！");
     return;
   }
-  
-  const pass = await emailRef.value?.validate({trigger: "blur"}).then(() => 1).catch(() => 0)
+
+  const pass = await emailRef.value?.validate({ trigger: "blur" }).then(() => 1).catch(() => 0)
   if (!pass) {
     message.warning("邮箱格式不正确！")
     return
   }
-  
+
 
   const code = await userStore.fetchVerifyCode(email);
   if (code) {
@@ -317,6 +257,19 @@ const switchLoginRegister = () => {
     });
   }
 };
+
+watch(userId, async (newVal, _oldVal) => {
+  console.log('newVal: ' + newVal);
+  if (newVal) {
+    formType.value = "logined";
+    const data = await userStore.fetchUserInfo(newVal)
+    console.log('data: ', data);
+
+  }
+
+},
+  { immediate: true }
+)
 
 </script>
 

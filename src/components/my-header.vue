@@ -112,7 +112,19 @@ const menuOptions: MenuOption[] = [
     icon: renderIcon(HeartIcon),
   },
   {
-    label: "关于我",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "about",
+            // params: {
+            //   lang: 'zh-CN'
+            // }
+          },
+        },
+        { default: () => "关于我" }
+      ),
     key: "info",
     icon: renderIcon(InfoIcon),
   },
