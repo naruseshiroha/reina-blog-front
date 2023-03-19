@@ -21,6 +21,7 @@ specifiers:
   markdown-it: ^13.0.1
   naive-ui: ^2.34.2
   pinia: ^2.0.28
+  pinia-plugin-persistedstate: ^3.1.0
   postcss: ^8.4.19
   sass: ^1.56.1
   tailwindcss: ^3.2.4
@@ -65,6 +66,7 @@ devDependencies:
   github-markdown-css: 5.1.0
   markdown-it: 13.0.1
   naive-ui: 2.34.2_vue@3.2.45
+  pinia-plugin-persistedstate: 3.1.0_pinia@2.0.28
   postcss: 8.4.19
   sass: 1.56.1
   tailwindcss: 3.2.4_postcss@8.4.19
@@ -3103,6 +3105,14 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /pinia-plugin-persistedstate/3.1.0_pinia@2.0.28:
+    resolution: {integrity: sha512-8UN+vYMEPBdgNLwceY08mi5olI0wkYaEb8b6hD6xW7SnBRuPydWHlEhZvUWgNb/ibuf4PvufpvtS+dmhYjJQOw==}
+    peerDependencies:
+      pinia: ^2.0.0
+    dependencies:
+      pinia: 2.0.28_mgnvym7yiazkylwwogi5r767ue
+    dev: true
+
   /pinia/2.0.28_mgnvym7yiazkylwwogi5r767ue:
     resolution: {integrity: sha512-YClq9DkqCblq9rlyUual7ezMu/iICWdBtfJrDt4oWU9Zxpijyz7xB2xTwx57DaBQ96UGvvTMORzALr+iO5PVMw==, registry: http://registry.npm.taobao.org/, tarball: http://registry.npm.taobao.org/pinia/-/pinia-2.0.28.tgz}
     peerDependencies:
@@ -3119,7 +3129,6 @@ packages:
       typescript: 4.9.3
       vue: 3.2.45
       vue-demi: 0.13.11_vue@3.2.45
-    dev: false
 
   /pkg-types/1.0.1:
     resolution: {integrity: sha512-jHv9HB+Ho7dj6ItwppRDDl0iZRYBD0jsakHXtFgoLr+cHSF6xC+QL54sJmWxyGxOLYSHm0afhXhXcQDQqH9z8g==}

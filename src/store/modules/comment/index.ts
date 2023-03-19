@@ -14,6 +14,7 @@ const useCommentStore = defineStore('commentStore', {
         comments: [],
         recentComments: [],
     }),
+    persist: true,
     getters: {
         getComments(): CommentVO[] {
             return this.comments;

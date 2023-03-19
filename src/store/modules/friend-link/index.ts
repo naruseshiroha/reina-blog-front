@@ -17,6 +17,7 @@ const useLinkStore = defineStore('linkStore', {
   state: (): ILinkState => ({
     links: [],
   }),
+  persist: true,
   getters: {
     getLinks(): LinkVO[] {
       return this.links;

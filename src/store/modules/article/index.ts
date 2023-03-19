@@ -54,6 +54,7 @@ const useArticleStore = defineStore('articleStore', {
     archiveIsFinished: false,
     likeUsers: [],
   }),
+  persist: true,
   getters: {
     getArticles(): IArticle[] {
       return this.articles;

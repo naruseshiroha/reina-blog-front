@@ -18,6 +18,7 @@ const useCollectionStore = defineStore('collectionStore', {
             pageSize: 7
         }
     }),
+    persist: true,
     getters: {
         getCollections(): UserCollect[] {
             return this.collections;

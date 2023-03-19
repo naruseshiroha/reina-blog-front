@@ -16,6 +16,7 @@ const useTagStore = defineStore('TagStore', {
     tagIsFinished: false,
     tagTotal: 0,
   }),
+  persist: true,
   getters: {
     getTags(): TagVO[] {
       return this.tags;

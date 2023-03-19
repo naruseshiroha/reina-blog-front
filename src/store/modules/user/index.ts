@@ -1,13 +1,14 @@
-import { UserRegisterBO } from '/@/api/types/index';
+import { UserRegisterBO, UserVO } from '/@/api/types/index';
 import { defineStore } from 'pinia';
 import { UserLoginBO } from '/@/api/types';
-import { fetchVerifyCode, fetchLogin, fetchRegister } from '/@/api/user';
+import { fetchVerifyCode, fetchLogin, fetchRegister, fetchUserInfo } from '/@/api/user';
 
 interface IUserState {
   userId: string;
   nickName: string;
   avatar: string;
   token: string;
+  userInfo: UserVO | undefined;
 }
 
 // useStore 可以是 useUser、useCart 之类的任何东西
@@ -19,7 +20,9 @@ const useUserStore = defineStore('userStore', {
     nickName: '',
     avatar: '',
     token: '',
+    userInfo: undefined,
   }),
+  persist: true,
   getters: {
     getUserId(): string {
       return this.userId;
@@ -33,6 +36,9 @@ const useUserStore = defineStore('userStore', {
     getToken(): string {
       return this.token;
     },
+    getUserInfo(): UserVO {
+      return this.userInfo as UserVO;
+    }
   },
   actions: {
     patch(partial: Partial<IUserState>) {
@@ -49,6 +55,9 @@ const useUserStore = defineStore('userStore', {
     },
     setToken(token: string) {
       this.token = token;
+    },
+    setUserInfo(userInfo: UserVO) {
+      this.userInfo = userInfo;
     },
     logout() {
       this.userId = ''
@@ -78,6 +87,10 @@ const useUserStore = defineStore('userStore', {
         return result;
       }
     },
+    async fetchUserInfo(id: string) {
+      const { data } = await fetchUserInfo(id)
+      this.setUserInfo(unref(data).data as UserVO)
+    }
   },
 });
 
