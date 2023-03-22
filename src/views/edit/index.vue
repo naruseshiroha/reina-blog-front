@@ -51,19 +51,18 @@
 <script setup lang="ts">
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui'
-import { ref } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { isImage } from '/@/util';
 
 const message = useMessage();
 
-const fileList = ref<UploadFileInfo[]>([
-  {
-    id: 'react',
-    name: '我是react.png',
-    status: 'finished',
-    url: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
-  }])
+// const fileList = ref<UploadFileInfo[]>([
+//   {
+//     id: 'react',
+//     name: '我是react.png',
+//     status: 'finished',
+//     url: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
+//   }])
 
 const mode = 'default'
 // 编辑器实例，必须用 shallowRef

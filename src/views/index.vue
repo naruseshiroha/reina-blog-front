@@ -1,14 +1,17 @@
 <template>
   <div>
     <span v-if="top"> 已经到顶了哦！ </span> <br />
+    <div class="notice">
+      this is notice template
+    </div>
     <n-card data-aos="flip-up" class="article my-2 relative" v-for="v in articles" :key="v.id">
-      <n-icon class="absolute -top-2 right-2 text-2xl text-rose-700" v-if="v.top" :component="TopIcon" />
+      <n-icon class="absolute -top-2 right-2 text-2xl text-red-700" v-if="v.top" :component="TopIcon" />
       <h2 class=" text-center ">
         <router-link class="text-2xl text-white bg-sky-blue p-0.5 m-0.5 opacity-80" :to="`/article/${v.id}`">{{
           v.title
         }}</router-link>
       </h2>
-      <n-space class="tags m-5 !justify-center">
+      <n-space class="tags m-5">
         <n-tag>
           <n-icon :component="CalendarIcon" />
           &nbsp;{{ v.createdAt.substring(0, 10) }}&nbsp;
@@ -38,7 +41,8 @@
         <router-link :to="`/article/${v.id}`">
           <div class="relative overflow-hidden">
             <img class="mx-auto" :src="`/img/article/${v.coverImage}`" alt="" />
-            <div class="absolute top-0 h-full w-full p-5 bg-gray-900 bg-opacity-50 text-2xl text-center text-gray-200 italic opacity-0 hover:opacity-100">
+            <div
+              class="absolute top-0 h-full w-full p-5 bg-gray-900 bg-opacity-50 text-2xl text-center text-gray-200 italic opacity-0 hover:opacity-100">
               {{ v.description }}
             </div>
           </div>
@@ -102,5 +106,9 @@ watch(
 <style lang="scss" scoped>
 :deep(.n-tag__content) {
   display: flex;
+}
+
+:deep(.n-space) {
+  justify-content: center !important;
 }
 </style>

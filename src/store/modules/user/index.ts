@@ -1,7 +1,7 @@
-import { UserRegisterBO, UserVO } from '/@/api/types/index';
+import { ResetPasswordBO, UserRegisterBO, UserVO } from '/@/api/types/index';
 import { defineStore } from 'pinia';
 import { UserLoginBO } from '/@/api/types';
-import { fetchVerifyCode, fetchLogin, fetchRegister, fetchUserInfo } from '/@/api/user';
+import { fetchVerifyCode, fetchResetCode, fetchLogin, fetchRegister, fetchUserInfo, fetchUpdateUserInfo, fetchResetPassword } from '/@/api/user';
 
 interface IUserState {
   userId: string;
@@ -67,6 +67,10 @@ const useUserStore = defineStore('userStore', {
       const { data: code } = await fetchVerifyCode(email);
       return (unref(code) as string)
     },
+    async fetchResetCode(email: string): Promise<string> {
+      const { data: code } = await fetchResetCode(email);
+      return (unref(code) as string)
+    },
     async fetchLogin(bo: UserLoginBO) {
       const { data } = await fetchLogin(bo)
       const { data: userId, error, message } = unref(data)
@@ -90,6 +94,15 @@ const useUserStore = defineStore('userStore', {
     async fetchUserInfo(id: string) {
       const { data } = await fetchUserInfo(id)
       this.setUserInfo(unref(data).data as UserVO)
+    },
+    async fetchUpdateUserInfo(userInfo: UserVO): Promise<boolean> {
+      const { data } = await fetchUpdateUserInfo(userInfo).catch(err => err)
+      return unref(data);
+    },
+    async fetchResetPassword(bo: ResetPasswordBO) {
+      const  {data}  = await fetchResetPassword(bo).catch(err => err)
+      console.log('data', data);
+      return unref(data);
     }
   },
 });

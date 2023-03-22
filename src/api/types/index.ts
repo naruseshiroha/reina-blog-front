@@ -45,6 +45,12 @@ export interface UserRegisterBO {
     verifyCode: string;
 }
 
+export interface ResetPasswordBO {
+    email: string;
+    code: string;
+    password: string;
+    rePassword?: string;
+}
 
 export interface UserVO {
     id: string;

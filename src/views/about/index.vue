@@ -1,17 +1,11 @@
 <template>
     <div class="container">
 
-
-        <!--<pre>{{ userId }}</pre> -->
-
         <div v-if="!userId" class="w-full h-screen ">
-            <object class="w-full h-full" data="/src/assets/resume.pdf" type="application/pdf"></object>
+            <object class="w-full h-full" data="/pdf/resume.pdf" type="application/pdf"></object>
         </div>
         <n-form v-else :disabled="!clickUpdateBtn" class="mx-8" ref="formRef" :label-width="80" label-placement="left"
             :model="formValue" size="large">
-            <pre>userInfo: {{ userInfo }}</pre>
-            <br />
-            <pre>formValue: {{ formValue }}</pre>
             <h2 class="text-center text-2xl mb-4">个人信息</h2>
             <n-form-item label="邮箱" path="user.email">
                 <n-input disabled v-model:value="formValue.email" />
@@ -29,10 +23,8 @@
                 <n-input v-model:value="formValue.lastName" />
             </n-form-item>
             <n-form-item label="头像" path="user.avatar">
-                <!-- <n-image width="200" :src="'/img/avatar/' + (userInfo?.avatar ?? 'default.jpg')"></n-image> -->
                 <n-upload action="/api/upload/avatar" :max="1" :default-file-list="previewFileList" list-type="image-card"
                     @finish="handleUploadFinish" response-type="json" />
-                <!-- <n-input v-model:value="formValue.avatar" /> -->
             </n-form-item>
             <n-form-item label="性别" path="user.gender">
                 <n-radio-group v-model:value="formValue.gender" name="radiogroup">
@@ -42,7 +34,6 @@
                         </n-radio>
                     </n-space>
                 </n-radio-group>
-                <!-- <n-input v-model:value="formValue.gender" /> -->
             </n-form-item>
             <!-- <n-form-item label="密码" path="user.password"> -->
             <!-- <n-input v-model:value="formValue.password" /> -->
@@ -52,16 +43,70 @@
             </n-form-item>
             <n-form-item class="form-foot-btns">
 
-                <n-button :disabled="clickUpdateBtn" @click="handleClickUpdateBtn">修改</n-button>
-                <n-button :disabled="!clickUpdateBtn" @click="handleClickSaveBtn">保存</n-button>
+                <n-button :disabled="clickUpdateBtn" strong secondary type="primary"
+                    @click="handleClickUpdateBtn">修改</n-button>
+                <n-button :disabled="!clickUpdateBtn" strong secondary type="tertiary"
+                    @click="handleClickCancelBtn">取消</n-button>
+                <n-button :disabled="!clickUpdateBtn" strong secondary type="info" @click="handleClickSaveBtn">保存</n-button>
             </n-form-item>
         </n-form>
         <!-- <n-image width="200" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" /> -->
+
+        <div class="btns">
+            <div class="pwd">
+                <span>忘记密码？修改密码？点这里</span>
+                <n-button @click="handleResetPassword">重置密码</n-button>
+            </div>
+            <div class="pwd">
+                <span>想发布文章？点这里</span>
+                <n-button>发布文章</n-button>
+            </div>
+            <div class="pwd">
+                <span>想发布友链？点这里</span>
+                <n-button>发布友链</n-button>
+            </div>
+        </div>
+
+        <n-modal v-model:show="showResetPasswordModal" :mask-closable="false" preset="dialog" title="Dialog"
+            @close="handleCloseDialog" :onEsc="handleCloseDialog">
+            <template #header>
+                <div>重置密码</div>
+            </template>
+
+            <n-form ref="resetFormRef" :model="resetForm" label-placement="left" label-width="auto" :rules="rules">
+                <n-form-item label="验证码" path="code">
+                    <n-input v-model:value="resetForm.code" :disabled="!loadingCode" placeholder="请输入验证码" :maxlength="6"
+                        clearable />
+                    <n-button :disabled="loadingCode" type="tertiary" @click="handleFetchCode">获取</n-button>
+                </n-form-item>
+                <n-form-item label="密码" path="password">
+                    <n-input @input="handlePasswordInput" @keydown.enter.prevent v-model:value="resetForm.password"
+                        type="password" show-password-on="mousedown" placeholder="请输入密码" :minlength="6" :maxlength="16"
+                        clearable />
+                </n-form-item>
+                <n-form-item ref="rePasswordRef" first label="确认密码" path="rePassword">
+                    <n-input :disabled="!resetForm.password" @keydown.enter.prevent v-model:value="resetForm.rePassword"
+                        type="password" show-password-on="mousedown" placeholder="请再次输入密码" :minlength="6" :maxlength="16"
+                        clearable />
+                </n-form-item>
+                <n-form-item>
+                    <n-button type="tertiary" @click="handleCloseDialog">取消</n-button>
+                    <n-button type="primary" @click="handleSaveDialog">保存</n-button>
+                </n-form-item>
+
+            </n-form>
+
+            <!-- <template #action>
+                <div>操作</div>
+            </template> -->
+        </n-modal>
     </div>
 </template>
 
 <script setup  lang="ts">
+import { useMessage, FormRules, FormItemRule } from 'naive-ui'
 import { FormInst, UploadFileInfo } from 'naive-ui';
+import { ResetPasswordBO, UserVO } from '/@/api/types';
 import { useUserStore } from '/@/store';
 
 const genders = [
@@ -78,31 +123,44 @@ const { userId, userInfo } = storeToRefs(userStore)
 const clickUpdateBtn = ref(false)
 const handleClickUpdateBtn = () => {
     clickUpdateBtn.value = true
-    // record the old form
-    console.log('userInfo: ', unref(userInfo));
 }
-const handleClickSaveBtn = () => {
+const handleClickCancelBtn = () => {
     clickUpdateBtn.value = false
+    Object.assign(formValue.value, unref(userInfo))
+    message.info("已取消！")
 }
-const handleUploadFinish = ({ event }: {
+const handleClickSaveBtn = async () => {
+    clickUpdateBtn.value = false
+    const userInfo = reactive<UserVO>({
+        id: unref(userId),
+        ...unref(formValue)
+    })
+    const data = await userStore.fetchUpdateUserInfo(userInfo)
+    if (data) {
+        message.success("修改成功！")
+    } else {
+        message.error("修改失败，请联系管理员！")
+    }
+}
+const handleUploadFinish = ({ file, event }: {
     file: UploadFileInfo
     event?: ProgressEvent,
 }) => {
     const img = (event?.target as XMLHttpRequest)?.response.data
-    console.log('img', img);
-
-    console.log(previewFileList);
-
     if (img) {
-        message.success("上传成功")
+        message.success("上传成功！")
         formValue.value.avatar = img
+        file.url = "/img/avatar/" + img
+        console.log(previewFileList);
     } else {
-
+        message.error("上传出错！")
+        file.url = "/img/avatar/default.jpg"
     }
-    // debugger
-    alert("finish")
 
 }
+// const handleUpdateFileList = (fileList: UploadFileInfo[]) => {
+//     console.log('updateList', fileList);
+// }
 
 const previewFileList = reactive<UploadFileInfo[]>([
     {
@@ -112,8 +170,6 @@ const previewFileList = reactive<UploadFileInfo[]>([
         url: '/img/avatar/' + (userInfo.value?.avatar ?? 'default.jpg')
     },
 ])
-
-console.log("userId", isRef(userId), unref(userId));
 
 const formValue = computed(() => {
     const form = reactive({
@@ -125,7 +181,6 @@ const formValue = computed(() => {
         avatar: '',
         gender: '',
         signature: '',
-        password: '',
     })
     if (unref(userInfo)) {
         Object.assign(form, unref(userInfo))
@@ -133,21 +188,100 @@ const formValue = computed(() => {
     return form;
 })
 
-// const formValue = ref({
-//     user: {
-//         email: '',
-//         telephone: '',
-//         nickName: '',
-//         firstName: '',
-//         lastName: '',
-//         avatar: '',
-//         gender: '',
-//         signature: '',
-//         password: '',
-//     },
-// })
 
+// reset password
+const showResetPasswordModal = ref(false)
+const handleResetPassword = () => {
+    showResetPasswordModal.value = true;
+}
+const rePasswordRef = ref()
+const resetFormRef = ref()
+const resetForm = reactive<ResetPasswordBO>({
+    code: "",
+    email: userInfo.value?.email as string,
+    password: "",
+    rePassword: ''
+})
+const validateRePassword = (_rule: FormItemRule, value: string): boolean => {
+    return value === resetForm.password;
+};
+const rules: FormRules = {
+    password: [
+        {
+            required: true,
+            message: "请输入密码",
+            trigger: "blur",
+        },
+        {
+            min: 6,
+            max: 16,
+            message: "长度为6-16位",
+            trigger: "blur",
+        },
+    ],
+    rePassword: [
+        {
+            required: true,
+            message: "请再次输入密码",
+            trigger: ["blur", "input"],
+        },
+        {
+            message: "两次输入的密码不一致",
+            trigger: ["blur", "password-input"],
+            validator: validateRePassword,
+        },
+    ],
+    code: {
+        required: true,
+        message: "验证码不能为空",
+        trigger: "blur",
+    },
+};
+const loadingCode = ref(false)
+const handlePasswordInput = () => {
+    if (resetForm.rePassword) {
+        rePasswordRef.value?.validate({ trigger: "password-input" });
+    }
+};
+const handleFetchCode = async () => {
+    loadingCode.value = true;
+    const email = userInfo.value?.email
+    const data = await userStore.fetchResetCode(email as string)
+    console.log('data', data);
 
+}
+
+const handleCloseDialog = () => {
+    console.log("close dialog");
+    showResetPasswordModal.value = false;
+    resetFormRef.value.restoreValidation()
+    Object.assign(resetForm, {
+        code: "",
+        password: "",
+        rePassword: ""
+    })
+    loadingCode.value = false;
+}
+
+const handleSaveDialog = async () => {
+    const pass = await resetFormRef.value
+        ?.validate()
+        .then(() => 1)
+        .catch(() => 0);
+    console.log('pass', pass);
+
+    if (!pass) return;
+    // confirm
+    const data = await userStore.fetchResetPassword(resetForm);
+    console.log('data is ', data);
+    if (data.code === 200) {
+        message.success(data.msg)
+        handleCloseDialog();
+    } else if (data.error) {
+        message.error(data.message)
+    }
+    loadingCode.value = false;
+}
 </script>
 
 <style lang="scss" scoped>

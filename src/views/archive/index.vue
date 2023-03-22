@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { useArticleStore } from "/@/store";
-import { useMessage } from 'naive-ui'
+// import { useMessage } from 'naive-ui'
 
 const props = defineProps({
   top: Boolean,
@@ -37,13 +37,13 @@ const props = defineProps({
   }
 });
 
-const message = useMessage()
+// const message = useMessage()
 
 const archiveStore = useArticleStore();
 const { getArchives: archives, archiveTotal, getArchivePageNum: pageNum } = toRefs(archiveStore);
 const page = computed(() => reactive({
   pageNum: pageNum.value,
-  pageSize: 10,
+  pageSize: 20,
 }))
 
 archiveStore.fetchPageArchives(page);
