@@ -19,3 +19,13 @@ export async function fetchRecentComments(page:IPageQuery) {
     const { pageNum, pageSize } = page;
     return await useMyFetch(`/comment/${pageNum}/${pageSize}`).get().json()
 }
+
+export async function fetchPageMessages(commentBo: CommentBO, page: IPageQuery) {
+    const { pageNum, pageSize } = page;
+    return await useMyFetch(`/comment/message/${pageNum}/${pageSize}`, {
+        body: JSON.stringify(commentBo),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).post().json()
+}

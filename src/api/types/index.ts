@@ -168,6 +168,7 @@ export interface CommentVO {
 }
 
 export interface CommentBO {
+    status?: string;
     userId: string;
     nickName: string;
     articleId: string;
