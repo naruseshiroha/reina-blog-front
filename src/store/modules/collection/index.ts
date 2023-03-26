@@ -1,6 +1,6 @@
 import { IPageQuery } from './../../../api/types/index';
 import { defineStore } from 'pinia';
-import { fetchUserCollect, fetchListUserCollect } from '/@/api/collection';
+import { fetchUserCollect, fetchListUserCollect, fetchRemoveUserCollect } from '/@/api/collection';
 import { UserCollect } from '/@/api/types';
 
 interface IUserCollectionState {
@@ -37,7 +37,6 @@ const useCollectionStore = defineStore('collectionStore', {
         // api
         async fetchUserCollect(bo: UserCollect) {
             const { data } = await fetchUserCollect(bo)
-            console.log('data', data);
             const { data: result, error, message } = unref(data)
             if (error) {
                 return Error(message);
@@ -47,11 +46,14 @@ const useCollectionStore = defineStore('collectionStore', {
         },
         async fetchListUserCollect(userId: string) {
             const { data } = await fetchListUserCollect(userId, this.page)
-            console.log('data', data);
             const { data: { list: collections, total } } = unref(data)
             this.setCollections(collections)
             this.total = total
         },
+        async fetchRemoveUserCollect(ids: string[]) {
+           const { data } = await fetchRemoveUserCollect(ids)
+           return unref(data).data;
+        }
     },
 });
 

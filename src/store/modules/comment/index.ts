@@ -36,14 +36,11 @@ const useCommentStore = defineStore('commentStore', {
         // api
         async fetchArticleComments(articleId: string) {
             const { data } = await fetchArticleComments(articleId)
-            console.log('data', data);
             const { data: comments } = unref(data)
-            console.log('comments', comments);
             this.setComments(comments)
         },
         async fetchRecentComments(page: IPageQuery) {
             const { data } = await fetchRecentComments(page);
-            console.log('data...', data);
             const { error, message, data: result } = unref(data)
             if (error) {
                 return Error(message)

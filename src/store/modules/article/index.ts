@@ -93,9 +93,6 @@ const useArticleStore = defineStore('articleStore', {
       this.likeUsers.splice(this.likeUsers.indexOf(userId), 1);
     },
     checkIsLiked(userId: string): boolean {
-      console.log('users', this.likeUsers);
-      const result = this.likeUsers.includes(userId);
-      console.log('check result', result);
       return this.likeUsers.includes(userId);
     },
     fetchArticlePreCheck(pageNum: number): boolean {
@@ -125,8 +122,6 @@ const useArticleStore = defineStore('articleStore', {
     },
     async fetchPageArchives(page: Ref<IPageQuery>) {
       const { pageNum, pageSize } = unref(page)
-      console.log('archive', pageNum, pageSize);
-
       // check fetch is necessary
       if (this.fetchArchivePreCheck(pageNum)) return
       const { data } = await fetchArchives(pageNum, pageSize);
@@ -146,9 +141,7 @@ const useArticleStore = defineStore('articleStore', {
       const result = await fetchArticleById(id);
       const { error, data } = toRefs(result)
       if (error.value) return
-      console.dir(data.value);
       const { data: article } = unref(data)
-      console.log('article', article);
       this.setArticleInfo(article)
     },
     async fetchLikeArticleUser(aid: string) {
@@ -160,10 +153,8 @@ const useArticleStore = defineStore('articleStore', {
     },
     async fetchLikeArticle(aid: string, uid: string, liked: boolean = false): Promise<string> {
       const result = await fetchLikeArticle(aid, uid, liked)
-      console.log('result', result);
       const { error, data } = toRefs(result)
       if (error.value) return "error"
-      console.log('data', data.value);
       const { data: res, msg } = unref(data)
       if (res) {
         if (!liked) {
@@ -176,7 +167,6 @@ const useArticleStore = defineStore('articleStore', {
     },
     async fetchArticleInfo(ids: string[], page?:IPageQuery) {
       const { data } = await fetchArticleInfo(ids, page)
-      console.log('data', data);
       return (unref(data) as R<Page<ArticleVO>>).data.list;
     }
   },

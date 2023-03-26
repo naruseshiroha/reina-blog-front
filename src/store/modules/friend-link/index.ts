@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { fetchLinks } from '/@/api/friend-link';
-import { Link, LinkVO, R } from '/@/api/types';
+import { fetchLinks, fetchApplyLink } from '/@/api/friend-link';
+import { Link, LinkBO, LinkVO, R } from '/@/api/types';
 
 interface ILinkState {
   //   nickName: string;
@@ -38,6 +38,10 @@ const useLinkStore = defineStore('linkStore', {
       const { data } = await fetchLinks();
       this.setLinks((data.value as R<Link[]>).data);
     },
+    async fetchApplyLink(link: LinkBO) {
+      const { data } = await fetchApplyLink(link)
+      return unref(data)
+    }
   },
 });
 

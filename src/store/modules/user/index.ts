@@ -101,7 +101,6 @@ const useUserStore = defineStore('userStore', {
     },
     async fetchResetPassword(bo: ResetPasswordBO) {
       const  {data}  = await fetchResetPassword(bo).catch(err => err)
-      console.log('data', data);
       return unref(data);
     }
   },
