@@ -1,0 +1,1 @@
+export const CLOSE_LINK_DIALOG = Symbol("closeLinkDialog");

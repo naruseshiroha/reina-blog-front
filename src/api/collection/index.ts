@@ -17,5 +17,5 @@ export function fetchListUserCollect(userId: string, page: IPageQuery = { pageNu
 }
 
 export function fetchRemoveUserCollect(ids: string[]) {
-    return useMyFetch<Boolean>(`/collect/${ids.join()}`).delete().json()
+    return useMyFetch<boolean>(`/collect/${ids.join()}`).delete().json()
 }

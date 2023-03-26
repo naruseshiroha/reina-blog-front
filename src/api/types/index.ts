@@ -129,6 +129,12 @@ export interface LinkVO {
     linkUrl: string;
 }
 
+export interface LinkBO {
+    linkName: string;
+    linkDesc: string;
+    linkUrl: string;
+}
+
 export interface ArticleVO {
     id: string;
     title: string;
