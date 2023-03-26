@@ -46,19 +46,9 @@ const wSize = useWindowSize()
 const headerSize = useElementSize(headerRef)
 const mainSize = useElementSize(mainBox)
 const footerSize = useElementSize(footerRef)
-// console.dir(wSize.height.value);
-// console.dir(headerSize.height);
-// console.dir(footerSize.height);
-// console.dir(mainSize.height);
 
 const hasScrollBar = computed(() => {
-  // console.log('wh', wh);
-  // console.log('hh', hh);
-  // console.log('mh', mh);
-  // console.log('fh', fh);
   const res = wSize.height.value < headerSize.height.value + mainSize.height.value + footerSize.height.value
-  // console.log('res', res);
-
   return res
 })
 const hideAsideRoutes: string[] = ["archive", "tag", 'edit', 'collection', 'about' ];
@@ -73,7 +63,6 @@ const checkAside = (routeName: string) => {
 };
 
 watch([hasScrollBar, mainSize.height], (newVal) => {
-  // console.log('default hasScrollBar', newVal, oldVal);
   bottom.value = !newVal
 },
   { immediate: true }
