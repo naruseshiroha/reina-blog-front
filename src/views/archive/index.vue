@@ -50,11 +50,8 @@ archiveStore.fetchPageArchives(page);
 
 watch(
   () => props.bottom,
-  async (newVal, oldVal) => {
-    console.log('bottom', 'new', newVal, 'old', oldVal)
-    console.log('hasScrollBar', props.hasScrollBar)
+  async (newVal, _oldVal) => {
     if (newVal === true || !props.hasScrollBar) {
-      // page.value.pageNum += 1;
       page.value.pageNum += 1;
       archiveStore.fetchPageArchives(page);
     }

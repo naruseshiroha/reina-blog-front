@@ -67,7 +67,6 @@ import {
   CommentsRegular as CommentsIcon,
 } from "@vicons/fa";
 import { useArticleStore } from "/@/store";
-import { useFetch } from "@vueuse/core";
 import { Ref } from "vue";
 import { IPageQuery } from "/@/api/types";
 
@@ -75,11 +74,6 @@ const props = defineProps({
   top: Boolean,
   bottom: Boolean,
 });
-
-const email = ref("lixunsam");
-const { data } = useFetch(`/api/user/code?email=${email.value}`).get().text();
-console.log("res", data);
-
 
 const articleStore = useArticleStore();
 const { getArticles: articles, getArticlePageNum: pageNum } = toRefs(articleStore);

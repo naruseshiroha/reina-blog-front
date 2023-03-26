@@ -3,8 +3,8 @@
     Edit Article
 
     <pre>
-{{ article }}
-    </pre>
+  {{ article }}
+      </pre>
 
     <h2 class="text-center text-2xl">发布文章</h2>
     <n-form ref="formRef" :model="article" :rules="rules" size="medium" label-placement="top">
@@ -17,8 +17,7 @@
           <n-select v-model:value="article.categoryId" :options="categories" clearable placeholder="请选择类别" />
         </n-form-item-gi>
         <n-form-item-gi :span="24" label="标签">
-          <n-select v-model:value="article.tags" filterable multiple tag :options="tags" clearable
-            placeholder="请选择标签" />
+          <n-select v-model:value="article.tags" filterable multiple tag :options="tags" clearable placeholder="请选择标签" />
         </n-form-item-gi>
         <n-form-item-gi :span="24" label="描述" path="description">
           <n-input v-model:value="article.description" type="textarea" placeholder="请输入描述" />
@@ -26,7 +25,7 @@
         <n-form-item-gi :span="24" label="封面图片">
           <!-- :default-file-list="fileList"  -->
           <n-upload action="/api/upload/article" list-type="image-card" :custom-request="customRequest"
-            @before-upload="beforeUpload" @finish="handleFinish">
+            @before-upload="beforeUpload">
             点击上传
           </n-upload>
         </n-form-item-gi>
@@ -108,33 +107,21 @@ const beforeUpload = async (data: {
   fileList: UploadFileInfo[]
 }) => {
   const mime = data.file.file?.type
-  console.log('mime', mime);
   if (!isImage(mime as string)) {
     message.error('图片格式不正确！');
     return false;
   }
   return true;
 }
-const handleFinish = (data: {
-  file: UploadFileInfo, event?: ProgressEvent
-}) => {
-  console.log('finish');
-  console.log('file', data.file);
-  alert()
-}
 
 const customRequest = async ({ file, onFinish }: UploadCustomRequestOptions) => {
-  console.log('file', file);
   const data = new FormData();
   data.append('file', file.file as File);
   const { data: filename } = await (await fetch('/api/upload/article', { method: 'post', body: data })).json()
-  console.log('filename', filename);
   file.url = `/img/article/${filename}`
   onFinish()
 }
 
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

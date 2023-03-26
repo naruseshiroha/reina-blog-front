@@ -308,15 +308,11 @@ const userCollect = computed(() =>
   })
 );
 const handleCollectButton = async () => {
-  console.log("userId", userId);
-
-  console.log("bo", unref(userCollect));
   if (!unref(userCollect).userId) {
     message.warning("请登录后在进行此操作！");
     return;
   }
   const data = await collectionStore.fetchUserCollect(unref(userCollect));
-  console.log("data..", data);
   if (data instanceof Error) {
     message.error(data.message);
   } else {

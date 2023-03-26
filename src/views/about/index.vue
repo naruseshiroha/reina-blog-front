@@ -26,7 +26,7 @@
                 <n-upload action="/api/upload/avatar" :max="1" :default-file-list="previewFileList" list-type="image-card"
                     @finish="handleUploadFinish" response-type="json" />
             </n-form-item>
-            <n-form-item label="性别" path="user.gender">
+            <n-form-item class="gender" label="性别" path="user.gender">
                 <n-radio-group v-model:value="formValue.gender" name="radiogroup">
                     <n-space>
                         <n-radio v-for="gender in genders" :key="gender.key" :value="gender.value">
@@ -50,20 +50,21 @@
                 <n-button :disabled="!clickUpdateBtn" strong secondary type="info" @click="handleClickSaveBtn">保存</n-button>
             </n-form-item>
         </n-form>
-        <!-- <n-image width="200" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" /> -->
 
         <div class="btns">
             <div class="pwd">
-                <span>忘记密码？修改密码？点这里</span>
+                <span>忘记密码？点这里</span>
                 <n-button @click="handleResetPassword">重置密码</n-button>
             </div>
-            <div class="pwd">
+            <div class="article">
                 <span>想发布文章？点这里</span>
-                <n-button>发布文章</n-button>
+                <RouterLink to="/edit">
+                    <n-button>发布文章</n-button>
+                </RouterLink>
             </div>
-            <div class="pwd">
+            <div class="link">
                 <span>想发布友链？点这里</span>
-                <n-button>发布友链</n-button>
+                <n-button @click="handleClickLinkBtn">发布友链</n-button>
             </div>
         </div>
 
@@ -93,19 +94,25 @@
                     <n-button type="tertiary" @click="handleCloseDialog">取消</n-button>
                     <n-button type="primary" @click="handleSaveDialog">保存</n-button>
                 </n-form-item>
-
             </n-form>
+        </n-modal>
 
-            <!-- <template #action>
-                <div>操作</div>
-            </template> -->
+        <n-modal v-model:show="showLinkModal" :mask-closable="false" preset="dialog" @close="handleCloseLinkDialog"
+            :onEsc="handleCloseLinkDialog">
+            <template #header>
+                <!-- Header -->
+            </template>
+            <template #icon>
+                <!-- Icon -->
+            </template>
+            <Link />
         </n-modal>
     </div>
 </template>
 
 <script setup  lang="ts">
-import { useMessage, FormRules, FormItemRule } from 'naive-ui'
-import { FormInst, UploadFileInfo } from 'naive-ui';
+import { FormInst, UploadFileInfo, useMessage, FormRules, FormItemRule } from 'naive-ui'
+import { CLOSE_LINK_DIALOG } from '/@/api/types/keys';
 import { ResetPasswordBO, UserVO } from '/@/api/types';
 import { useUserStore } from '/@/store';
 
@@ -158,9 +165,6 @@ const handleUploadFinish = ({ file, event }: {
     }
 
 }
-// const handleUpdateFileList = (fileList: UploadFileInfo[]) => {
-//     console.log('updateList', fileList);
-// }
 
 const previewFileList = reactive<UploadFileInfo[]>([
     {
@@ -187,7 +191,6 @@ const formValue = computed(() => {
     }
     return form;
 })
-
 
 // reset password
 const showResetPasswordModal = ref(false)
@@ -246,13 +249,14 @@ const handlePasswordInput = () => {
 const handleFetchCode = async () => {
     loadingCode.value = true;
     const email = userInfo.value?.email
-    const data = await userStore.fetchResetCode(email as string)
+    const data: string = await userStore.fetchResetCode(email as string)
     console.log('data', data);
-
+    if (data) {
+        message.info("请前往邮箱查看验证码！")
+    }
 }
 
 const handleCloseDialog = () => {
-    console.log("close dialog");
     showResetPasswordModal.value = false;
     resetFormRef.value.restoreValidation()
     Object.assign(resetForm, {
@@ -268,12 +272,9 @@ const handleSaveDialog = async () => {
         ?.validate()
         .then(() => 1)
         .catch(() => 0);
-    console.log('pass', pass);
-
     if (!pass) return;
     // confirm
     const data = await userStore.fetchResetPassword(resetForm);
-    console.log('data is ', data);
     if (data.code === 200) {
         message.success(data.msg)
         handleCloseDialog();
@@ -282,18 +283,31 @@ const handleSaveDialog = async () => {
     }
     loadingCode.value = false;
 }
+
+// apply friend link
+const showLinkModal = ref(false)
+
+const handleClickLinkBtn = () => {
+    showLinkModal.value = true
+}
+
+const handleCloseLinkDialog = () => {
+    showLinkModal.value = false
+}
+
+
+provide(CLOSE_LINK_DIALOG, handleCloseLinkDialog as Function)
 </script>
 
 <style lang="scss" scoped>
 .container {
     // margin: 20px 100px 0 100px;
-
     margin: 0 auto;
 
-    .avatar {}
-
-    :deep(.n-form-item .n-form-item-blank) {
-        justify-content: flex-start;
+    :deep(.gender) {
+        .n-form-item-blank {
+            justify-content: flex-start;
+        }
     }
 
     :deep(.form-foot-btns) {
@@ -301,5 +315,20 @@ const handleSaveDialog = async () => {
             justify-content: center;
         }
     }
+
+    .btns {
+        display: flex;
+
+        .pwd,
+        .article,
+        .link {
+            margin: auto;
+
+            span {
+                margin-right: 10px;
+            }
+        }
+    }
+
 }
 </style>

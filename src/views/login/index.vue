@@ -259,12 +259,9 @@ const switchLoginRegister = () => {
 };
 
 watch(userId, async (newVal, _oldVal) => {
-  console.log('newVal: ' + newVal);
   if (newVal) {
     formType.value = "logined";
-    const data = await userStore.fetchUserInfo(newVal)
-    console.log('data: ', data);
-
+    await userStore.fetchUserInfo(newVal)
   }
 
 },

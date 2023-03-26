@@ -1,11 +1,13 @@
 <template>
-  <div class="text-center mx-auto xl:w-2/3 lg:w-3/4">
-    <pre>
-                userId:{{ userId }} <br>
-                <!-- {{ collections }} -->
-                <!-- {{ articles }} -->
-                </pre>
-    <h2 class="my-3 font-bold text-lg xl:text-xl">总收藏数: {{ userId ? total : 0 }}</h2>
+  <div class=" mx-auto xl:w-2/3 lg:w-3/4">
+    <h2 class="text-center my-3 font-bold text-lg xl:text-xl">总收藏数: {{ userId ? total : 0 }}</h2>
+    <n-popconfirm @positive-click="handlePositiveClick('')" @negative-click="handleBatchNegativeClick">
+      <template #trigger>
+        <n-button :disabled="delCollections.length === 0" secondary type="error">批量删除</n-button>
+      </template>
+      确认删除 "{{ delCollections.map(c => c.title).join("、") }}" ？
+    </n-popconfirm>
+
     <main>
       <n-list v-if="userId" hoverable clickable class="collect">
         <n-list-item v-for="v in collections" :key="v.id">
@@ -14,17 +16,6 @@
             <template #header-extra>
               {{ v.createdAt?.replace("T", " ") }}
             </template>
-            <!-- <template #description>
-              <n-space size="small" style="margin-top: 4px">
-                <n-tag :bordered="false" type="info" size="small">
-                  暑夜
-                </n-tag>
-                <n-tag :bordered="false" type="info" size="small">
-                  晚春
-                </n-tag>
-              </n-space>
-              {{ 'loading....' }}
-            </template> -->
             <n-skeleton v-if="loadingDetail" round height="100px"></n-skeleton>
             <div v-else>
               <router-link :to="`/article/${v.articleId}`">
@@ -38,22 +29,17 @@
               </router-link>
             </div>
           </n-thing>
-          <n-popconfirm @positive-click="handlePositiveClick" @negative-click="handleNegativeClick">
+          <n-popconfirm @positive-click="handlePositiveClick(v.id as string)" @negative-click="handleNegativeClick">
             <template #trigger>
-              <!-- <n-button>引用</n-button> -->
-              <n-button type="error" :disabled="!v.checked" @click="handleRemoveCollection('')" round secondary
-                strong>清除</n-button>
-            </template>
-            <template #action>
-              <n-button strong secondary>取消</n-button>
-              <n-button strong secondary type="info">确认</n-button>
+              <n-button type="error" :disabled="!v.checked" round secondary strong>
+                清除
+              </n-button>
             </template>
             <span>确认清除“ {{ v.title }} ”?</span>
           </n-popconfirm>
         </n-list-item>
         <n-pagination class="justify-center mt-4" v-model:page="page.pageNum"
           :page-count="Math.ceil(total / page.pageSize)" />
-        <pre>{{ page }}</pre>
       </n-list>
       <div v-else>请先登录</div>
     </main>
@@ -64,17 +50,12 @@
 import { ArticleVO } from "/@/api/types";
 import { useArticleStore, useCollectionStore, useUserStore } from "/@/store";
 
-// const props = defineProps({
-//   top: Boolean,
-//   bottom: Boolean,
-// });
 const message = useMessage();
 const userStore = useUserStore();
 const collectionStore = useCollectionStore();
 const articleStore = useArticleStore();
 
 const { userId } = storeToRefs(userStore);
-// const userId = "1629490452966141953";
 
 const { collections, total, page } = storeToRefs(collectionStore);
 // check userId
@@ -86,21 +67,27 @@ const init = () => {
 
 init()
 
+const delCollections = computed(() => {
+  return collections.value.filter(c => c.checked).map(c => ({ id: c.id, title: c.title }))
+})
+
 // removeCollection
-const handleRemoveCollection = async (id: string | undefined) => {
-  console.log("id is ", id as string);
-  console.log(message);
+const handlePositiveClick = async (id: string) => {
+  const ids: string[] = (id ? [id] : 0) || delCollections.value.map(c => c.id as string)
+  const data = await collectionStore.fetchRemoveUserCollect(ids)
+  if (data === true) {
+    message.success("删除成功!")
+    init()
+  } else {
+    message.error("删除失败!")
+  }
+}
+const handleBatchNegativeClick = () => {
+  collections.value.filter(c => c.checked).forEach(c => c.checked = false)
+}
 
-};
-const handlePositiveClick = () => {
-  console.log("clicked");
-
-  message.info("并不");
-};
 const handleNegativeClick = () => {
-  console.log("clicked");
-
-  message.info("并不");
+  message.info("已取消");
 };
 
 const loadingDetail = ref(true);
@@ -124,19 +111,6 @@ watch(collections, async (newVal, _oldVal) => {
   }
 });
 
-// watch(props, async (newVal, _oldVal) => {
-//   console.log("props", newVal);
-//   if (newVal.bottom) {
-//     console.log(page);
-//     page.value.pageNum += 1;
-//     const data = await collectionStore.fetchListUserCollect(unref(userId), unref(page));
-//     if (data) {
-//       console.log("data is ", data);
-//     } else {
-//       // page.pageNum -= 1;
-//     }
-//   }
-// });
 </script>
 
 <style scoped lang="scss">
