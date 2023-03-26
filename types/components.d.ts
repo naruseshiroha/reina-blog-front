@@ -8,6 +8,9 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Comment: typeof import('./../src/components/comment/index.vue')['default']
+    CommentItem: typeof import('./../src/components/comment-item/index.vue')['default']
+    Item: typeof import('./../src/components/item/index.vue')['default']
+    Link: typeof import('./../src/components/link/index.vue')['default']
     MyAside: typeof import('./../src/components/my-aside.vue')['default']
     MyFooter: typeof import('./../src/components/my-footer.vue')['default']
     MyHeader: typeof import('./../src/components/my-header.vue')['default']
@@ -19,8 +22,8 @@ declare module '@vue/runtime-core' {
     NCard: typeof import('naive-ui')['NCard']
     NCheckbox: typeof import('naive-ui')['NCheckbox']
     NDialogProvider: typeof import('naive-ui')['NDialogProvider']
+    NDivider: typeof import('naive-ui')['NDivider']
     NEllipsis: typeof import('naive-ui')['NEllipsis']
-    NForItem: typeof import('naive-ui')['NForItem']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
     NFormItemGi: typeof import('naive-ui')['NFormItemGi']
