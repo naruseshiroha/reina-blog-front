@@ -26,12 +26,8 @@
           <n-button>Suffix</n-button>
         </template> -->
         <template #prefix>
-          <n-avatar
-            round
-            size="large"
-            :src="v.avatar"
-            fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-          />
+          <n-avatar round size="large" :src="v.avatar"
+            fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
         </template>
         <n-tooltip :style="{ maxWidth: '400px' }" placement="left-end" trigger="hover">
           <template #trigger>
@@ -70,9 +66,8 @@ const commentStore = useCommentStore();
 commentStore.fetchRecentComments(page);
 const { recentComments: comments } = storeToRefs(commentStore);
 
+// TODO: to article detail info page
 const handleToArtile = async (articleId: string) => {
   console.log("articleId", articleId);
 };
 </script>
-
-<style lang="scss" scoped></style>
