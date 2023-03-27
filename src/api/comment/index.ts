@@ -29,3 +29,12 @@ export async function fetchPageMessages(commentBo: CommentBO, page: IPageQuery) 
         }
     }).post().json()
 }
+
+export async function fetchLeaveMessage(commentBo: CommentBO) {
+    return await useMyFetch("/comment", {
+        body: JSON.stringify(commentBo),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).post().json()
+}

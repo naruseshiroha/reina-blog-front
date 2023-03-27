@@ -1,5 +1,6 @@
 <template>
-  <div class=" mx-auto xl:w-2/3 lg:w-3/4">
+  <!-- <div class=" mx-auto xl:w-2/3 lg:w-3/4"> -->
+  <div>
     <h2 class="text-center my-3 font-bold text-lg xl:text-xl">总收藏数: {{ userId ? total : 0 }}</h2>
     <n-popconfirm @positive-click="handlePositiveClick('')" @negative-click="handleBatchNegativeClick">
       <template #trigger>

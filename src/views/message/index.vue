@@ -1,11 +1,9 @@
 <template>
-    <div class=" mx-auto xl:w-2/3 lg:w-3/4 container">
+    <!-- <div class=" mx-auto xl:w-2/3 lg:w-3/4 container"> -->
+    <div class="message">
         <h2 class="text-center text-2xl font-bold mb-3">レイナ　の　ブログ　へ　ようこそ</h2>
-
-        <h2 class="text-center my-3 font-bold text-lg xl:text-xl">总留言数: {{ 1234 }}</h2>
         <main>
-
-            <n-thing>
+            <n-thing class="border-2 border-red-600 rounded-md px-4 py-2 relative">
                 <template #header>
                     <n-icon :size="24">
                         <BullhornIcon />
@@ -15,11 +13,12 @@
                     </span>
                 </template>
                 <template #header-extra>
+                    <n-button text @click="shrink = !shrink">
+                        <n-icon v-show="!shrink" :size="24" :component="DownIcon"></n-icon>
+                        <n-icon v-show="shrink" :size="24" :component="UpIcon"></n-icon>
+                    </n-button>
                 </template>
-                <div class="notice border-2 border-red-600 rounded-md px-4 py-2 relative">
-                    <n-icon class="collopse absolute top-0 right-0" :size="24">
-                        <BullhornIcon />
-                    </n-icon>
+                <div v-show="!shrink">
                     <div v-for="v in 2" class="h-full notice-01">
                         这里是我一手建设维护的资源站，低调于三次元，致力给新人打造一个轻松愉快的galgame下载平台，让更多人喜欢并且容易玩上galgame也是本站的初衷。
                         随着时间的推移，历经多次调整，相信有不少人见证了网站的发展，至于我制作的汉硬也得到了不少人的认同支持和搬运。我不喜欢到处打广告，向能找到这里或被推荐到这里的人衷心说句：Enjoy the
@@ -35,12 +34,10 @@
 
             <n-divider />
 
-            <!-- <n-list hoverable clickable class="collect">
-                <n-list-item v-for="v in messages" :key="v.id"> -->
             <n-thing class="" conent-style="margin-top: 10px;">
                 <template #header>
                     <n-icon :size="24">
-                        <BullhornIcon />
+                        <CommentsIcon />
                     </n-icon>
                     <span class="text-xl">
                         留言板
@@ -48,17 +45,21 @@
                 </template>
                 <CommentItem v-for="m in messages" :key="m.id" :message="m" />
             </n-thing>
-            <!-- </n-list-item> -->
             <n-pagination v-show="pageCount > 1" class="justify-center mt-4" v-model:page="page.pageNum"
                 :page-count="pageCount" />
-            <!-- </n-list> -->
+
+            <h2 class="my-3 font-bold text-lg xl:text-xl">总留言数: {{ total }}</h2>
+            <Reply />
         </main>
-        {{ pageCount }}
-        {{ page }}
     </div>
 </template>
 
 <script setup lang="ts">
+import {
+    CommentMultiple32Regular as CommentsIcon,
+    ChevronCircleUp48Regular as UpIcon,
+    ChevronCircleDown48Regular as DownIcon
+} from "@vicons/fluent";
 import { Bullhorn as BullhornIcon } from '@vicons/fa'
 import { useCommentStore } from '/@/store';
 import { CommentBO } from '/@/api/types'
@@ -105,6 +106,8 @@ const pageCount = computed(() => Math.ceil(unref(total) / page.value.pageSize))
 const messageStore = useCommentStore();
 const { total, page, messages } = storeToRefs(messageStore);
 
+const shrink = ref(false)
+
 const bo = reactive<CommentBO>({
     status: '1',
     userId: "",
@@ -124,14 +127,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.container {
-
-    .notice {
-        .collopse {
-            transform: translate(-50%, -50%);
-        }
-    }
-
+.message {
     .notice-01 {
         color: #b94a48;
         background-color: #f2dede;

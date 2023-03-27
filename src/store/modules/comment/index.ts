@@ -1,4 +1,4 @@
-import { fetchArticleComments, fetchRecentComments, fetchPageMessages } from '/@/api/comment';
+import { fetchArticleComments, fetchRecentComments, fetchPageMessages, fetchLeaveMessage } from '/@/api/comment';
 import { CommentVO, CommentBO, IPageQuery } from '/@/api/types';
 import { defineStore } from 'pinia';
 
@@ -76,7 +76,17 @@ const useCommentStore = defineStore('commentStore', {
                 this.total = total
                 this.setMessages(comments)
             }
-        }
+        },
+        async fetchLeaveMessages(commentBo: CommentBO) {
+            const { data } = await fetchLeaveMessage(commentBo)
+            const { error, message, data: result } = unref(data)
+            if (error) {
+                return Error(message)
+            } else {
+                return result
+            }
+        },
+        
     }
 })
 

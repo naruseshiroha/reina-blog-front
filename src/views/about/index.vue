@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="about">
 
         <div v-if="!userId" class="w-full h-screen ">
             <object class="w-full h-full" data="/pdf/resume.pdf" type="application/pdf"></object>
@@ -300,9 +300,9 @@ provide(CLOSE_LINK_DIALOG, handleCloseLinkDialog as Function)
 </script>
 
 <style lang="scss" scoped>
-.container {
+.about {
     // margin: 20px 100px 0 100px;
-    margin: 0 auto;
+    // margin: 0 auto;
 
     :deep(.gender) {
         .n-form-item-blank {

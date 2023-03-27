@@ -10,10 +10,10 @@
     <main class="border flex-1 flex">
       <n-grid cols="11" item-responsive>
         <n-grid-item :span="hasAside ? 7 : 11">
-          <main ref="mainBox" class="h-full p-4">
-          <KeepAlive>
-            <RouterView :top="top" :bottom="bottom" :hasScrollBar="hasScrollBar" />
-          </KeepAlive>
+          <main ref="mainBox" class="h-full p-4 ">
+            <KeepAlive>
+              <RouterView :top="top" :bottom="bottom" :hasScrollBar="hasScrollBar" />
+            </KeepAlive>
           </main>
         </n-grid-item>
         <n-grid-item v-if="hasAside" :span="4">
@@ -51,7 +51,7 @@ const hasScrollBar = computed(() => {
   const res = wSize.height.value < headerSize.height.value + mainSize.height.value + footerSize.height.value
   return res
 })
-const hideAsideRoutes: string[] = ["archive", "tag", 'edit', 'collection', 'about', 'message' ];
+const hideAsideRoutes: string[] = ["archive", "tag", 'edit', 'collection', 'about', 'message'];
 
 const route = useRoute();
 const routeName = computed(() => route.name);

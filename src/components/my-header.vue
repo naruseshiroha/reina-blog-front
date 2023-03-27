@@ -90,7 +90,16 @@ const menuOptions: MenuOption[] = [
     icon: renderIcon(TagIcon),
   },
   {
-    label: "留言",
+    label: () =>
+      h(
+        RouterLink,
+        {
+          to: {
+            name: "message",
+          },
+        },
+        { default: () => "留言" }
+      ),
     key: "comments",
     icon: renderIcon(CommentIcon),
   },

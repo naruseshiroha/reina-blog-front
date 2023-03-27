@@ -10,14 +10,12 @@
         <template #header-extra>
             {{ props.message.createdAt.replace(/t/i, " ") }}
         </template>
-        <!-- <n-tooltip :style="{ maxWidth: '70vw' }" placement="top" trigger="hover">
-            <template #trigger> -->
-        <RouterLink :to="`/article/${props.message.articleId}`">
+        <RouterLink v-if="props.message.articleId === '-1'" :to="`/message`">
             <p v-html="props.message.content"></p>
         </RouterLink>
-        <!-- </template>
-            <p>{{ props.message.content }}</p>
-        </n-tooltip> -->
+        <RouterLink v-else :to="`/article/${props.message.articleId}`">
+            <p v-html="props.message.content"></p>
+        </RouterLink>
     </n-thing>
 </template>
 

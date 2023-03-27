@@ -1,5 +1,5 @@
 <template>
-  <div class="archive p-5 w-2/3 mx-auto">
+  <div class="archive">
     <h1 class="text-center text-3xl font-bold">归档页</h1>
     <n-timeline size="large">
       <h2 class="text-2xl font-bold py-4">{{ `最高! 全 ${archiveTotal} ポスト もっと書こう！` }}</h2>
