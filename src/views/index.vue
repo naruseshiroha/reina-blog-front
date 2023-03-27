@@ -1,9 +1,15 @@
 <template>
   <div>
-    <span v-if="top"> 已经到顶了哦！ </span> <br />
-    <div class="notice">
-      this is notice template
-    </div>
+    <n-card v-show="showBull" hoverable class="mb-3 rounded-md">
+      <template #header>
+        <span class="text-2xl text-red-500 font-bold">公告请看留言板块</span>
+      </template>
+      <template #header-extra>
+        <n-button text @click="showBull = false">
+          <n-icon :size="24" :component="CloseIcon"></n-icon>
+        </n-button>
+      </template>
+    </n-card>
     <n-card data-aos="flip-up" class="article my-2 relative" v-for="v in articles" :key="v.id">
       <n-icon class="absolute -top-2 right-2 text-2xl text-red-700" v-if="v.top" :component="TopIcon" />
       <h2 class=" text-center ">
@@ -47,18 +53,15 @@
             </div>
           </div>
         </router-link>
-
       </div>
     </n-card>
-    bottom: {{ bottom }} <br />
-
-    <span v-if="bottom"> 已经到底了哦！ </span> <br />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
   // Fire as FireIcon,
+  WindowCloseRegular as CloseIcon,
   Bookmark as TopIcon,
   CalendarAltRegular as CalendarIcon,
   Tags as TagsIcon,
@@ -74,6 +77,8 @@ const props = defineProps({
   top: Boolean,
   bottom: Boolean,
 });
+
+const showBull = ref(true)
 
 const articleStore = useArticleStore();
 const { getArticles: articles, getArticlePageNum: pageNum } = toRefs(articleStore);
