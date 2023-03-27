@@ -60,6 +60,7 @@ declare module '@vue/runtime-core' {
     NUpload: typeof import('naive-ui')['NUpload']
     Random: typeof import('./../src/components/random/index.vue')['default']
     Rank: typeof import('./../src/components/rank/index.vue')['default']
+    Reply: typeof import('./../src/components/reply/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Tag: typeof import('./../src/components/tag/index.vue')['default']
