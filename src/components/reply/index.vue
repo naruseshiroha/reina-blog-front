@@ -11,7 +11,6 @@
                 </n-button>
             </div>
         </div>
-        {{ content }}
     </div>
 </template>
 
