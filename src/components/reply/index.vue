@@ -21,6 +21,7 @@ import { useUserStore, useCommentStore } from "/@/store";
 
 const userStore = useUserStore()
 const messageStore = useCommentStore()
+const message = useMessage()
 
 const mode = "simple";
 
@@ -108,7 +109,7 @@ const handlePublished = async () => {
     const data = await messageStore.fetchLeaveMessages(bo)
     console.log('data is', data);
     if (data) {
-        message.success()
+        message.success("发布成功，请等待审核！")
     }
 }
 </script>
