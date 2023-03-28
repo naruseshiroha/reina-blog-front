@@ -14,9 +14,17 @@
         <n-icon :size="20" :component="CloseIcon" />
       </n-button>
     </template>
-    <n-list v-show="!isShrink" hoverable boarder>
+    <n-list class="rank" v-show="!isShrink" hoverable boarder>
       <n-list-item v-for="(v, i) in ranks" :key="i">
-        {{ v.title }}
+        <RouterLink :to="`/article/${v.id}`">
+          <span class="text-base">{{ v.title }}</span>
+        </RouterLink>
+        <div class="right ml-auto flex flex-row flex-nowrap ">
+          <n-icon color=" red" :size="20">
+            <FireIcon />
+          </n-icon>
+          {{ v.viewCount }}
+        </div>
       </n-list-item>
     </n-list>
   </n-card>
@@ -29,43 +37,32 @@ import {
   ChevronCircleDown48Regular as DownIcon,
   DismissCircle48Regular as CloseIcon,
 } from "@vicons/fluent";
+import { Fire as FireIcon } from '@vicons/fa';
+import { useArticleStore } from "/@/store";
+
+const articleStore = useArticleStore()
+articleStore.fetchRankArticle()
+
+const { ranks } = storeToRefs(articleStore);
 
 const isClose = ref(false);
 const isShrink = ref(false);
 const showIcon = computed(() => (isShrink.value ? UpIcon : DownIcon));
 
-const ranks = computed(() => [
-  {
-    id: 1,
-    title: "Title 01",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 2,
-    title: "Title 02",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 3,
-    title: "Title 03",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 4,
-    title: "Title 04",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 5,
-    title: "Title 05",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 6,
-    title: "Title 06",
-    createdAt: "2022-11-11 12:13:14",
-  },
-]);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scopes>
+.rank {
+  .n-list-item {
+    .n-list-item__main {
+      display: flex;
+      align-items: center;
+
+      .right {
+        min-width: 55px;
+        justify-content: space-around;
+      }
+    }
+  }
+}
+</style>

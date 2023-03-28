@@ -28,3 +28,11 @@ export async function fetchArticleInfo(ids: string[], page: IPageQuery = { pageN
     const { pageNum, pageSize } = page;
     return await useMyFetch(`/article/collect/${ids.join(',')}?pageNum=${pageNum}&pageSize=${pageSize}`).get().json()
 }
+
+export async function fetchRandomArticle() {
+    return await useMyFetch(`/article/random`).get().json()
+}
+
+export async function fetchRankArticle() {
+    return await useMyFetch(`/article/rank`).get().json()
+}

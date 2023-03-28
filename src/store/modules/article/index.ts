@@ -1,4 +1,4 @@
-import { fetchArchives, fetchArticleById, fetchArticleInfo, fetchArticles, fetchLikeArticle, fetchLikeArticleUser } from '/@/api/article';
+import { fetchArchives, fetchArticleById, fetchArticleInfo, fetchArticles, fetchLikeArticle, fetchLikeArticleUser, fetchRandomArticle, fetchRankArticle } from '/@/api/article';
 import { ArticleVO, Category, IPageQuery, Page, R, Tag, UserVO } from '/@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
@@ -24,6 +24,7 @@ interface IArchive {
   title: string;
   createdAt: string;
   category: Category;
+  viewCount: number;
 }
 
 interface IArticleState {
@@ -38,6 +39,8 @@ interface IArticleState {
   archiveTotal: number;
   archiveIsFinished: boolean;
   likeUsers: string[];
+  randoms: IArchive[],
+  ranks: IArchive[],
 }
 
 const useArticleStore = defineStore('articleStore', {
@@ -53,6 +56,8 @@ const useArticleStore = defineStore('articleStore', {
     archiveTotal: 0,
     archiveIsFinished: false,
     likeUsers: [],
+    randoms: [],
+    ranks: [],
   }),
   persist: true,
   getters: {
@@ -168,7 +173,15 @@ const useArticleStore = defineStore('articleStore', {
     async fetchArticleInfo(ids: string[], page?:IPageQuery) {
       const { data } = await fetchArticleInfo(ids, page)
       return (unref(data) as R<Page<ArticleVO>>).data.list;
-    }
+    },
+    async fetchRandomArticle() {
+      const { data } = await fetchRandomArticle()
+      this.randoms = unref(data).data.map(e => ({id: e.id, title: e.title}))
+    },
+    async fetchRankArticle() {
+      const { data } = await fetchRankArticle()
+      this.ranks = unref(data).data
+    },
   },
 });
 

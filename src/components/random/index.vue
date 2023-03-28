@@ -4,7 +4,7 @@
       <div class="flex items-center">
         <n-icon :component="RandomIcon"></n-icon>
         <span class="ml-1"> 随机文章 </span>
-        <n-button text>
+        <n-button text @click="handleRandomArticle">
           <n-icon :size="20" :component="RefreshIcon" />
         </n-button>
       </div>
@@ -18,8 +18,10 @@
       </n-button>
     </template>
     <n-list v-show="!isShrink" hoverable boarder>
-      <n-list-item v-for="(v, i) in ranks" :key="i">
-        {{ v.title }}
+      <n-list-item v-for="(v, i) in randoms" :key="i">
+        <RouterLink :to="`/article/${v.id}`">
+          {{ v.title }}
+        </RouterLink>
       </n-list-item>
     </n-list>
   </n-card>
@@ -28,48 +30,23 @@
 <script setup lang="ts">
 import {
   ArrowSync24Regular as RefreshIcon,
-  DocumentSync24Regular as RandomIcon, 
+  DocumentSync24Regular as RandomIcon,
   ChevronCircleUp48Regular as UpIcon,
   ChevronCircleDown48Regular as DownIcon,
   DismissCircle48Regular as CloseIcon,
 } from "@vicons/fluent";
+import { useArticleStore } from "/@/store";
 
+const articleStore = useArticleStore()
+articleStore.fetchRandomArticle()
+
+const { randoms } = storeToRefs(articleStore)
 const isClose = ref(false);
 const isShrink = ref(false);
 const showIcon = computed(() => (isShrink.value ? UpIcon : DownIcon));
 
-const ranks = computed(() => [
-  {
-    id: 1,
-    title: "Title 01",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 2,
-    title: "Title 02",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 3,
-    title: "Title 03",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 4,
-    title: "Title 04",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 5,
-    title: "Title 05",
-    createdAt: "2022-11-11 12:13:14",
-  },
-  {
-    id: 6,
-    title: "Title 06",
-    createdAt: "2022-11-11 12:13:14",
-  },
-]);
-</script>
+const handleRandomArticle = () => {
+  articleStore.fetchRandomArticle()
+}
 
-<style lang="scss" scoped></style>
+</script>
