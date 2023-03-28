@@ -16,7 +16,7 @@
         <template #footer>
           <!-- {{ formatTime('YYYY-MM-DD HH:mm:ss', v?.createdAt) }} -->
           <span class="text-base font-normal">
-            {{ v.createdAt?.substring(0, 10).concat(' by ').concat('li xun') }}
+            {{ v.createdAt?.substring(0, 10) }}
           </span>
         </template>
       </n-timeline-item>

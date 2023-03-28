@@ -39,8 +39,7 @@
             <span>确认清除“ {{ v.title }} ”?</span>
           </n-popconfirm>
         </n-list-item>
-        <n-pagination class="justify-center mt-4" v-model:page="page.pageNum"
-          :page-count="Math.ceil(total / page.pageSize)" />
+        <n-pagination v-show="pages > 1" class="justify-center mt-4" v-model:page="page.pageNum" :page-count="pages" />
       </n-list>
       <div v-else>请先登录</div>
     </main>
@@ -67,6 +66,8 @@ const init = () => {
 }
 
 init()
+
+const pages = computed(() => Math.ceil(total.value / page.value.pageSize))
 
 const delCollections = computed(() => {
   return collections.value.filter(c => c.checked).map(c => ({ id: c.id, title: c.title }))
