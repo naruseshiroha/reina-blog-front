@@ -7,7 +7,7 @@
       msize {{ mainSize.height }} -->
       <MyHeader />
     </header>
-    <main class="border flex-1 flex mx-auto xl:w-4/5 lg:w-6/7">
+    <main class="border flex-1 flex mx-auto w-3/4 xl:w-4/5 lg:w-5/6">
       <n-grid cols="11" item-responsive>
         <n-grid-item :span="hasAside ? 7 : 11">
           <main ref="mainBox" class="h-full p-4 ">
