@@ -99,6 +99,7 @@ export interface CategoryVO {
 
 export interface Tag extends BaseEntity {
     id: string;
+    tagId: string;
     tagName: string;
     tagDesc: string;
     status: boolean;

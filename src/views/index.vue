@@ -26,7 +26,7 @@
           <n-icon :component="TagsIcon" />
           <i v-for="t in v.tags" :key="t.id">
             &nbsp;
-            <router-link :to="`/tag/${t.id}`">{{ t.tagName }}</router-link>
+            <router-link :to="`/tag/${t.tagId}`">{{ t.tagName }}</router-link>
             &nbsp;
           </i>
         </n-tag>
@@ -79,6 +79,17 @@ const props = defineProps({
 });
 
 const showBull = ref(true)
+const route = useRoute()
+const router = useRouter()
+
+console.log('route', route.query, 'params', route.params);
+console.log('router', router);
+
+const params = reactive({
+  keyword: '',
+  tagIds: [],
+  categoryIds: []
+})
 
 const articleStore = useArticleStore();
 const { getArticles: articles, getArticlePageNum: pageNum } = toRefs(articleStore);
@@ -87,7 +98,7 @@ const page: Ref<IPageQuery> = computed(() => reactive({
   pageNum: pageNum.value,
   pageSize: 10
 }))
-articleStore.fetchPageArticles(page);
+articleStore.fetchPageArticles(page, params);
 
 
 watch(
