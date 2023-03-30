@@ -26,7 +26,7 @@
           <n-icon :component="TagsIcon" />
           <i v-for="t in v.tags" :key="t.id">
             &nbsp;
-            <router-link :to="`/tag/${t.tagId}`">{{ t.tagName }}</router-link>
+            <router-link :to="{ name: 'index', query: { tagIds: t.tagId } }">{{ t.tagName }}</router-link>
             &nbsp;
           </i>
         </n-tag>
@@ -55,6 +55,7 @@
         </router-link>
       </div>
     </n-card>
+    <n-pagination v-show="pages > 1" class="justify-center mt-4" v-model:page="page.pageNum" :page-count="pages" />
   </div>
 </template>
 
@@ -70,13 +71,11 @@ import {
   CommentsRegular as CommentsIcon,
 } from "@vicons/fa";
 import { useArticleStore } from "/@/store";
-import { Ref } from "vue";
-import { IPageQuery } from "/@/api/types";
 
-const props = defineProps({
-  top: Boolean,
-  bottom: Boolean,
-});
+// const props = defineProps({
+//   top: Boolean,
+//   bottom: Boolean,
+// });
 
 const showBull = ref(true)
 const route = useRoute()
@@ -86,30 +85,42 @@ console.log('route', route.query, 'params', route.params);
 console.log('router', router);
 
 const params = reactive({
-  keyword: '',
-  tagIds: [],
-  categoryIds: []
+  key: route.query.key as string,
+  tagIds: route.query.tagId as string,
+  categoryId: route.query.categoryId as string
 })
 
-const articleStore = useArticleStore();
-const { getArticles: articles, getArticlePageNum: pageNum } = toRefs(articleStore);
 
-const page: Ref<IPageQuery> = computed(() => reactive({
-  pageNum: pageNum.value,
-  pageSize: 10
-}))
-articleStore.fetchPageArticles(page, params);
+console.log('params', params);
+
+
+const articleStore = useArticleStore();
+const { getArticles: articles, page, total } = storeToRefs(articleStore);
+
+const pages = computed(() => Math.ceil(total.value / page.value.pageSize))
+
+// articleStore.fetchPageArticles(page);
+articleStore.fetchNewPageArticle(params);
 
 
 watch(
-  () => props.bottom,
-  (newVal) => {
-    if (newVal == true) {
-      page.value.pageNum += 1;
-      articleStore.fetchPageArticles(page)
-    }
-  },
+  () => page.value.pageNum,
+  () => {
+    articleStore.fetchNewPageArticle(params)
+  }
 );
+watch(
+  () => route.query,
+  (newVal) => {
+    console.log('change', newVal);
+    console.log('before', params);
+    params.tagIds = newVal.tagIds as string
+    console.log('after', params);
+
+    articleStore.fetchNewPageArticle(params)
+  },
+  { immediate: true }
+)
 
 </script>
 

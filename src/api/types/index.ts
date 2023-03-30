@@ -5,6 +5,12 @@ export interface R<T> {
     data: T;
 }
 
+export interface IArticleQueryParam {
+    key: string;
+    tagIds: string;
+    categoryId: string;
+}
+
 export interface Page<T> {
     total: string;
     list: T[];

@@ -1,5 +1,5 @@
-import { fetchArchives, fetchArticleById, fetchArticleInfo, fetchArticles, fetchLikeArticle, fetchLikeArticleUser, fetchRandomArticle, fetchRankArticle } from '/@/api/article';
-import { ArticleVO, Category, IPageQuery, Page, R, Tag, UserVO } from '/@/api/types';
+import { fetchArchives, fetchArticleById, fetchArticleInfo, fetchArticles, fetchLikeArticle, fetchLikeArticleUser, fetchNewPageArticle, fetchRandomArticle, fetchRankArticle } from '/@/api/article';
+import { ArticleVO, Category, IArticleQueryParam, IPageQuery, Page, R, Tag, UserVO } from '/@/api/types';
 import { defineStore } from 'pinia';
 import { Ref } from 'vue';
 
@@ -41,6 +41,8 @@ interface IArticleState {
   likeUsers: string[];
   randoms: IArchive[],
   ranks: IArchive[],
+  total: number;
+  page: IPageQuery;
 }
 
 const useArticleStore = defineStore('articleStore', {
@@ -58,6 +60,11 @@ const useArticleStore = defineStore('articleStore', {
     likeUsers: [],
     randoms: [],
     ranks: [],
+    total: 0,
+    page: {
+      pageNum: 1,
+      pageSize: 10
+    }
   }),
   persist: true,
   getters: {
@@ -109,6 +116,12 @@ const useArticleStore = defineStore('articleStore', {
       return false
     },
     // api
+    async fetchNewPageArticle(params: IArticleQueryParam) {
+      const { data } = await fetchNewPageArticle(this.page, params)
+      const { data: { list: articles, total}} = unref(data)
+      this.setArticles(articles)
+      this.total = total
+    },
     async fetchPageArticles(page?: any) {
       const { pageNum, pageSize } = unref(page)
       if (this.fetchArticlePreCheck(pageNum)) return

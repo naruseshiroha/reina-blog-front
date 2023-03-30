@@ -1,9 +1,21 @@
-import { IPageQuery } from './../types/index';
+import { IArticleQueryParam, IPageQuery } from './../types/index';
 import { ArticleVO } from '/@/api/types/index';
 import useMyFetch from '/@/util/fetch';
 
 export async function fetchArticles(pageNum: number, pageSize: number) {
     return await useMyFetch(`/article/${pageNum}/${pageSize}`).get().json()
+}
+
+export async function fetchNewPageArticle(page: IPageQuery, params: IArticleQueryParam) {
+      const { pageNum, pageSize } = page;
+      let paramsArr:string[] = []
+      for (const key in params) {
+        if (params[key]) {
+          paramsArr.push(`${key}=${params[key]}`)
+        }
+      }
+      const joinStr = "?" + paramsArr.join("&")
+      return await useMyFetch(`/article/${pageNum}/${pageSize}/${joinStr}`).get().json()
 }
 
 export async function fetchArchives(pageNum: number = 1, pageSize: number = 10) {

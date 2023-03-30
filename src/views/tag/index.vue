@@ -15,7 +15,7 @@
       <n-grid-item class="flex" v-for="(t, i) in tags" :key="i">
         <n-card hoverable embedded>
           <template #header>
-            <RouterLink :to="{ name: 'index', query: { tagId: t.id } }">
+            <RouterLink :to="{ name: 'index', query: { tagIds: t.id } }">
               {{ t.tagName }}
             </RouterLink>
           </template>

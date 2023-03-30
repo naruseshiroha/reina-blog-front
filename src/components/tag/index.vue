@@ -13,9 +13,12 @@
           标签
         </template>
         <template #default>
-          <n-space class="!justify-center" v-show="!isShrink">
-            <n-tag v-model:checked="v.checked" type="success" checkable v-for="v in tags" :key="v.id">
-              {{ v.tagName }}
+          <n-space class="" v-show="!isShrink">
+            <!-- <n-tag v-model:checked="v.checked" type="success" checkable v-for="v in tags" :key="v.id"> -->
+            <n-tag type="success" v-for="v in tags" :key="v.id">
+              <RouterLink @click="handle2top" :to="{ name: 'index', query: { tagIds: v.id } }">
+                {{ v.tagName }}
+              </RouterLink>
             </n-tag>
           </n-space>
         </template>
@@ -69,12 +72,21 @@ const tagStore = useTagStore();
 tagStore.fetchAllTags();
 const { getTags: tags } = storeToRefs(tagStore);
 
+// @TODO: to top
+const handle2top = () => {
+  console.log('to top');
+}
+
 </script>
 
 <style lang="scss" scoped>
 :deep(.tabs) {
   .n-tabs-nav__suffix {
     padding: 0 20px
+  }
+
+  .n-space {
+    justify-content: center !important;
   }
 }
 </style>
