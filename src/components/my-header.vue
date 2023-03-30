@@ -1,5 +1,5 @@
 <template>
-  <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
+  <n-menu v-show="routeName !== 'admin'" v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
 </template>
 
 <script setup lang="ts">
@@ -20,6 +20,11 @@ import { RouterLink } from "vue-router";
 const renderIcon = (icon: Component) => {
   return () => h(NIcon, null, { default: () => h(icon) });
 };
+
+const route = useRoute();
+console.log('route', route);
+const routeName = computed(() => route.name)
+
 
 const activeKey = ref<string | null>(null);
 
