@@ -72,3 +72,37 @@ export async function fetchAdminUpdateCategory(category: ICategoryBO) {
         }
     }).put().json();
 }
+
+// tag
+export async function fetchAdminTag(keyword: string | null, status: string | null ) {
+    return await useMyFetch(`/tag/admin?keyword=${keyword ?? ''}&status=${status ?? ''}`).get().json()
+}
+
+export async function fetchAdminDeleteTag(tagIds: string | string[]) {
+    const ids = typeof tagIds === 'string' ? tagIds : tagIds.join()
+    return await useMyFetch(`/tag/${ids}`).delete().json();
+}
+
+interface ITagBO {
+    id?: string | null;
+    tagName: string;
+    tagDesc: string;
+    status?: string | null;
+}
+export async function fetchAdminInsertTag(tag: ITagBO) {
+    return await useMyFetch(`/tag`, {
+        body: JSON.stringify(tag),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).post().json();
+}
+
+export async function fetchAdminUpdateTag(tag: ITagBO) {
+    return await useMyFetch(`/tag`, {
+        body: JSON.stringify(tag),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).put().json();
+}

@@ -128,6 +128,7 @@ export interface TagVO {
     id: string;
     tagName: string;
     tagDesc: string;
+    status: string;
     count: number;
     checked: boolean;
 }
