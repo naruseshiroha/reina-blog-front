@@ -11,7 +11,7 @@
                     <n-icon :component="TagIcon" /> 平山道支行</n-breadcrumb-item>
             </n-breadcrumb>
         </n-layout-header>
-        <n-layout position="absolute" style="top: 64px; bottom: 64px" has-sider>
+        <n-layout position="absolute" style="top: 56px; bottom: 32px" has-sider>
             <n-layout-sider bordered collapse-mode="width" :native-scrollbar="false" :collapsed-width="64" :width="240"
                 :collapsed="collapsed" show-trigger @collapse="collapsed = true" @expand="collapsed = false">
                 <n-menu v-model:value="activeKey" :collapsed="collapsed" :collapsed-width="64" :collapsed-icon-size="22"
@@ -22,8 +22,10 @@
                 <RouterView />
             </n-layout>
         </n-layout>
-        <n-layout-footer position="absolute" class="p-2 " bordered>
-            Footer
+        <n-layout-footer position="absolute" class="p-0 h-8 " bordered>
+            <span class="text-xl">
+                Footer
+            </span>
         </n-layout-footer>
     </n-layout>
 </template>
