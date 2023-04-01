@@ -12,3 +12,9 @@
 body {
     overflow: hidden;
 }
+
+.v-binder-follower-container {
+    .v-binder-follower-content {
+        max-width: 500px;
+    }
+}
