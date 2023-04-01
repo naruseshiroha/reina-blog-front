@@ -7,9 +7,10 @@ export interface R<T> {
 }
 
 export interface IArticleQueryParam {
-    key: string;
-    tagIds: string;
-    categoryId: string;
+    key: string | null;
+    tagIds: string  | null;
+    categoryId: string | null;
+    top?: string | null;
 }
 
 export interface Page<T> {
@@ -111,6 +112,7 @@ export interface CategoryVO {
     categoryName: string;
     categoryDesc: string;
     count: number;
+    status: string;
 }
 
 export interface Tag extends BaseEntity {
@@ -159,6 +161,7 @@ export interface ArticleVO {
     content: string;
     coverImage: string;
     top?: boolean;
+    status?: string;
     createdAt: string;
     viewCount: number;
     likeCount: number;
