@@ -19,10 +19,10 @@
             </n-layout-sider>
             <n-layout content-style="padding: 24px; height:100%;" :native-scrollbar="false">
                 {{ activeKey }}
-                <RouterView />
+                <RouterView :activeKey="activeKey"></RouterView>
             </n-layout>
         </n-layout>
-        <n-layout-footer position="absolute" class="p-0 h-8 " bordered>
+        <n-layout-footer position="absolute" class="p-0 h-8" bordered>
             <span class="text-xl">
                 Footer
             </span>
@@ -52,7 +52,7 @@ function renderIcon(icon: Component) {
 }
 
 const collapsed = ref(true)
-const activeKey = ref<string | null>('Home')
+const activeKey = ref<string>('Home')
 const menuOptions: MenuOption[] = [
     {
         label: 'Home',
@@ -85,8 +85,8 @@ const menuOptions: MenuOption[] = [
         icon: renderIcon(TagIcon)
     },
     {
-        label: 'Bull',
-        key: 'Bull',
+        label: 'Bulletin',
+        key: 'Bulletin',
         icon: renderIcon(BullIcon)
     },
     {
