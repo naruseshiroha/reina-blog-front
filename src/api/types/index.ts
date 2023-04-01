@@ -198,3 +198,12 @@ export interface CommentBO {
     replyUserId?: string;
     replyNickName?: string;
 }
+
+export interface IBulletinVO {
+    id?: string | null;
+    bulTitle: string | null;
+    bulContent: string | null;
+    status?: string | null;
+    createdAt?: string | null;
+    updatedAt?: string | null;
+}

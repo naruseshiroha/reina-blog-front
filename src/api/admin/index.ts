@@ -1,4 +1,4 @@
-import { IPageQuery, IUserQueryBO } from "../types";
+import { IBulletinVO, IPageQuery, IUserQueryBO } from "../types";
 import useMyFetch from "/@/util/fetch";
 
 export async function fetchAdminPageUser(page: IPageQuery, user: IUserQueryBO) {
@@ -101,6 +101,34 @@ export async function fetchAdminInsertTag(tag: ITagBO) {
 export async function fetchAdminUpdateTag(tag: ITagBO) {
     return await useMyFetch(`/tag`, {
         body: JSON.stringify(tag),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).put().json();
+}
+
+// bulletin
+export async function fetchAdminBulletin(bulTitle: string | null, status: string | null) {
+    return await useMyFetch(`/bulletin?bulTitle=${bulTitle ?? '' }&status=${status ?? ''}`).get().json()
+}
+
+export async function fetchAdminDeleteBulletin(bulletinIds: string | string[]) {
+    const ids = typeof bulletinIds === 'string' ? bulletinIds : bulletinIds.join()
+    return await useMyFetch(`/bulletin/${ids}`).delete().json();
+}
+
+export async function fetchAdminInsertBulletin(bulletin: IBulletinVO) {
+    return await useMyFetch(`/bulletin`, {
+        body: JSON.stringify(bulletin),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).post().json();
+}
+
+export async function fetchAdminUpdateBulletin(bulletin: IBulletinVO) {
+    return await useMyFetch(`/bulletin`, {
+        body: JSON.stringify(bulletin),
         headers: {
             'Content-Type': 'application/json'
         }
