@@ -11,11 +11,11 @@ export async function fetchAdminPageUser(page: IPageQuery, user: IUserQueryBO) {
     }).post().json();
 }
 
-export async function fetchAdminFroze(userId: string, froze: string) {
+export async function fetchAdminFrozeUser(userId: string, froze: string) {
     return await useMyFetch(`/admin/user/froze/${userId}/${froze}`).put().json();
 }
 
-export async function fetchAdminDelete(userIds:  string[]) {
+export async function fetchAdminDeleteUser(userIds:  string[]) {
     return await useMyFetch(`/admin/user/${userIds.join()}`).delete().json();
 }
 
@@ -24,11 +24,17 @@ interface IResetPasswordBO {
     password: string;
 }
 
-export async function fetchAdminReset(user:  IResetPasswordBO) {
+export async function fetchAdminResetUser(user:  IResetPasswordBO) {
     return await useMyFetch(`/admin/user/reset`, {
         body: JSON.stringify(user),
         headers: {
             'Content-Type': 'application/json'
         }
     }).put().json();
+}
+
+// article
+export async function fetchAdminDeleteArticle(articleIds: string | string[]) {
+    const ids = typeof articleIds === 'string' ? articleIds : articleIds.join()
+    return await useMyFetch(`/article/${ids}`).delete().json();
 }

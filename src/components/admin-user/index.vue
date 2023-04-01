@@ -60,7 +60,7 @@ import type { DataTableColumns } from 'naive-ui'
 import { useUserStore } from '/@/store';
 import { Gender, Role, UserStatus } from '/@/api/types/enums';
 
-import { fetchAdminFroze, fetchAdminDelete, fetchAdminReset } from '/@/api/admin'
+import { fetchAdminFrozeUser, fetchAdminDeleteUser, fetchAdminResetUser } from '/@/api/admin'
 
 type RowData = {
     id: string
@@ -163,7 +163,7 @@ const userData = ref([]);
 const columns = createColumns({
     async handleClickBtn(btnName, row) {
         if (btnName === '凍結') {
-            const { data } = await fetchAdminFroze(row.id, "1")
+            const { data } = await fetchAdminFrozeUser(row.id, "1")
             const { data: result, msg } = unref(data)
             if (result) {
                 message.success(msg)
@@ -171,7 +171,7 @@ const columns = createColumns({
                 message.error(msg)
             }
         } else if (btnName === '解凍') {
-            const { data } = await fetchAdminFroze(row.id, "0")
+            const { data } = await fetchAdminFrozeUser(row.id, "0")
             const { data: result, msg } = unref(data)
             if (result) {
                 message.success(msg)
@@ -179,7 +179,7 @@ const columns = createColumns({
                 message.error(msg)
             }
         } else if (btnName === '削除') {
-            const { data } = await fetchAdminDelete([row.id])
+            const { data } = await fetchAdminDeleteUser([row.id])
             const { data: result, msg } = unref(data)
             if (result) {
                 message.success(msg)
@@ -285,7 +285,7 @@ const fetchPage = async () => {
 
 // delete
 const handleRemoveUser = async () => {
-    const { data } = await fetchAdminDelete(checkedRowKeys.value as string[])
+    const { data } = await fetchAdminDeleteUser(checkedRowKeys.value as string[])
     if (unref(data).data) {
         message.success("删除成功")
     }
@@ -313,7 +313,7 @@ const handleClickSaveBtn = async () => {
         message.warning("密码长度为 6-16 位！")
         return
     }
-    const { data } = await fetchAdminReset(resetForm)
+    const { data } = await fetchAdminResetUser(resetForm)
     const { data: result, msg } = unref(data)
     if (result) {
         resetForm.password = ''
