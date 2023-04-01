@@ -168,3 +168,47 @@ export async function fetchAdminUpdateLink(link: ILinkBO) {
         }
     }).put().json();
 }
+
+// comment
+interface ICommentBO {
+    content: string | null;
+    userId: string | null;
+    articleId: string | null;
+    replyUserId: string | null;
+    status: string | null;
+}
+
+export async function fetchAdminComment(page: IPageQuery, comment: ICommentBO) {
+    const { pageNum, pageSize } = page
+    return await useMyFetch(`/comment/admin/${pageNum}/${pageSize}`, {
+        body: JSON.stringify(comment),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).post().json();
+}
+
+export async function fetchAdminDeleteComment(commentIds: string | string[]) {
+    const ids = typeof commentIds === 'string' ? commentIds : commentIds.join()
+    return await useMyFetch(`/comment/${ids}`).delete().json();
+}
+
+export async function fetchAdminAuditComment(id: string, status: string) {
+    return await useMyFetch(`/comment/${id}/${status}`).put().json();
+}
+
+export async function fetchArticleOptions() {
+    return await useMyFetch('/article/options').get().json()
+}
+
+export async function fetchUserOptions() {
+    return await useMyFetch('/user/options').get().json()
+}
+
+export async function fetchCategoryOptions() {
+    return await useMyFetch('/category/options').get().json()
+}
+
+export async function fetchTagOptions() {
+    return await useMyFetch('/tag/options').get().json()
+}

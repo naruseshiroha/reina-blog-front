@@ -184,6 +184,7 @@ export interface CommentVO {
     status?: string;
     parentId: string;
     createdAt: string;
+    updatedAt: string;
     children?: CommentVO[];
     avatar: string;
     collapsed?: boolean;
