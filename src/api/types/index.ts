@@ -1,3 +1,4 @@
+import { Gender, Role, UserStatus } from "./enums";
 
 export interface R<T> {
     code: number;
@@ -56,6 +57,15 @@ export interface ResetPasswordBO {
     code: string;
     password: string;
     rePassword?: string;
+}
+
+export interface IUserQueryBO {
+    email: string | undefined | null; 
+    telephone: string | undefined | null;
+    nickName: string | undefined | null;
+    gender: Gender | undefined | null;
+    role: Role | undefined | null;
+    froze: UserStatus | undefined | null;
 }
 
 export interface UserVO {

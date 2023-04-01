@@ -1,7 +1,8 @@
-import { ResetPasswordBO, UserRegisterBO, UserVO } from '/@/api/types/index';
+import { IPageQuery, IUserQueryBO, ResetPasswordBO, UserRegisterBO, UserVO } from '/@/api/types/index';
 import { defineStore } from 'pinia';
 import { UserLoginBO } from '/@/api/types';
 import { fetchVerifyCode, fetchResetCode, fetchLogin, fetchRegister, fetchUserInfo, fetchUpdateUserInfo, fetchResetPassword } from '/@/api/user';
+import { fetchAdminPageUser } from '/@/api/admin'
 
 interface IUserState {
   userId: string;
@@ -102,6 +103,12 @@ const useUserStore = defineStore('userStore', {
     async fetchResetPassword(bo: ResetPasswordBO) {
       const  {data}  = await fetchResetPassword(bo).catch(err => err)
       return unref(data);
+    },
+    // admin api
+    async fetchAdminPageUser(page: IPageQuery, bo: IUserQueryBO) {
+      const { data } = await fetchAdminPageUser(page, bo)
+      // console.log('data is ', data);
+      return unref(data).data
     }
   },
 });
