@@ -20,15 +20,8 @@
                     </n-button>
                 </template>
                 <div v-show="!shrink">
-                    <div v-for="_v in 2" class="h-full notice-01">
-                        这里是我一手建设维护的资源站，低调于三次元，致力给新人打造一个轻松愉快的galgame下载平台，让更多人喜欢并且容易玩上galgame也是本站的初衷。
-                        随着时间的推移，历经多次调整，相信有不少人见证了网站的发展，至于我制作的汉硬也得到了不少人的认同支持和搬运。我不喜欢到处打广告，向能找到这里或被推荐到这里的人衷心说句：Enjoy the
-                        game.
-                    </div>
-                    <div v-for="_v in 2" class="h-full notice-02">
-                        晚上趁着老婆玩手机不看电影会断断续续更新一下，不要期待太多。
-                        网站会关闭么？目前还不会的，毕竟有一些网友还是发现了本人的网站底部的捐助链接。
-                        最后祝大家新年快乐
+                    <div v-for="b, i in bulletins" :key="i" :class="'h-full ' + (i % 2 === 0 ? 'notice-01' : 'notice-02')">
+                        {{ b.bulContent }}
                     </div>
                 </div>
             </n-thing>
@@ -63,7 +56,8 @@ import {
 } from "@vicons/fluent";
 import { Bullhorn as BullhornIcon } from '@vicons/fa'
 import { useCommentStore } from '/@/store';
-import { CommentBO } from '/@/api/types'
+import { CommentBO, IBulletinVO } from '/@/api/types'
+import { fetchAdminBulletin } from "/@/api/admin";
 
 // const messages = [
 //     {
@@ -117,6 +111,14 @@ const bo = reactive<CommentBO>({
     content: "",
 })
 messageStore.fetchPageMessages(bo, unref(page))
+
+const bulletins = ref<IBulletinVO[]>([])
+const initBulletin = async () => {
+    const { data } = await fetchAdminBulletin(null, '1')
+    bulletins.value = unref(data).data
+}
+
+initBulletin()
 
 watch(
     () => page.value.pageNum,
