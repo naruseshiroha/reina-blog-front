@@ -134,3 +134,37 @@ export async function fetchAdminUpdateBulletin(bulletin: IBulletinVO) {
         }
     }).put().json();
 }
+
+// link
+export async function fetchAdminLink(linkName: string | null, linkUrl: string | null, status: string | null ) {
+    return await useMyFetch(`/friendLink/admin?linkName=${linkName ?? ''}&linkUrl=${linkUrl ?? ''}&status=${status ?? ''}`).get().json()
+}
+
+export async function fetchAdminDeleteLink(linkIds: string | string[]) {
+    const ids = typeof linkIds === 'string' ? linkIds : linkIds.join()
+    return await useMyFetch(`/friendLink/${ids}`).delete().json();
+}
+
+interface ILinkBO {
+    id?: string | null;
+    linkName: string;
+    linkDesc: string;
+    status?: string | null;
+}
+export async function fetchAdminInsertLink(link: ILinkBO) {
+    return await useMyFetch(`/friendLink`, {
+        body: JSON.stringify(link),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).post().json();
+}
+
+export async function fetchAdminUpdateLink(link: ILinkBO) {
+    return await useMyFetch(`/friendLink`, {
+        body: JSON.stringify(link),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).put().json();
+}

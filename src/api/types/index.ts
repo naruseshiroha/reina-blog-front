@@ -147,6 +147,7 @@ export interface LinkVO {
     linkName: string;
     linkDesc: string;
     linkUrl: string;
+    status?: string;
 }
 
 export interface LinkBO {
