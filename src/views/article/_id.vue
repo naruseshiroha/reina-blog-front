@@ -111,7 +111,7 @@
                 <div class="relative pb-4">
                   <p :style="{ textIndent: '2rem' }" v-html="comment.content"></p>
                   <n-avatar class="absolute -top-8 -left-12" round :size="48"
-                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
+                    :src="`/img/avater/${comment.avatar ?? 'default.jpg'}`" />
                 </div>
                 <template #footer>
                   <div>
@@ -209,21 +209,18 @@ const { articleInfo: article } = storeToRefs(articleStore);
 const { comments } = storeToRefs(commentStore);
 const loading = computed(() => !Boolean(unref(article)));
 
-const uid = ref("123");
-const isLike = computed(() => articleStore.checkIsLiked(unref(uid)));
+const { userId, userInfo } = storeToRefs(userStore)
+const isLike = computed(() => articleStore.checkIsLiked(unref(userId)));
 const category = computed(() => unref(article)?.category);
 
 const handleLikeButton = async () => {
-  const res = await articleStore.fetchLikeArticle(unref(id), unref(uid), unref(isLike));
+  const res = await articleStore.fetchLikeArticle(unref(id), unref(userId), unref(isLike));
   message.success(res);
 };
 
-// const userId = computed(() => userStore.userId)
-const { userId } = storeToRefs(userStore);
-
 const userCollect = computed(() =>
   reactive<UserCollect>({
-    userId: userId.value,
+    userId: userInfo.value?.id as string,
     articleId: article.value?.id || "",
     title: article.value?.title || "",
   })
@@ -270,17 +267,23 @@ const handleCreated = (editor) => {
 
 // 发表评论
 // const replyUserId = ref("");
-const replyObj = reactive<{
-  content: string | undefined;
-  parentId: string | undefined;
-  replyUserId: string | undefined;
-  replyNickName: string | undefined;
-}>({
-  content: undefined,
-  parentId: undefined,
-  replyUserId: undefined,
-  replyNickName: undefined,
-});
+const commentBO = reactive({
+  userId: userInfo.value?.id,
+  nickName: userInfo.value?.nickName,
+  content: '',
+  articleId: id.value
+})
+// const replyObj = reactive<{
+//   content: string | undefined;
+//   parentId: string | undefined;
+//   replyUserId: string | undefined;
+//   replyNickName: string | undefined;
+// }>({
+//   content: undefined,
+//   parentId: undefined,
+//   replyUserId: undefined,
+//   replyNickName: undefined,
+// });
 // 移除 replyNode
 const removeReplyNode = (): HTMLElement => {
   const rNode = document.getElementById("reply");
@@ -301,13 +304,11 @@ const handleReplyBtn = async (comment: CommentVO, event: Event) => {
     id: parentId,
     userId: replyUserId,
     nickName: replyNickName,
-    articleId,
   } = comment;
-  Object.assign(replyObj, {
+  Object.assign(commentBO, {
     parentId,
     replyUserId,
     replyNickName,
-    articleId,
   });
 
   showCloseIcon.value = true;
@@ -329,12 +330,15 @@ const handlePublished = async () => {
   //   replyNickName: null,
   // };
   // @TODO: userId, nickName, parentId, replyUserId, replyNickName
-  Object.assign(replyObj, {
-    userId: "1",
-    nickName: "test",
-    content: content,
-    articleId: id,
-  });
+  // Object.assign(replyObj, {
+  //   userId: "1",
+  //   nickName: "test",
+  //   content: content,
+  //   articleId: id,
+  // });
+
+  commentBO.content = content.value
+
   // check content not empty
   const regexp = /^(<p>(<br>)*(\s(&nbsp;)*)*<\/p>)+$/;
   if (regexp.test(unref(content))) {
@@ -342,7 +346,7 @@ const handlePublished = async () => {
     return;
   }
   const { data } = await useFetch("/api/comment", {
-    body: JSON.stringify(replyObj),
+    body: JSON.stringify(commentBO),
     headers: {
       "Content-Type": "application/json",
     },
