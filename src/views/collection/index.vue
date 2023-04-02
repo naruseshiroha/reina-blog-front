@@ -76,7 +76,7 @@ const delCollections = computed(() => {
 // removeCollection
 const handlePositiveClick = async (id: string) => {
   const ids: string[] = (id ? [id] : 0) || delCollections.value.map(c => c.id as string)
-  const data = await collectionStore.fetchRemoveUserCollect(ids)
+  const data = await collectionStore.fetchRemoveUserCollect(ids, userId.value)
   if (data === true) {
     message.success("删除成功!")
     init()

@@ -50,8 +50,8 @@ const useCollectionStore = defineStore('collectionStore', {
             this.setCollections(collections)
             this.total = total
         },
-        async fetchRemoveUserCollect(ids: string[]) {
-           const { data } = await fetchRemoveUserCollect(ids)
+        async fetchRemoveUserCollect(ids: string[], userId: string) {
+           const { data } = await fetchRemoveUserCollect(ids, userId)
            return unref(data).data;
         }
     },
