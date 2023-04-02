@@ -1,15 +1,12 @@
 <template>
     <n-layout class="h-screen ">
         <n-layout-header class="p-4  h-14 flex " bordered>
-            <n-avatar></n-avatar>
-            <n-breadcrumb>
-                <n-breadcrumb-item>
-                    <n-icon :component="HomeIcon" /> 北京总行</n-breadcrumb-item>
-                <n-breadcrumb-item>
-                    <n-icon :component="UserIcon" /> 天津分行</n-breadcrumb-item>
-                <n-breadcrumb-item>
-                    <n-icon :component="TagIcon" /> 平山道支行</n-breadcrumb-item>
-            </n-breadcrumb>
+            <n-avatar size="medium" src="/img/favicon.png"></n-avatar>
+            <RouterLink :to="{ name: 'index' }">
+                <n-breadcrumb class="cursor-pointer">
+                    <n-breadcrumb-item><n-icon :component="HomeIcon" /> フロントへ</n-breadcrumb-item>
+                </n-breadcrumb>
+            </RouterLink>
         </n-layout-header>
         <n-layout position="absolute" style="top: 56px; bottom: 32px" has-sider>
             <n-layout-sider bordered collapse-mode="width" :native-scrollbar="false" :collapsed-width="64" :width="240"
@@ -18,7 +15,7 @@
                     :options="menuOptions" />
             </n-layout-sider>
             <n-layout content-style="padding: 24px; height:100%;" :native-scrollbar="false">
-                {{ activeKey }}
+                <!-- {{ activeKey }} -->
                 <RouterView :activeKey="activeKey"></RouterView>
             </n-layout>
         </n-layout>
