@@ -7,6 +7,16 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AdminArticle: typeof import('./../src/components/admin-article/index.vue')['default']
+    AdminBulletin: typeof import('./../src/components/admin-bulletin/index.vue')['default']
+    AdminCategory: typeof import('./../src/components/admin-category/index.vue')['default']
+    AdminComment: typeof import('./../src/components/admin-comment/index.vue')['default']
+    AdminLink: typeof import('./../src/components/admin-link/index.vue')['default']
+    AdminLogin: typeof import('./../src/components/admin-login/index.vue')['default']
+    AdminPublishArticle: typeof import('./../src/components/admin-publish-article/index.vue')['default']
+    AdminTag: typeof import('./../src/components/admin-tag/index.vue')['default']
+    AdminUser: typeof import('./../src/components/admin-user/index.vue')['default']
+    AdminWelcome: typeof import('./../src/components/admin-welcome/index.vue')['default']
     Comment: typeof import('./../src/components/comment/index.vue')['default']
     CommentItem: typeof import('./../src/components/comment-item/index.vue')['default']
     Link: typeof import('./../src/components/link/index.vue')['default']
@@ -20,6 +30,7 @@ declare module '@vue/runtime-core' {
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NCheckbox: typeof import('naive-ui')['NCheckbox']
+    NDataTable: typeof import('naive-ui')['NDataTable']
     NDialogProvider: typeof import('naive-ui')['NDialogProvider']
     NDivider: typeof import('naive-ui')['NDivider']
     NForm: typeof import('naive-ui')['NForm']
@@ -29,6 +40,7 @@ declare module '@vue/runtime-core' {
     NGrid: typeof import('naive-ui')['NGrid']
     NGridItem: typeof import('naive-ui')['NGridItem']
     NIcon: typeof import('naive-ui')['NIcon']
+    NImage: typeof import('naive-ui')['NImage']
     NInput: typeof import('naive-ui')['NInput']
     NInputGroup: typeof import('naive-ui')['NInputGroup']
     NLayout: typeof import('naive-ui')['NLayout']
