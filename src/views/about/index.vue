@@ -250,7 +250,6 @@ const handleFetchCode = async () => {
     loadingCode.value = true;
     const email = userInfo.value?.email
     const data: string = await userStore.fetchResetCode(email as string)
-    console.log('data', data);
     if (data) {
         message.info("请前往邮箱查看验证码！")
     }
