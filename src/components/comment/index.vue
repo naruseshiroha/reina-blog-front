@@ -7,9 +7,6 @@
       </div>
     </template>
     <template #header-extra>
-      <!-- <n-button text>
-        <n-icon :size="20" :component="UpIcon" />
-      </n-button> -->
       <n-button text @click="isShrink = !isShrink">
         <n-icon :size="20" :component="showIcon" />
       </n-button>
@@ -18,22 +15,14 @@
       </n-button>
     </template>
     <n-list v-show="!isShrink" hoverable boarder>
-      <!-- <template #header> hhh </template>
-      <template #footer> fff </template> -->
       <n-list-item v-for="(v, i) in comments" :key="i">
-        <!-- 
-        <template #suffix>
-          <n-button>Suffix</n-button>
-        </template> -->
         <template #prefix>
-          <n-avatar round size="large" :src="v.avatar"
-            fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
+          <n-avatar round size="large" :src="v.avatar" fallback-src="/img/avatar/default.jpg" />
         </template>
         <n-tooltip :style="{ maxWidth: '400px' }" placement="left-end" trigger="hover">
           <template #trigger>
-            <RouterLink :to="`/article/${v.articleId}#${v.id}`">
-              <!-- <span>{{ v.content.slice(0, 30).concat("...") }}</span> -->
-              <span v-html="v.content" @click="handleToArtile(v.articleId)"></span>
+            <RouterLink :to="`${v.articleId === '-1' ? '/message' : `/article/${v.articleId}`}#${v.id}`">
+              <span v-html="v.content"></span>
             </RouterLink>
           </template>
           {{ v.content }}
@@ -65,9 +54,4 @@ const page = reactive<IPageQuery>({
 const commentStore = useCommentStore();
 commentStore.fetchRecentComments(page);
 const { recentComments: comments } = storeToRefs(commentStore);
-
-// TODO: to article detail info page
-const handleToArtile = async (articleId: string) => {
-  console.log("articleId", articleId);
-};
 </script>

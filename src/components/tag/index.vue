@@ -13,10 +13,9 @@
           标签
         </template>
         <template #default>
-          <n-space class="" v-show="!isShrink">
-            <!-- <n-tag v-model:checked="v.checked" type="success" checkable v-for="v in tags" :key="v.id"> -->
+          <n-space v-show="!isShrink">
             <n-tag type="success" v-for="v in tags" :key="v.id">
-              <RouterLink @click="handle2top" :to="{ name: 'index', query: { tagIds: v.id } }">
+              <RouterLink :to="{ name: 'index', query: { tagIds: v.id } }">
                 {{ v.tagName }}
               </RouterLink>
             </n-tag>
@@ -71,11 +70,6 @@ const { getLinks: links } = storeToRefs(linkStore);
 const tagStore = useTagStore();
 tagStore.fetchAllTags();
 const { getTags: tags } = storeToRefs(tagStore);
-
-// @TODO: to top
-const handle2top = () => {
-  console.log('to top');
-}
 
 </script>
 

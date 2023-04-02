@@ -64,7 +64,6 @@ const articleOptions = ref([])
 const userOptions = ref([])
 const init = async () => {
     const articles = await initArticleOptions()
-    console.log('articles', articles);
     articleOptions.value = articles
 
     const users = await initUserOptions()
@@ -205,8 +204,6 @@ const fetchPage = async () => {
     const { data } = await fetchAdminComment(page, queryForm)
     const { list: result, total } = unref(data).data
     page.total = total
-    console.log('data', result);
-
     commentData.value = result;
     checkedRowKeys.value = []
 }

@@ -9,7 +9,7 @@
         </template>
         <template #default>
           <span class="mx-4">——</span>
-          <router-link class="text-lg  font-semibold" :to="`/category/${v.category?.id}`">
+          <router-link class="text-lg  font-semibold" :to="{ name: 'index', query: { categoryId: v.category.id } }">
             {{ v.category?.categoryName }}
           </router-link>
         </template>

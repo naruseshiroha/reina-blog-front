@@ -107,7 +107,6 @@ const useUserStore = defineStore('userStore', {
     // admin api
     async fetchAdminPageUser(page: IPageQuery, bo: IUserQueryBO) {
       const { data } = await fetchAdminPageUser(page, bo)
-      // console.log('data is ', data);
       return unref(data).data
     }
   },

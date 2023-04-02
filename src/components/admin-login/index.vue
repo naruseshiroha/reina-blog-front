@@ -25,8 +25,6 @@ const form = reactive({
 const rules = []
 const handleLoginBtn = () => {
     // check is admin
-    console.log("form", unref(form));
-
 }
 </script>
 

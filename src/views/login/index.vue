@@ -215,7 +215,6 @@ const rules: FormRules = {
 
 // verifyCode
 const emailRef = ref<FormItemInst | null>(null);
-const telephoneRef = ref<FormItemInst | null>(null);
 const timeLimitStr = ref<string>("");
 const loadingCode = ref<boolean>(false);
 

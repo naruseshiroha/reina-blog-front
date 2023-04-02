@@ -79,20 +79,11 @@ import { useArticleStore } from "/@/store";
 
 const showBull = ref(true)
 const route = useRoute()
-const router = useRouter()
-
-console.log('route', route.query, 'params', route.params);
-console.log('router', router);
-
 const params = reactive({
   key: route.query.key as string,
   tagIds: route.query.tagId as string,
   categoryId: route.query.categoryId as string
 })
-
-
-console.log('params', params);
-
 
 const articleStore = useArticleStore();
 const { getArticles: articles, page, total } = storeToRefs(articleStore);
@@ -112,11 +103,9 @@ watch(
 watch(
   () => route.query,
   (newVal) => {
-    console.log('change', newVal);
-    console.log('before', params);
+    params.key = newVal.key as string
+    params.categoryId = newVal.categoryId as string
     params.tagIds = newVal.tagIds as string
-    console.log('after', params);
-
     articleStore.fetchNewPageArticle(params)
   },
   { immediate: true }

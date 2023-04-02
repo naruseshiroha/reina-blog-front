@@ -22,7 +22,6 @@ const renderIcon = (icon: Component) => {
 };
 
 const route = useRoute();
-console.log('route', route);
 const routeName = computed(() => route.name)
 
 

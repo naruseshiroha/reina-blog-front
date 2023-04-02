@@ -201,7 +201,6 @@ const handleRemoveArticle = async () => {
 
 const handleRemove = async (id: string | string[]) => {
     const { data } = await fetchAdminDeleteArticle(id)
-    console.log('data', data, unref(data));
     const { data: result, msg } = unref(data)
     if (result) {
         message.success(msg)
