@@ -26,6 +26,9 @@
       <n-form-item ref="emailRef" label="邮箱" first path="email">
         <n-input @keydown.enter.prevent v-model:value="registerForm.email" placeholder="请输入邮箱" clearable />
       </n-form-item>
+      <n-form-item label="手机号码" path="telephone">
+        <n-input @keydown.enter.prevent v-model:value="registerForm.telephone" placeholder="请输入手机号码" clearable />
+      </n-form-item>
       <n-form-item label="密码" path="password">
         <n-input @input="handlePasswordInput" @keydown.enter.prevent v-model:value="registerForm.password" type="password"
           show-password-on="mousedown" placeholder="请输入密码" :minlength="6" :maxlength="16" clearable />
@@ -170,6 +173,14 @@ const rules: FormRules = {
       trigger: "blur",
     },
   ],
+  telephone: [
+    {
+      required: true, message: "手机号不能为空", trigger: 'blur'
+    },
+    {
+      min: 11, max: 11, message: '长度为11位', trigger: 'blur'
+    }
+  ],
   password: [
     {
       required: true,
@@ -204,6 +215,7 @@ const rules: FormRules = {
 
 // verifyCode
 const emailRef = ref<FormItemInst | null>(null);
+const telephoneRef = ref<FormItemInst | null>(null);
 const timeLimitStr = ref<string>("");
 const loadingCode = ref<boolean>(false);
 
