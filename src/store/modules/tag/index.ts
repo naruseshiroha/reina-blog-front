@@ -44,9 +44,11 @@ const useTagStore = defineStore('TagStore', {
       this.setTags(
         (data.value as R<Page<TagVO>>).data.list.map(e => ({
           id: e.id,
+          tagId: e.id as string,
           tagName: e.tagName,
           tagDesc: e.tagDesc,
           count: e.count,
+          status: e.status,
           checked: false,
         }))
       );

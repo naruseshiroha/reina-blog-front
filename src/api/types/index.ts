@@ -125,12 +125,13 @@ export interface Tag extends BaseEntity {
 }
 
 export interface TagVO {
-    id: string;
+    id?: string;
+    tagId: string;
     tagName: string;
-    tagDesc: string;
-    status: string;
-    count: number;
-    checked: boolean;
+    tagDesc?: string;
+    status?: string;
+    count?: number;
+    checked?: boolean;
 }
 
 export interface Link extends BaseEntity {
