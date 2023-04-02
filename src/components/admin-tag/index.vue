@@ -106,7 +106,7 @@ const columns = createColumns({
     async handleClickBtn(btnName, row) {
         if (btnName === '削除') {
             // delete
-            const { data } = await fetchAdminDeleteTag(row.id)
+            const { data } = await fetchAdminDeleteTag(row.id as string)
             if (unref(data).data) {
                 message.success("删除成功")
                 await fetchPage()
