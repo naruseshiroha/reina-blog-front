@@ -27,34 +27,6 @@
         </template>
         <n-skeleton v-if="loading" text :repeat="6" />
         <template v-else>
-          <!-- <h2 class="text-center">
-            <span class="text-3xl cursor-pointer">{{ article?.title }}</span>
-          </h2> 
-
-          <n-space class="tags m-4 !justify-center">
-            <n-tag>
-              <n-icon :component="CalendarIcon" />
-              &nbsp;{{ article?.createdAt.substring(0, 10) }}&nbsp;
-            </n-tag>
-            <n-tag>
-              <n-icon :component="TagsIcon" />
-              花譜、神椿
-            </n-tag>
-            <n-tag>
-              <n-icon :component="EyeIcon" />
-              &nbsp;{{ article?.viewCount ?? 0 }}&nbsp;
-            </n-tag>
-            <n-tag>
-              <n-icon :component="LikeIcon" />
-              &nbsp;{{ article?.likeCount ?? 0 }}&nbsp;
-            </n-tag>
-            <n-tag>
-              <n-icon :component="CommentsIcon" />
-              &nbsp;{{ article?.commentCount ?? 0 }}&nbsp;
-            </n-tag>
-          </n-space>
-          <n-image :src="`/src/assets/img/article/${article?.coverImage}`"
-            fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" /> -->
           <!-- <KaFu class="markdown-body" /> -->
           <div class="markdown-body" v-html="article?.content"></div>
 
@@ -66,12 +38,11 @@
                 <TagsIcon />
               </n-icon>
               <n-tag class="mx-1" v-for="v in article?.tags" :key="v.id">
-                {{ v.tagName }}
+                <RouterLink :to="{ name: 'index', query: { tagIds: v.tagId } }">
+                  {{ v.tagName }}
+                </RouterLink>
               </n-tag>
             </div>
-            <!-- </div> -->
-            <!-- <n-grid :x-gap="12" :cols="4">
-              <n-grid-item class="text-center" :offset="1"> -->
             <n-button class="mr-2" @click="handleLikeButton">
               <template #icon>
                 <n-icon>
@@ -81,8 +52,6 @@
               <span :style="{ width: '28px' }">{{ isLike ? "已赞" : "赞" }}</span>
               <!-- {{ like ? "已喜欢" : "喜欢" }} -->
             </n-button>
-            <!-- </n-grid-item>
-              <n-grid-item class="text-center"> -->
             <n-button @click="handleCollectButton">
               <template #icon>
                 <n-icon>
@@ -91,8 +60,6 @@
               </template>
               收藏
             </n-button>
-            <!-- </n-grid-item>
-            </n-grid> -->
           </div>
 
           <!-- Comment -->
@@ -101,33 +68,20 @@
               <n-icon class="mr-1" :size="22">
                 <CommentsIcon />
               </n-icon>
-              <span class="text-xl">{{ 1234 }}条评论</span>
+              <span class="text-xl">{{ article?.commentCount ?? 0 }}条评论</span>
             </div>
 
-            {{ replyUserId }}
+            <!-- {{ replyUserId }} -->
 
             <div id="reply-wrapper">
               <div class="reply relative" id="reply">
                 <div :style="{ border: '1px solid #ccc', zIndex: 9999 }">
-                  <Toolbar
-                    style="border-bottom: 1px solid #ccc"
-                    :editor="editorRef"
-                    :defaultConfig="toolbarConfig"
-                    :mode="mode"
-                  />
-                  <Editor
-                    style="height: 250px; overflow-y: hidden"
-                    v-model="content"
-                    :defaultConfig="editorConfig"
-                    :mode="mode"
-                    @onCreated="handleCreated"
-                  />
-                  <n-button
-                    @click="handleCancelReplyBtn"
-                    v-show="showCloseIcon"
-                    type="text"
-                    class="absolute bottom-0 right-0 m-2"
-                  >
+                  <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig"
+                    :mode="mode" />
+                  <Editor style="height: 250px; overflow-y: hidden" v-model="content" :defaultConfig="editorConfig"
+                    :mode="mode" @onCreated="handleCreated" />
+                  <n-button @click="handleCancelReplyBtn" v-show="showCloseIcon" type="text"
+                    class="absolute bottom-0 right-0 m-2">
                     取消回复
                     <n-icon :size="18">
                       <CloseIcon />
@@ -143,45 +97,25 @@
             </div>
 
             <div v-for="comment in comments" :key="comment.id" class="mt-5">
-              <n-card
-                :id="`${comment.id}`"
-                :title="`${comment.nickName} 说道：`"
-                hoverable
-              >
+              <n-card :id="`${comment.id}`" :title="`${comment.nickName} 说道：`" hoverable>
                 <template #header-extra>
                   <span class="text-base flex items-center">
                     {{ comment.createdAt.replace(/T/, " ") }}
-                    <n-button
-                      v-show="comment.children"
-                      class="ml-2"
-                      text
-                      @click="comment.collapsed = !comment.collapsed"
-                    >
-                      <n-icon
-                        :size="18"
-                        :component="
-                          comment.collapsed ? ChevronCircleUpIcon : ChevronCircleDownIcon
-                        "
-                      />
+                    <n-button v-show="comment.children" class="ml-2" text @click="comment.collapsed = !comment.collapsed">
+                      <n-icon :size="18" :component="
+                        comment.collapsed ? ChevronCircleUpIcon : ChevronCircleDownIcon
+                      " />
                     </n-button>
                   </span>
                 </template>
                 <div class="relative pb-4">
                   <p :style="{ textIndent: '2rem' }" v-html="comment.content"></p>
-                  <n-avatar
-                    class="absolute -top-8 -left-12"
-                    round
-                    :size="48"
-                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-                  />
+                  <n-avatar class="absolute -top-8 -left-12" round :size="48"
+                    src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
                 </div>
                 <template #footer>
                   <div>
-                    <n-button
-                      class="float-right"
-                      type="text"
-                      @click="handleReplyBtn(comment, $event)"
-                    >
+                    <n-button class="float-right" type="text" @click="handleReplyBtn(comment, $event)">
                       <template #icon>
                         <ReplyIcon />
                       </template>
@@ -191,13 +125,8 @@
                   </div>
                 </template>
 
-                <n-card
-                  :id="`${child.id}`"
-                  v-show="!comment.collapsed"
-                  v-for="child in comment.children"
-                  :title="`${child.nickName} 回复 ${child.replyNickName} ：`"
-                  hoverable
-                >
+                <n-card :id="`${child.id}`" v-show="!comment.collapsed" v-for="child in comment.children"
+                  :title="`${child.nickName} 回复 ${child.replyNickName} ：`" hoverable>
                   <template #header-extra>
                     <span>
                       {{ child.createdAt.replace(/T/, " ") }}
@@ -205,20 +134,12 @@
                   </template>
                   <div class="relative pb-4">
                     <p :style="{ textIndent: '2rem' }" v-html="child.content"></p>
-                    <n-avatar
-                      class="absolute -top-8 -left-12"
-                      round
-                      :size="48"
-                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-                    />
+                    <n-avatar class="absolute -top-8 -left-12" round :size="48"
+                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
                   </div>
                   <template #footer>
                     <div>
-                      <n-button
-                        class="float-right"
-                        type="text"
-                        @click="handleReplyBtn(child, $event)"
-                      >
+                      <n-button class="float-right" type="text" @click="handleReplyBtn(child, $event)">
                         <template #icon>
                           <ReplyIcon />
                         </template>

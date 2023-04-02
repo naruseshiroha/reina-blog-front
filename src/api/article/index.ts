@@ -1,9 +1,36 @@
-import { IArticleQueryParam, IPageQuery } from './../types/index';
-import { ArticleVO } from '/@/api/types/index';
+import { ArticleVO, IArticleQueryParam, IPageQuery, TagVO } from '/@/api/types/index';
 import useMyFetch from '/@/util/fetch';
 
 export async function fetchArticles(pageNum: number, pageSize: number) {
     return await useMyFetch(`/article/${pageNum}/${pageSize}`).get().json()
+}
+
+export async function fetchInsertArticle(article: IArticleBO) {
+    return await useMyFetch(`/article`, {
+        body: JSON.stringify(article),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).post().json()
+}
+
+interface IArticleBO {
+    authorId: string;
+    title: string;
+    description: string;
+    content: string;
+    coverImage: string;
+    categoryId: string;
+    tagIds?: string[];
+    tags: TagVO[]
+}
+export async function fetchUpdateArticle(article: IArticleBO) {
+    return await useMyFetch(`/article`, {
+        body: JSON.stringify(article),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).put().json()
 }
 
 export async function fetchNewPageArticle(page: IPageQuery, params: IArticleQueryParam) {

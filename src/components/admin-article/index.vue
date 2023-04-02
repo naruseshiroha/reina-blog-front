@@ -26,28 +26,27 @@
 
         <n-space>
             <n-button :disabled="!checkedRowKeys.length" strong secondary type="error"
-                @click="handleRemoveUser()">批量删除</n-button>
-            <RouterLink :to="{ name: 'edit' }">
-                <n-button type="primary" strong secondary>
-                    发布文章
-                </n-button>
-            </RouterLink>
+                @click="handleRemoveArticle()">批量删除</n-button>
+            <n-button @click="handleClickAddBtn" type="primary" strong secondary>发布文章</n-button>
         </n-space>
         <n-data-table size="large" :columns="columns" :row-key="(row: ArticleVO) => row.id" :data="articleData"
             @update:checked-row-keys="handleCheck" />
         <n-pagination class="my-3 justify-end" v-model:page="page.pageNum" :page-count="pages" simple />
 
         <!-- reset password dialog -->
-        <n-modal v-model:show="clickedResetBtn" preset="dialog" title="重置用户密码">
-            <template #default>
+        <n-modal v-model:show="clickedAddBtn" preset="dialog" :title="operate + '文章'" :style="{ width: '65%' }" class="">
+            <!-- <template #default>
                 <div class="flex items-center">
                     Content
                 </div>
             </template>
             <template #action>
                 <n-button @click="handleClickSaveBtn" secondary strong type="success">保存</n-button>
-            </template>
+            </template> -->
+            <AdminPublishArticle :fetchPage="fetchPage" :operate="operate" :articleId="articleId" />
         </n-modal>
+
+
     </div>
 </template>
 
@@ -55,9 +54,10 @@
 import { h } from 'vue'
 import { NButton, FormInst, NImage, NText, NTag, DataTableRowKey, NSpace } from 'naive-ui'
 import type { DataTableColumns } from 'naive-ui'
-
+import { CLOSE_ARTICLE_DIALOG } from '/@/api/types/keys';
 import { fetchNewPageArticle } from '/@/api/article';
 import { ArticleVO } from '/@/api/types';
+import { fetchAdminDeleteArticle } from '/@/api/admin';
 
 const message = useMessage()
 
@@ -156,8 +156,13 @@ const createColumns = ({ handleClickBtn }: { handleClickBtn: (btnName: string, r
 
 const articleData = ref([]);
 const columns = createColumns({
-    async handleClickBtn(_btnName, _row) {
-        message.info(_btnName)
+    async handleClickBtn(btnName, row) {
+        // message.info(_btnName)
+        if (btnName === '削除') {
+            handleRemove(row.id)
+        } else if (btnName === '編集') {
+            handleClickEditBtn(row.id);
+        }
     }
 });
 const checkedRowKeysRef = ref<DataTableRowKey[]>([])
@@ -186,11 +191,24 @@ const fetchPage = async () => {
     const { list: tableData, total } = unref(data).data
     articleData.value = tableData
     page.total = total
+    checkedRowKeys.value = []
 }
 
 // delete
-const handleRemoveUser = async () => {
+const handleRemoveArticle = async () => {
+    handleRemove(checkedRowKeys.value as string[])
+}
 
+const handleRemove = async (id: string | string[]) => {
+    const { data } = await fetchAdminDeleteArticle(id)
+    console.log('data', data, unref(data));
+    const { data: result, msg } = unref(data)
+    if (result) {
+        message.success(msg)
+        await fetchPage()
+    } else {
+        message.error(msg)
+    }
 }
 
 // form reset btn
@@ -207,10 +225,27 @@ const queryForm = reactive({
     categoryId: null,
     top: null
 })
-const clickedResetBtn = ref(false)
-const handleClickSaveBtn = async () => {
 
+const operate = ref("")
+const clickedAddBtn = ref(false)
+const handleClickAddBtn = () => {
+    operate.value = "新增"
+    articleId.value = ''
+    clickedAddBtn.value = true
 }
+
+const articleId = ref('')
+const handleClickEditBtn = (id: string) => {
+    operate.value = "修改"
+    articleId.value = id
+    clickedAddBtn.value = true
+}
+
+// close article dialog
+const handleCloseArticleDialog = () => {
+    clickedAddBtn.value = false
+}
+provide(CLOSE_ARTICLE_DIALOG, handleCloseArticleDialog as Function)
 
 watch(
     queryForm,
