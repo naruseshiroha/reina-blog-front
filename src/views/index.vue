@@ -82,7 +82,8 @@ const route = useRoute()
 const params = reactive({
   key: route.query.key as string,
   tagIds: route.query.tagId as string,
-  categoryId: route.query.categoryId as string
+  categoryId: route.query.categoryId as string,
+  status: '1',
 })
 
 const articleStore = useArticleStore();
