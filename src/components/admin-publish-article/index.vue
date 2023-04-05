@@ -229,7 +229,8 @@ watch(
     () => article.tagIds,
     () => {
         article.tags = tagOptions.value.filter((t) => article.tagIds.includes(t.value as string)).map(o => ({ tagId: o.value as string, tagName: o.label }))
-    }
+    },
+    { immediate: true }
 )
 
 watch(
