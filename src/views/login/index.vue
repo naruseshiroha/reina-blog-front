@@ -95,10 +95,10 @@ const handleLoginBtn = async () => {
     return
   }
   const data = await userStore.fetchLogin(loginForm);
-  if (data instanceof Error) {
-    message.error(data.message)
+  if (data.code !== 200) {
+    message.error(data.msg)
   } else {
-    message.success("登录成功")
+    message.success(data.msg)
     formType.value = "logined";
   }
 };
@@ -123,10 +123,10 @@ const handleRegisterBtn = async () => {
     .catch(() => 0);
   if (!pass) return;
   const data = await userStore.fetchRegister(registerForm);
-  if (data instanceof Error) {
-    message.error(data.message)
+  if (data.code !== 200) {
+    message.error(data.msg)
   } else {
-    message.success("注册成功！")
+    message.success(data.msg)
     switchLoginRegister()
   }
 };
@@ -233,7 +233,7 @@ const getVerifyCode = async (email: string): Promise<string | void> => {
 
 
   const code = await userStore.fetchVerifyCode(email);
-  if (code) {
+  if (code.data) {
     message.info("请前往邮箱查看验证码！")
     // time limit 
     let limit = 60;

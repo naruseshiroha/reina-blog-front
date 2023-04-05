@@ -277,8 +277,8 @@ const handleSaveDialog = async () => {
     if (data.code === 200) {
         message.success(data.msg)
         handleCloseDialog();
-    } else if (data.error) {
-        message.error(data.message)
+    } else {
+        message.error(data.msg)
     }
     loadingCode.value = false;
 }
