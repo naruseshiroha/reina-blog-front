@@ -37,12 +37,7 @@ const useCollectionStore = defineStore('collectionStore', {
         // api
         async fetchUserCollect(bo: UserCollect) {
             const { data } = await fetchUserCollect(bo)
-            const { data: result, error, message } = unref(data)
-            if (error) {
-                return Error(message);
-            } else {
-                return result;
-            }
+            return unref(data)
         },
         async fetchListUserCollect(userId: string) {
             const { data } = await fetchListUserCollect(userId, this.page)

@@ -13,7 +13,7 @@
                 </router-link>
               </n-breadcrumb-item>
               <n-breadcrumb-item>
-                <router-link :to="`/category/${category?.id}`">
+                <router-link :to="{ name: 'index', query: { categoryId: category?.id } }">
                   <n-icon :component="FolderIcon" />
                   {{ category?.categoryName }}
                 </router-link>
@@ -231,10 +231,12 @@ const handleCollectButton = async () => {
     return;
   }
   const data = await collectionStore.fetchUserCollect(unref(userCollect));
-  if (data instanceof Error) {
-    message.error(data.message);
+  console.log('data', data);
+  const { data: result, msg } = data
+  if (result) {
+    message.success(msg)
   } else {
-    message.success("收藏成功！");
+    message.error(msg)
   }
 };
 
