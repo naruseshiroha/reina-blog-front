@@ -1,4 +1,4 @@
-import { IPageQuery, IUserQueryBO, ResetPasswordBO, UserRegisterBO, UserVO } from '/@/api/types/index';
+import { IPageQuery, IUserQueryBO, R, ResetPasswordBO, UserRegisterBO, UserVO } from '/@/api/types/index';
 import { defineStore } from 'pinia';
 import { UserLoginBO } from '/@/api/types';
 import { fetchVerifyCode, fetchResetCode, fetchLogin, fetchRegister, fetchUserInfo, fetchUpdateUserInfo, fetchResetPassword } from '/@/api/user';
@@ -64,33 +64,25 @@ const useUserStore = defineStore('userStore', {
       this.userId = ''
     },
     // api
-    async fetchVerifyCode(email: string): Promise<string> {
-      const { data: code } = await fetchVerifyCode(email);
-      return (unref(code) as string)
+    async fetchVerifyCode(email: string): Promise<R<string>> {
+      const { data } = await fetchVerifyCode(email);
+      return unref(data);
     },
     async fetchResetCode(email: string): Promise<string> {
       const { data: code } = await fetchResetCode(email);
       return (unref(code) as string)
     },
-    async fetchLogin(bo: UserLoginBO) {
+    async fetchLogin(bo: UserLoginBO): Promise<R<string>> {
       const { data } = await fetchLogin(bo)
-      const { data: userId, error, message } = unref(data)
-      if (error) {
-        return Error(message);
-      } else {
-        // @Todo: set userId
-        this.userId = userId;
-        return userId;
-      }
+      const { data: userId } = unref(data)
+      if (userId) {
+       this.userId = userId;
+      } 
+      return unref(data)
     },
-    async fetchRegister(bo: UserRegisterBO) {
+    async fetchRegister(bo: UserRegisterBO): Promise<R<boolean>>{
       const { data } = await fetchRegister(bo);
-      const { data: result, error, message } = unref(data)
-      if (error) {
-        return Error(message);
-      } else {
-        return result;
-      }
+      return unref(data)
     },
     async fetchUserInfo(id: string) {
       const { data } = await fetchUserInfo(id)
@@ -101,7 +93,7 @@ const useUserStore = defineStore('userStore', {
       return unref(data);
     },
     async fetchResetPassword(bo: ResetPasswordBO) {
-      const  {data}  = await fetchResetPassword(bo).catch(err => err)
+      const  {data}  = await fetchResetPassword(bo)
       return unref(data);
     },
     // admin api
