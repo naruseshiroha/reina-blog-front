@@ -111,7 +111,7 @@
                 <div class="relative pb-4">
                   <p :style="{ textIndent: '2rem' }" v-html="comment.content"></p>
                   <n-avatar class="absolute -top-8 -left-12" round :size="48"
-                    :src="`/img/avater/${comment.avatar ?? 'default.jpg'}`" />
+                    :src="`/img/avatar/${comment.avatar ?? 'default.jpg'}`" />
                 </div>
                 <template #footer>
                   <div>
@@ -135,7 +135,7 @@
                   <div class="relative pb-4">
                     <p :style="{ textIndent: '2rem' }" v-html="child.content"></p>
                     <n-avatar class="absolute -top-8 -left-12" round :size="48"
-                      src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
+                      :src="`/img/avatar/${child.avatar ?? 'default.jpg'}`" />
                   </div>
                   <template #footer>
                     <div>
