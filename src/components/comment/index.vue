@@ -17,7 +17,7 @@
     <n-list v-show="!isShrink" hoverable boarder>
       <n-list-item v-for="(v, i) in comments" :key="i">
         <template #prefix>
-          <n-avatar round size="large" :src="v.avatar" fallback-src="/img/avatar/default.jpg" />
+          <n-avatar round size="large" :src="`/img/avatar/${v.avatar ?? 'default.jpg'}`" />
         </template>
         <n-tooltip :style="{ maxWidth: '400px' }" placement="left-end" trigger="hover">
           <template #trigger>
