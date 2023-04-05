@@ -2,7 +2,7 @@ import { ResetPasswordBO, UserLoginBO, UserRegisterBO, UserVO } from '/@/api/typ
 import useMyFetch from "/@/util/fetch";
 
 export async function fetchVerifyCode(username: string, isRegister: boolean = true) {
-    return await useMyFetch(`/user/code?username=${username}&isRegister=${isRegister}`);
+    return await useMyFetch(`/user/code?username=${username}&isRegister=${isRegister}`).get().json();
 }
 
 export async function fetchResetCode(email: string) {
