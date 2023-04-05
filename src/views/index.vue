@@ -31,7 +31,7 @@
           </i>
         </n-tag>
         <n-tag>
-          <n-icon :component="EyeIcon" />
+          <n-icon :component="HeartIcon" />
           &nbsp;{{ v.viewCount ?? 0 }}&nbsp;
         </n-tag>
         <n-tag>
@@ -66,7 +66,8 @@ import {
   Bookmark as TopIcon,
   CalendarAltRegular as CalendarIcon,
   Tags as TagsIcon,
-  EyeRegular as EyeIcon,
+  // EyeRegular as EyeIcon,
+  HeartRegular as HeartIcon,
   ThumbsUpRegular as LikeIcon,
   CommentsRegular as CommentsIcon,
 } from "@vicons/fa";
