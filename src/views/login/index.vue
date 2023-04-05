@@ -50,12 +50,15 @@
     </n-form>
     <!-- logined -->
     <div v-show="formType === 'logined'">
-      <h2 class="text-xl">ようこそ！</h2>
+      <h2 class="text-2xl">ようこそ！</h2>
       <div class="mt-2 flex justify-between items-center">
-        <n-avatar round :size="60" :src="'/img/avatar/' + (userInfo?.avatar ?? 'default.jpg')" />
-        <span>{{ userInfo?.nickName }}</span>
-        <n-button @click="handleLogoutBtn">退出</n-button>
+        <n-avatar round :size="60" :src="`/img/avatar/${userInfo?.avatar ?? 'default.jpg'}`" />
+        <span class="text-xl font-bold">{{ userInfo?.nickName }}</span>
+        <n-button @click="handleLogoutBtn" type="error" secondary strong>退出</n-button>
       </div>
+      <p class="text-center mt-2 font-thin text-lg">
+        <span>{{ userInfo?.signature }}</span>
+      </p>
     </div>
   </n-card>
 </template>
