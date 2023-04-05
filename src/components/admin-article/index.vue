@@ -7,11 +7,11 @@
             </n-form-item>
             <n-form-item label="类别">
                 <n-select v-model:value="queryForm.categoryId" :style="{ width: '150px' }" placeholder="选择类别"
-                    :options="topOptions" clearable />
+                    :options="categoryOptions" clearable />
             </n-form-item>
             <n-form-item label="标签">
                 <n-select v-model:value="queryForm.tagIds" :style="{ width: '170px' }" placeholder="选择标签"
-                    :options="topOptions" clearable />
+                    :options="tagOptions" clearable />
             </n-form-item>
             <n-form-item label="置顶">
                 <n-select v-model:value="queryForm.top" :style="{ width: '120px' }" placeholder="选择状态" :options="topOptions"
@@ -57,9 +57,35 @@ import type { DataTableColumns } from 'naive-ui'
 import { CLOSE_ARTICLE_DIALOG } from '/@/api/types/keys';
 import { fetchNewPageArticle } from '/@/api/article';
 import { ArticleVO } from '/@/api/types';
-import { fetchAdminDeleteArticle } from '/@/api/admin';
+import { fetchAdminDeleteArticle, fetchCategoryOptions, fetchTagOptions } from '/@/api/admin';
 
-const message = useMessage()
+type Options = {
+    label: string;
+    value: string | boolean;
+}
+
+const message = useMessage();
+
+const initTagOptions = async (): Promise<Options[]> => {
+    const { data } = await fetchTagOptions()
+    return unref(data).data.map(v => ({ label: v.tagName, value: v.id }))
+}
+const initCategoryOptions = async (): Promise<Options[]> => {
+    const { data } = await fetchCategoryOptions()
+    return unref(data).data.map(v => ({ label: v.categoryName, value: v.id }))
+}
+
+const tagOptions = ref<Options[]>([])
+const categoryOptions = ref<Options[]>([])
+const init = async () => {
+    const tags = await initTagOptions()
+    tagOptions.value = tags
+
+    const categories = await initCategoryOptions()
+    categoryOptions.value = categories
+}
+
+init();
 
 const createColumns = ({ handleClickBtn }: { handleClickBtn: (btnName: string, row: ArticleVO) => void }): DataTableColumns<ArticleVO> => {
     return [
