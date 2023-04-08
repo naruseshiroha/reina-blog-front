@@ -4,6 +4,7 @@ import '/@/assets/scss/my.scss'
 import 'github-markdown-css'
 // AOS
 import App from './App.vue';
+import './router/guard'
 import router from './router';
 import store from './store';
 
